@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-display: "VolkswagenHeavy", "Fredoka", sans-serif;
+  --font-sans: "FuturaBkBTBook", "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-hollywood: "VolkswagenHeavy", sans-serif;
+  
+  --color-holly-orange: #e1a139;
+  --color-holly-brown: #8B4513;
+  --color-holly-white: #ffffff;
+  --color-holly-cream: #fdfcf5;
+}
+
+@layer base {
+  @font-face {
+    font-family: 'VolkswagenHeavy';
+    src: url('https://helaholly.com/wp-content/uploads/2026/01/Volkswagen-Heavy.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'FuturaBkBTBook';
+    src: url('https://helaholly.com/wp-content/uploads/2026/01/Futura-Bk-BT-Book.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  body {
+    @apply bg-white text-holly-brown font-sans antialiased;
+  }
+}
+
+.card-shadow {
+  box-shadow: 0 10px 30px -5px rgba(139, 69, 19, 0.1);
+}
+
+.btn-hover-effect {
+  @apply transition-all duration-300 active:scale-95 hover:shadow-lg;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e1a139;
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #8B4513;
+}
+
+/* Google Places Autocomplete Custom Styling */
+.pac-container {
+  background-color: #fdfcf5; /* holly-cream */
+  border-radius: 30px;
+  border: 2px solid rgba(225, 161, 57, 0.1); /* holly-orange with opacity */
+  box-shadow: 0 15px 30px rgba(139, 69, 19, 0.1);
+  font-family: 'FuturaBkBTBook', sans-serif;
+  margin-top: 8px;
+  z-index: 9999 !important;
+}
+
+.pac-item {
+  padding: 12px 20px;
+  border-top: 1px solid rgba(225, 161, 57, 0.05);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pac-item:first-child {
+  border-top: none;
+}
+
+.pac-item:hover {
+  background-color: rgba(225, 161, 57, 0.05);
+}
+
+.pac-item-query {
+  font-family: 'VolkswagenHeavy', sans-serif;
+  font-weight: 700;
+  color: #8B4513; /* holly-brown */
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.pac-matched {
+  color: #e1a139; /* holly-orange */
+}
+
+.pac-icon {
+  display: none;
+}
+
+.pac-container:after {
+  display: none;
+}

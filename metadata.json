@@ -1,0 +1,7 @@
+{
+  "name": "Heladería Hollywood",
+  "description": "Sistema de pedidos premium para Heladería Hollywood, con soporte para pedidos en tienda y delivery de Gelato y Soft.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

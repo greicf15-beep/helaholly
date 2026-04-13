@@ -34,12 +34,12 @@ export function ProductGrid({ products, onAddToCart, orderMode }: ProductGridPro
               <div className="absolute inset-0 bg-gradient-to-t from-holly-brown/20 via-transparent to-transparent opacity-60" />
               
               {/* Price Tag Overlay */}
-              <div className="absolute top-3 left-3 sm:top-6 sm:left-6 bg-white/90 backdrop-blur-sm px-2 py-1 sm:px-4 sm:py-2 font-sans font-bold text-sm sm:text-lg tracking-widest text-holly-orange rounded-lg sm:rounded-xl shadow-sm border border-holly-orange/10">
+              <div className="absolute top-3 left-3 sm:top-6 sm:left-6 bg-white/90 backdrop-blur-sm px-2 py-1 sm:px-4 sm:py-2 font-sans font-bold text-xs sm:text-lg tracking-normal sm:tracking-widest text-holly-orange rounded-lg sm:rounded-xl shadow-sm border border-holly-orange/10">
                 ${product.price.toFixed(2)}
               </div>
 
               {/* Availability Badge */}
-              <div className="absolute top-3 right-3 sm:top-6 sm:right-6 flex flex-col gap-2 items-end">
+              <div className="absolute bottom-3 right-3 sm:top-6 sm:right-6 flex flex-col gap-2 items-end">
                 {product.deliveryAvailable ? (
                   <div className="bg-emerald-500/90 backdrop-blur-sm p-1.5 sm:p-2 rounded-lg shadow-lg text-white" title="Disponible para Delivery">
                     <Truck className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -75,18 +75,18 @@ export function ProductGrid({ products, onAddToCart, orderMode }: ProductGridPro
               )}
             </div>
             
-            <div className="text-center px-1 sm:px-4">
-              <h3 className="text-sm sm:text-[18px] font-display font-bold text-holly-brown mb-1 sm:mb-2 tracking-normal group-hover:text-holly-orange transition-colors duration-300">{product.name}</h3>
-              <p className="text-[9px] sm:text-[11px] text-holly-orange font-sans font-medium uppercase tracking-[1px] sm:tracking-[1.5px] leading-relaxed line-clamp-2 mb-3 sm:mb-0">
+            <div className="text-center px-0.5 sm:px-4">
+              <h3 className="text-[13px] sm:text-[18px] font-display font-bold text-holly-brown mb-0.5 sm:mb-2 tracking-tight sm:tracking-normal group-hover:text-holly-orange transition-colors duration-300">{product.name}</h3>
+              <p className="text-[8px] sm:text-[11px] text-holly-orange font-sans font-medium uppercase tracking-[0.5px] sm:tracking-[1.5px] leading-tight sm:leading-relaxed line-clamp-2 mb-2 sm:mb-0">
                 {product.description}
               </p>
               
               {/* Mobile Always Visible Button */}
               {!isUnavailable && (
-                <div className="sm:hidden mt-2">
+                <div className="sm:hidden mt-1.5">
                   <button
                     onClick={() => onAddToCart(product)}
-                    className="w-full py-2.5 bg-holly-brown text-white font-sans font-bold text-[10px] uppercase tracking-[1.5px] rounded-xl shadow-md active:scale-95 transition-transform"
+                    className="w-full py-2 bg-holly-brown text-white font-sans font-bold text-[9px] uppercase tracking-[1px] rounded-lg shadow-md active:scale-95 transition-transform"
                   >
                     SELECCIONAR
                   </button>

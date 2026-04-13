@@ -12,7 +12,13 @@
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.5.0",
+    "@splinetool/react-spline": "^4.1.0",
+    "@splinetool/runtime": "^1.12.74",
     "@tailwindcss/vite": "^4.1.14",
+    "@types/google.maps": "^3.58.1",
+    "@types/three": "^0.183.1",
     "@vis.gl/react-google-maps": "^1.7.1",
     "@vitejs/plugin-react": "^5.0.4",
     "dotenv": "^17.2.3",
@@ -22,6 +28,7 @@
     "motion": "^12.23.24",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "three": "^0.183.2",
     "vite": "^6.2.0"
   },
   "devDependencies": {

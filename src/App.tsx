@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
-import { Hero } from './components/Hero';
 import { CategorySelector } from './components/CategorySelector';
 import { ProductGrid } from './components/ProductGrid';
 import { Cart } from './components/Cart';
@@ -16,8 +15,13 @@ import { db } from './firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { handleFirestoreError, OperationType } from './errorUtils';
 import { APIProvider } from '@vis.gl/react-google-maps';
+import { Home, IceCream, IceCreamBowl, ShoppingCart } from 'lucide-react';
 
 const API_KEY = process.env.GOOGLE_MAPS_PLATFORM_KEY || '';
+
+if (!API_KEY) {
+  console.warn('GOOGLE_MAPS_PLATFORM_KEY is missing. Please add it to the Secrets panel in AI Studio.');
+}
 
 export default function App() {
   const [selectedStore, setSelectedStore] = useState<StoreLocation | null>(null);
@@ -26,6 +30,14 @@ export default function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [customizingProduct, setCustomizingProduct] = useState<Product | null>(null);
+  const [notification, setNotification] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (notification) {
+      const timer = setTimeout(() => setNotification(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [notification]);
   
   const { cart, addToCart, removeFromCart, updateQuantity, clearCart, total } = useCart();
 
@@ -43,19 +55,26 @@ export default function App() {
   const filteredProducts = useMemo(() => {
     if (!selectedCategory || !selectedStore) return [];
     
+    let products = PRODUCTS.filter(p => p.category === selectedCategory);
+
+    // Filter by order mode
+    if (orderMode === 'in-store') {
+      products = products.filter(p => !p.onlyDelivery);
+    } else if (orderMode === 'delivery') {
+      products = products.filter(p => !p.onlyInStore);
+    }
+
     if (selectedCategory === 'soft') {
-      // Strictly soft products
-      return PRODUCTS.filter(p => p.category === 'soft');
+      return products;
     } else {
-      // Strictly gelato products
+      // Gelato products
       // If store is soft, only show packaged gelatos
       if (selectedStore.type === 'soft') {
-        return PRODUCTS.filter(p => p.category === 'gelato' && p.isPackaged);
+        return products.filter(p => p.isPackaged);
       }
-      // If store is gelateria, show all gelatos
-      return PRODUCTS.filter(p => p.category === 'gelato');
+      return products;
     }
-  }, [selectedCategory, selectedStore]);
+  }, [selectedCategory, selectedStore, orderMode]);
 
   const handleCheckoutSubmit = async (data: any) => {
     const path = 'orders';
@@ -91,7 +110,12 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <APIProvider apiKey={API_KEY} version="weekly">
+      <APIProvider 
+        apiKey={API_KEY} 
+        version="weekly" 
+        libraries={['places', 'geometry', 'routes']}
+        authReferrerPolicy="origin"
+      >
         <div className="min-h-screen bg-holly-cream font-sans selection:bg-holly-orange selection:text-white">
           <AnimatePresence mode="wait">
             {!selectedStore || !selectedCategory ? (
@@ -106,7 +130,10 @@ export default function App() {
                   orderMode={orderMode}
                   onOrderModeSelect={(mode) => setOrderMode(mode)}
                   selectedStore={selectedStore}
-                  onStoreSelect={(store) => setSelectedStore(store)}
+                  onStoreSelect={(store) => {
+                    setSelectedStore(store);
+                    clearCart();
+                  }}
                   onCategorySelect={(cat) => setSelectedCategory(cat)} 
                 />
               </motion.div>
@@ -120,55 +147,68 @@ export default function App() {
                 <Navbar 
                   cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)} 
                   onCartClick={() => setIsCartOpen(true)} 
+                  orderMode={orderMode}
+                  onChangeMode={() => {
+                    setOrderMode(null);
+                    setSelectedStore(null);
+                    setSelectedCategory(null);
+                    clearCart();
+                  }}
                 />
                 
                 <main className="pt-24">
-                  <Hero />
-                  
-                  {/* Wave Separator */}
-                  <div className="relative w-full h-24 -mt-12 z-10 overflow-hidden pointer-events-none">
-                    <svg 
-                      viewBox="0 0 1440 120" 
-                      fill="none" 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      className="absolute bottom-0 w-full h-full preserve-3d"
-                      preserveAspectRatio="none"
-                    >
-                      <path 
-                        d="M0 120L60 110C120 100 240 80 360 75C480 70 600 80 720 85C840 90 960 90 1080 80C1200 70 1320 50 1380 40L1440 30V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" 
-                        fill="#fdfcf5"
-                      />
-                    </svg>
-                  </div>
-
-                  <section id="menu-section" className="py-24 bg-white">
+                  <section id="menu-section" className="py-12 bg-white">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                      <div className="text-center mb-16">
-                        <div className="flex flex-col items-center justify-center gap-4 mb-4">
-                          <span className="text-xs font-bold uppercase tracking-[0.4em] text-holly-orange">Nuestra Selección</span>
-                          <div className="flex gap-4">
+                      <div className="mb-12">
+                        <div className="grid grid-cols-2 gap-y-2 max-w-4xl mx-auto px-4">
+                          {/* Category Title */}
+                          <div className="flex flex-col items-start">
+                            <span className="text-xl sm:text-2xl font-display font-bold text-holly-brown uppercase tracking-tight">
+                              {selectedCategory}
+                            </span>
+                          </div>
+
+                          {/* Store Title */}
+                          <div className="flex flex-col items-end text-right">
+                            <span className="text-xl sm:text-2xl font-display font-bold text-holly-brown uppercase tracking-tight">
+                              SEDE {selectedStore.name.replace(/Hollywood\s*/i, '')}
+                            </span>
+                          </div>
+
+                          {/* Category Button */}
+                          <div className="flex flex-col items-start">
                             <button 
                               onClick={() => setSelectedCategory(null)}
-                              className="text-[10px] font-bold uppercase tracking-widest text-holly-brown hover:text-holly-orange border border-holly-orange/20 px-4 py-2 rounded-full transition-colors"
+                              className="text-[9px] sm:text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-holly-orange hover:bg-holly-orange hover:text-white border border-holly-orange px-4 py-1.5 rounded-full transition-all flex items-center gap-1"
                             >
                               Cambiar categoría
                             </button>
+                          </div>
+
+                          {/* Store Button */}
+                          <div className="flex flex-col items-end text-right">
                             <button 
-                              onClick={() => setSelectedStore(null)}
-                              className="text-[10px] font-bold uppercase tracking-widest text-holly-brown hover:text-holly-orange border border-holly-orange/20 px-4 py-2 rounded-full transition-colors"
+                              onClick={() => {
+                                setSelectedStore(null);
+                                clearCart();
+                              }}
+                              className="text-[9px] sm:text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-holly-orange hover:bg-holly-orange hover:text-white border border-holly-orange px-4 py-1.5 rounded-full transition-all flex items-center gap-1"
                             >
                               Cambiar sede
                             </button>
                           </div>
                         </div>
-                        <h2 className="text-6xl font-display font-bold text-holly-brown mb-8 uppercase tracking-normal">
-                          {selectedCategory === 'gelato' ? 'GELATO PREMIUM' : 'SOFT SERVE'}
-                        </h2>
-                        <CategorySelector 
-                          selected={selectedCategory} 
-                          onSelect={setSelectedCategory} 
-                          selectedStore={selectedStore}
-                        />
+                        
+                        <div className="mt-12 text-center">
+                          <h2 className="text-5xl sm:text-7xl font-display font-bold text-holly-brown mb-8 uppercase tracking-normal">
+                            {selectedCategory === 'gelato' ? 'GELATO PREMIUM' : 'SOFT SERVE'}
+                          </h2>
+                          <CategorySelector 
+                            selected={selectedCategory} 
+                            onSelect={setSelectedCategory} 
+                            selectedStore={selectedStore}
+                          />
+                        </div>
                       </div>
 
                       <ProductGrid 
@@ -199,13 +239,31 @@ export default function App() {
                   />
                 )}
 
+                {/* Notification Toast */}
+                <AnimatePresence>
+                  {notification && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 50, x: '-50%' }}
+                      animate={{ opacity: 1, y: 0, x: '-50%' }}
+                      exit={{ opacity: 0, y: 50, x: '-50%' }}
+                      className="fixed bottom-24 left-1/2 z-[100] bg-holly-brown text-white px-6 py-3 rounded-full shadow-2xl border border-holly-orange/30 flex items-center gap-3 min-w-[280px] justify-center"
+                    >
+                      <span className="text-xs font-bold uppercase tracking-widest text-center">{notification}</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 <footer className="bg-holly-brown text-holly-white py-24 border-t border-holly-orange/10">
                   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-16 border-b border-holly-white/10 pb-16 mb-16">
                       <div className="space-y-6">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-holly-orange flex items-center justify-center font-display text-xl rounded-lg">H</div>
-                          <h3 className="text-3xl font-display font-bold uppercase tracking-normal">Heladería Hollywood</h3>
+                        <div className="flex items-center">
+                          <img 
+                            src="/logo_holly.png" 
+                            alt="Heladería Hollywood" 
+                            className="h-16 w-auto object-contain brightness-0 invert"
+                            referrerPolicy="no-referrer"
+                          />
                         </div>
                         <p className="text-holly-white/60 font-medium leading-relaxed">
                           Cremosidad y sabor premium en cada bocado. Disfruta de la experiencia Hollywood.
@@ -270,18 +328,22 @@ export default function App() {
                     }}
                     className="flex flex-col items-center gap-1 text-holly-brown/60 hover:text-holly-orange transition-colors"
                   >
-                    <span className="text-xl">🏠</span>
+                    <Home className="w-5 h-5" />
                     <span className="text-[9px] font-bold uppercase tracking-widest">Home</span>
                   </button>
                   <button 
                     onClick={() => {
+                      if (selectedStore?.type === 'gelateria') {
+                        setNotification('Soft no disponible en esta sede');
+                        return;
+                      }
                       setSelectedCategory('soft');
                       const el = document.getElementById('menu-section');
                       el?.scrollIntoView({ behavior: 'smooth' });
                     }}
-                    className={`flex flex-col items-center gap-1 transition-colors ${selectedCategory === 'soft' ? 'text-holly-orange' : 'text-holly-brown/60'}`}
+                    className={`flex flex-col items-center gap-1 transition-colors ${selectedCategory === 'soft' ? 'text-holly-orange' : 'text-holly-brown/60'} ${selectedStore?.type === 'gelateria' ? 'opacity-40' : ''}`}
                   >
-                    <span className="text-xl">🍦</span>
+                    <IceCream className="w-5 h-5" />
                     <span className="text-[9px] font-bold uppercase tracking-widest">Soft</span>
                   </button>
                   <button 
@@ -292,14 +354,14 @@ export default function App() {
                     }}
                     className={`flex flex-col items-center gap-1 transition-colors ${selectedCategory === 'gelato' ? 'text-holly-orange' : 'text-holly-brown/60'}`}
                   >
-                    <span className="text-xl">🍨</span>
+                    <IceCreamBowl className="w-5 h-5" />
                     <span className="text-[9px] font-bold uppercase tracking-widest">Gelato</span>
                   </button>
                   <button 
                     onClick={() => setIsCartOpen(true)}
                     className="flex flex-col items-center gap-1 text-holly-brown/60 hover:text-holly-orange transition-colors relative"
                   >
-                    <span className="text-xl">🛒</span>
+                    <ShoppingCart className="w-5 h-5" />
                     <span className="text-[9px] font-bold uppercase tracking-widest">Cart</span>
                     {cart.length > 0 && (
                       <span className="absolute -top-1 -right-1 bg-holly-orange text-white text-[8px] w-4 h-4 flex items-center justify-center rounded-full">

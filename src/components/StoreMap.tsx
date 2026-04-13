@@ -1,35 +1,62 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { APIProvider, Map, AdvancedMarker, Pin, useMap, useMapsLibrary } from '@vis.gl/react-google-maps';
-import { HOLLYWOOD_STORES } from '../constants';
+import React, { useState, useEffect } from 'react';
+import { Map, Marker, useMap, useMapsLibrary } from '@vis.gl/react-google-maps';
 import { StoreLocation } from '../types';
-import { motion } from 'motion/react';
 
-const API_KEY = process.env.GOOGLE_MAPS_PLATFORM_KEY || '';
+// Custom Polyline component because @vis.gl/react-google-maps doesn't export one directly
+function Polyline(props: google.maps.PolylineOptions) {
+  const map = useMap();
+  const [polyline, setPolyline] = useState<google.maps.Polyline | null>(null);
+
+  useEffect(() => {
+    if (!polyline) {
+      setPolyline(new google.maps.Polyline(props));
+    }
+
+    return () => {
+      if (polyline) polyline.setMap(null);
+    };
+  }, [polyline]);
+
+  useEffect(() => {
+    if (polyline) {
+      polyline.setOptions(props);
+      polyline.setMap(map);
+    }
+  }, [polyline, map, props]);
+
+  return null;
+}
+
+const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_PLATFORM_KEY || '';
 const hasValidKey = Boolean(API_KEY) && API_KEY !== '';
 
 interface StoreMapProps {
   userLocation: { lat: number; lng: number } | null;
   selectedStore: StoreLocation | null;
   onStoreSelect?: (store: StoreLocation) => void;
+  onLocationChange?: (location: { lat: number; lng: number }) => void;
 }
 
-function MapContent({ userLocation, selectedStore }: StoreMapProps) {
+function MapContent({ userLocation, selectedStore, onLocationChange }: StoreMapProps) {
   const map = useMap();
   const routesLib = useMapsLibrary('routes');
   const [directionsService, setDirectionsService] = useState<google.maps.DirectionsService | null>(null);
   const [directionsRenderer, setDirectionsRenderer] = useState<google.maps.DirectionsRenderer | null>(null);
+  const [routePath, setRoutePath] = useState<google.maps.LatLngLiteral[] | null>(null);
 
   useEffect(() => {
-    if (!routesLib || !map) return;
+    if (!map || !routesLib) return;
     
+    console.log('Initializing Directions Service and Renderer');
     const ds = new routesLib.DirectionsService();
     const dr = new routesLib.DirectionsRenderer({
       map,
       suppressMarkers: true,
+      preserveViewport: true,
       polylineOptions: {
-        strokeColor: '#e1a139',
-        strokeWeight: 6,
-        strokeOpacity: 0.8,
+        strokeColor: '#C2A378', // Beige/Tan
+        strokeWeight: 8,
+        strokeOpacity: 1.0,
       },
     });
     
@@ -39,16 +66,13 @@ function MapContent({ userLocation, selectedStore }: StoreMapProps) {
     return () => {
       dr.setMap(null);
     };
-  }, [routesLib, map]);
+  }, [map, routesLib]);
 
   // Auto-center on user location when it's first captured
   useEffect(() => {
     if (!map || !userLocation) return;
     
-    // Jump to user location immediately for feedback
     map.setCenter(userLocation);
-    
-    // If no store is selected, zoom in closer to the user
     if (!selectedStore) {
       map.setZoom(15);
     }
@@ -56,12 +80,19 @@ function MapContent({ userLocation, selectedStore }: StoreMapProps) {
 
   // Draw route and fit bounds when both locations are available
   useEffect(() => {
-    if (!directionsService || !directionsRenderer || !userLocation || !selectedStore || !map) {
-      if (directionsRenderer) directionsRenderer.setMap(null);
+    if (!userLocation || !selectedStore || !map) return;
+
+    // If directions service is not available yet or fails, we'll use a straight line as fallback
+    if (!directionsService || !directionsRenderer) {
+      setRoutePath([userLocation, { lat: selectedStore.lat, lng: selectedStore.lng }]);
       return;
     }
 
-    directionsRenderer.setMap(map);
+    console.log('Requesting route...', {
+      from: userLocation,
+      to: { lat: selectedStore.lat, lng: selectedStore.lng }
+    });
+
     directionsService.route(
       {
         origin: userLocation,
@@ -69,10 +100,27 @@ function MapContent({ userLocation, selectedStore }: StoreMapProps) {
         travelMode: google.maps.TravelMode.DRIVING,
       },
       (result, status) => {
+        console.log('Route result status:', status);
         if (status === 'OK' && result) {
+          console.log('Route found! Setting directions.');
+          setRoutePath(null); // Clear fallback path
+          directionsRenderer.setMap(map);
           directionsRenderer.setDirections(result);
           
-          // Fit bounds to show both markers
+          const bounds = new google.maps.LatLngBounds();
+          bounds.extend(userLocation);
+          bounds.extend({ lat: selectedStore.lat, lng: selectedStore.lng });
+          map.fitBounds(bounds, {
+            top: 60,
+            right: 60,
+            bottom: 60,
+            left: 60
+          });
+        } else {
+          console.warn('Route request failed (likely API not enabled). Using straight line fallback.', status);
+          setRoutePath([userLocation, { lat: selectedStore.lat, lng: selectedStore.lng }]);
+          
+          // Still fit bounds for the fallback line
           const bounds = new google.maps.LatLngBounds();
           bounds.extend(userLocation);
           bounds.extend({ lat: selectedStore.lat, lng: selectedStore.lng });
@@ -87,37 +135,52 @@ function MapContent({ userLocation, selectedStore }: StoreMapProps) {
     );
   }, [directionsService, directionsRenderer, userLocation, selectedStore, map]);
 
+  const handleDragEnd = (e: google.maps.MapMouseEvent) => {
+    if (e.latLng && onLocationChange) {
+      onLocationChange({
+        lat: e.latLng.lat(),
+        lng: e.latLng.lng()
+      });
+    }
+  };
+
   return (
     <>
       {/* User Marker */}
       {userLocation && (
-        <AdvancedMarker position={userLocation} title="Tu Ubicación">
-          <div className="relative">
-            <div className="absolute -inset-4 bg-holly-orange/20 rounded-full animate-ping" />
-            <Pin background="#e1a139" glyphColor="#fff" scale={1.2} />
-          </div>
-        </AdvancedMarker>
+        <Marker 
+          position={userLocation} 
+          title="Tu Ubicación (Puedes moverme)"
+          draggable={true}
+          onDragEnd={handleDragEnd}
+        />
       )}
 
       {/* Selected Store Marker */}
       {selectedStore && (
-        <AdvancedMarker
-          key={selectedStore.id}
+        <Marker
           position={{ lat: selectedStore.lat, lng: selectedStore.lng }}
           title={selectedStore.name}
-        >
-          <Pin 
-            background="#8B4513" 
-            glyphColor="#fff"
-            scale={1.3}
-          />
-        </AdvancedMarker>
+          icon={{
+            url: 'https://maps.google.com/mapfiles/ms/icons/orange-dot.png'
+          }}
+        />
+      )}
+
+      {/* Fallback Polyline if Directions API fails */}
+      {routePath && (
+        <Polyline
+          path={routePath}
+          strokeColor="#C2A378"
+          strokeWeight={8}
+          strokeOpacity={1.0}
+        />
       )}
     </>
   );
 }
 
-export function StoreMap({ userLocation, selectedStore, onStoreSelect }: StoreMapProps) {
+export function StoreMap({ userLocation, selectedStore, onStoreSelect, onLocationChange }: StoreMapProps) {
   if (!hasValidKey) {
     return (
       <div className="w-full h-64 bg-holly-cream rounded-[30px] flex items-center justify-center p-8 text-center border-2 border-dashed border-holly-orange/20">
@@ -132,17 +195,17 @@ export function StoreMap({ userLocation, selectedStore, onStoreSelect }: StoreMa
   }
 
   return (
-    <div className="w-full h-80 rounded-[30px] overflow-hidden shadow-xl border-4 border-white relative">
+    <div className="w-full h-full rounded-[30px] overflow-hidden shadow-xl border-4 border-white relative">
       <Map
         defaultCenter={{ lat: 10.6667, lng: -71.6167 }}
         defaultZoom={11}
-        mapId="HOLLYWOOD_MAP_ID"
         style={{ width: '100%', height: '100%' }}
         disableDefaultUI={true}
       >
         <MapContent 
           userLocation={userLocation} 
           selectedStore={selectedStore}
+          onLocationChange={onLocationChange}
         />
       </Map>
     </div>

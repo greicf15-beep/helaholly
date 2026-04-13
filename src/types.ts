@@ -11,6 +11,8 @@ export interface Product {
   category: Category;
   image: string;
   deliveryAvailable: boolean;
+  onlyDelivery?: boolean;
+  onlyInStore?: boolean;
   isPackaged?: boolean; // True for gelato ready-to-go
   isCustomizable?: boolean;
 }
@@ -21,7 +23,7 @@ export interface CartItem extends Product {
     size?: string;
     flavor?: string;
     toppings?: string[];
-    extraToppings?: { name: string; price: number }[];
+    extraToppings?: { name: string; price: number; flavor?: string }[];
   };
 }
 

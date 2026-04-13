@@ -54,50 +54,5 @@
   background: #8B4513;
 }
 
-/* Google Places Autocomplete Custom Styling */
-.pac-container {
-  background-color: #fdfcf5; /* holly-cream */
-  border-radius: 30px;
-  border: 2px solid rgba(225, 161, 57, 0.1); /* holly-orange with opacity */
-  box-shadow: 0 15px 30px rgba(139, 69, 19, 0.1);
-  font-family: 'FuturaBkBTBook', sans-serif;
-  margin-top: 8px;
-  z-index: 9999 !important;
-}
+/* Google Places Autocomplete Custom Styling - REMOVED */
 
-.pac-item {
-  padding: 12px 20px;
-  border-top: 1px solid rgba(225, 161, 57, 0.05);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.pac-item:first-child {
-  border-top: none;
-}
-
-.pac-item:hover {
-  background-color: rgba(225, 161, 57, 0.05);
-}
-
-.pac-item-query {
-  font-family: 'VolkswagenHeavy', sans-serif;
-  font-weight: 700;
-  color: #8B4513; /* holly-brown */
-  font-size: 16px;
-  text-transform: uppercase;
-}
-
-.pac-matched {
-  color: #e1a139; /* holly-orange */
-}
-
-.pac-icon {
-  display: none;
-}
-
-.pac-container:after {
-  display: none;
-}

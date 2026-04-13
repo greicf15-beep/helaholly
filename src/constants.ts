@@ -23,18 +23,103 @@ export const TINA_FLAVORS = [
   "Mantecado", "Chocolate", "Dulce de Leche"
 ];
 
-export const FRAPUCCINO_FLAVORS = [
-  { name: "Original", price: 4.95 },
-  { name: "Tiramisú", price: 4.95 },
-  { name: "Nutella", price: 8.15 }
+export const GELATO_BASICO_FLAVORS = ['Fresa', 'Mantecado', 'Chocolate Malteado', 'Napolitano'];
+export const GELATO_PREMIUM_FLAVORS = [
+  'Tiramisu', 'Biscotti Dolci', 'Brazo Gitano de Coco', "Hershey's", 
+  'Sundae de Arequipe', 'Sundae de Chocolate', 'Sundae de Fresa', 
+  'Brownie Snickers', 'Oreo', 'Ron Pasas', 'Tia Gesua', 
+  'Cheesecake de Fresa', 'Chocolatissimo', 'Brownie', 'Brownie Fudge', 'Coco'
+];
+export const GELATO_PELICULA_FLAVORS = ['Ferrero Rocher', 'Chocolate Dubai'];
+export const GELATO_DELUXE_FLAVORS = ['Pistacho'];
+
+export const GELATO_LINES = [
+  { id: 'basica', label: 'Línea Básica', price: 9.65 },
+  { id: 'premium', label: 'Línea Premium', price: 12.95 },
+  { id: 'pelicula', label: 'Línea de Película', price: 16.10 },
+  { id: 'deluxe', label: 'Línea Deluxe', price: 23.50 }
 ];
 
-export const MILKSHAKE_FLAVORS = [
+export const GELATO_16OZ_LINES = [
+  { id: 'basica', label: 'Línea Básica', price: 4.40 },
+  { id: 'premium', label: 'Línea Premium', price: 6.05 },
+  { id: 'deluxe', label: 'Línea Deluxe', price: 8.25 }
+];
+
+export const GELATO_16OZ_BASICO_FLAVORS = ['Fresa', 'Chocolattisimo', 'Ron Pasas'];
+export const GELATO_16OZ_PREMIUM_FLAVORS = ['Brownie Snickers', 'Brazo Gitano de Coco'];
+export const GELATO_16OZ_DELUXE_FLAVORS = ['Pistacho'];
+
+export const BARQUILLA_1_PORCION_LINES = [
+  { id: 'basica', label: 'Línea Básica', price: 1.72 },
+  { id: 'premium', label: 'Línea Premium', price: 2.33 },
+  { id: 'pelicula', label: 'Línea de Película', price: 2.92 },
+  { id: 'deluxe', label: 'Línea Deluxe', price: 4.75 }
+];
+
+export const BARQUILLON_1_PORCION_LINES = [
+  { id: 'basica', label: 'Línea Básica', price: 2.48 },
+  { id: 'premium', label: 'Línea Premium', price: 3.09 },
+  { id: 'pelicula', label: 'Línea de Película', price: 3.69 },
+  { id: 'deluxe', label: 'Línea Deluxe', price: 5.49 }
+];
+
+export const BARQUILLON_2_PORCIONES_LINES = [
+  { id: 'basica', label: 'Línea Básica', price: 3.87 },
+  { id: 'premium', label: 'Línea Premium', price: 5.09 },
+  { id: 'pelicula', label: 'Línea de Película', price: 6.28 },
+  { id: 'deluxe', label: 'Línea Deluxe', price: 9.92 }
+];
+
+export const TINA_1_PORCION_LINES = [
+  { id: 'basica', label: 'Línea Básica', price: 1.70 },
+  { id: 'premium', label: 'Línea Premium', price: 2.32 },
+  { id: 'pelicula', label: 'Línea de Película', price: 2.91 },
+  { id: 'deluxe', label: 'Línea Deluxe', price: 4.74 }
+];
+
+export const TINA_2_PORCIONES_LINES = [
+  { id: 'basica', label: 'Línea Básica', price: 3.09 },
+  { id: 'premium', label: 'Línea Premium', price: 4.31 },
+  { id: 'pelicula', label: 'Línea de Película', price: 5.50 },
+  { id: 'deluxe', label: 'Línea Deluxe', price: 9.16 }
+];
+
+export const SOFT_FRAPUCCINO_FLAVORS = [
+  { name: "Original", price: 4.95 },
+  { name: "Tiramisú", price: 4.95 },
+  { name: "Nutella", price: 8.15 },
+  { name: "PISTACHO", price: 8.15 },
+  { name: "NOCCIOLA", price: 8.15 }
+];
+
+export const SOFT_MILKSHAKE_FLAVORS = [
   { name: "Oreo", price: 4.40 },
   { name: "Toddy Crunch", price: 4.40 },
   { name: "Brownie Snickers", price: 4.40 },
   { name: "Ferrero Rochers", price: 5.60 },
   { name: "Frutos del Bosque", price: 5.60 }
+];
+
+export const GELATO_FRAPUCCINO_FLAVORS = [
+  { name: "Frapuccino Original", price: 7.34 },
+  { name: "Frapuccino Tiramisu", price: 7.40 }
+];
+
+export const GELATO_MERENGADA_FLAVORS = [
+  { name: "Merengada Reeses", price: 7.80 },
+  { name: "Merengada Oreo", price: 7.80 },
+  { name: "Merengada Nutella", price: 7.80 },
+  { name: "Merengada B-ready", price: 7.80 },
+  { name: "Merengada Raffaello", price: 9.64 },
+  { name: "Merengada Ferrero", price: 9.64 }
+];
+
+export const GELATO_EXTRA_PORTIONS = [
+  { name: "Porción Básica", price: 1.38 },
+  { name: "Porción Premium", price: 2.00 },
+  { name: "Porción Película", price: 2.59 },
+  { name: "Porción Deluxe", price: 4.43 }
 ];
 
 export const EXTRA_TOPPINGS = [
@@ -57,37 +142,81 @@ export const EXTRA_TOPPINGS = [
   { name: "BUBBLE", price: 2.00 }
 ];
 
+export const PROMOS: Product[] = [
+  {
+    id: 'promo-basico',
+    name: 'Combo basico',
+    description: '1 Helado Basico 1 lt + 10 Conos. Elige tu sabor favorito.',
+    price: 11.55,
+    category: 'gelato',
+    image: '/combobasico.webp',
+    deliveryAvailable: true,
+    isPackaged: true,
+    isCustomizable: true
+  },
+  {
+    id: 'promo-hollylunch',
+    name: 'Promo HollyLunch',
+    description: '1 Helado Premium 1 lt. + 1 Caja Holly Conos + 1 Bolso Hollylonchera. Elige tu sabor favorito.',
+    price: 19.25,
+    category: 'gelato',
+    image: '/hollylunch.webp',
+    deliveryAvailable: true,
+    isPackaged: true,
+    isCustomizable: true
+  },
+  {
+    id: 'promo-casa-premium',
+    name: 'Promo Hollywood a tu casa',
+    description: '1 Helado Premium 1 lt. + 1 Caja de Holly Conos + 1 Cuchara para helados. Elige tu sabor favorito.',
+    price: 18.50,
+    category: 'gelato',
+    image: '/Hollywoodatucasa.webp',
+    deliveryAvailable: true,
+    isPackaged: true,
+    isCustomizable: true
+  },
+  {
+    id: 'promo-casa-pelicula',
+    name: 'Promo Hollywood a tu casa - de pelicula',
+    description: '1 Helado Pelicula 1 lt + 1 Caja de Holly Conos. Elige tu sabor favorito.',
+    price: 18.15,
+    category: 'gelato',
+    image: '/hollywoodatucasapelicula.webp',
+    deliveryAvailable: true,
+    isPackaged: true,
+    isCustomizable: true
+  },
+  {
+    id: 'promo-casa-deluxe',
+    name: 'Promo Hollywood a tu casa - deluxe',
+    description: '1 Helado Deluxe 1 lt + 1 Caja Holly Conos. Elige tu sabor favorito.',
+    price: 25.50,
+    category: 'gelato',
+    image: '/hollywoodatucasadeluxe.webp',
+    deliveryAvailable: true,
+    isPackaged: true,
+    isCustomizable: true
+  }
+];
+
+export const COOKIE_BROWNIE_FLAVORS = [
+  "Mantecado", "Fresa", "Chocolate", "Napolitano"
+];
+
 export const PRODUCTS: Product[] = [
   // Gelato
   {
-    id: 'g1',
-    name: 'Helado 16oz Básico',
-    description: 'Nuestro gelato artesanal en presentación de 16oz, sabores clásicos.',
+    id: 'gelato-16oz-custom',
+    name: 'Helado 16oz',
+    description: 'Nuestro gelato artesanal en presentación de 16oz. Elige tu línea y sabor favorito.',
     price: 4.40,
     category: 'gelato',
-    image: 'https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?auto=format&fit=crop&w=400&h=400&q=80',
+    image: '/16oz.webp',
     deliveryAvailable: true,
-    isPackaged: true
-  },
-  {
-    id: 'g2',
-    name: 'Helado 16oz Premium',
-    description: 'Gelato de 16oz con nuestra selección de sabores premium.',
-    price: 6.05,
-    category: 'gelato',
-    image: 'https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?auto=format&fit=crop&w=400&h=400&q=80',
-    deliveryAvailable: true,
-    isPackaged: true
-  },
-  {
-    id: 'g3',
-    name: 'Helado 16oz Deluxe',
-    description: 'La experiencia máxima en 16oz con sabores exclusivos deluxe.',
-    price: 8.25,
-    category: 'gelato',
-    image: 'https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?auto=format&fit=crop&w=400&h=400&q=80',
-    deliveryAvailable: true,
-    isPackaged: true
+    onlyDelivery: true,
+    isPackaged: true,
+    isCustomizable: true
   },
   {
     id: 'g4',
@@ -95,149 +224,171 @@ export const PRODUCTS: Product[] = [
     description: 'Delicioso helado servido en una auténtica concha de coco.',
     price: 3.20,
     category: 'gelato',
-    image: '/hollycoco.webp',
+    image: '/helado_coco_en_concha.webp',
     deliveryAvailable: true,
+    onlyDelivery: true,
     isPackaged: true
   },
   {
-    id: 'g5',
-    name: 'Helado 1 Lt Básico',
-    description: 'Un litro de nuestro mejor gelato artesanal, sabores básicos.',
+    id: 'gelato-1lt-basica',
+    name: '1LT Linea basica',
+    description: 'Un litro de nuestro gelato artesanal Línea Básica. Elige tu sabor favorito.',
     price: 9.65,
     category: 'gelato',
-    image: 'https://images.unsplash.com/photo-1501443762994-82bd5dabb892?auto=format&fit=crop&w=400&h=400&q=80',
+    image: '/linea_basica.webp',
     deliveryAvailable: true,
-    isPackaged: true
+    onlyDelivery: true,
+    isPackaged: true,
+    isCustomizable: true
   },
   {
-    id: 'g6',
-    name: 'Helado 1 Lt Premium',
-    description: 'Un litro de placer con nuestra selección de sabores premium.',
+    id: 'gelato-1lt-premium',
+    name: '1LT Linea Premium',
+    description: 'Un litro de nuestro gelato artesanal Línea Premium. Elige tu sabor favorito.',
     price: 12.95,
     category: 'gelato',
-    image: 'https://images.unsplash.com/photo-1501443762994-82bd5dabb892?auto=format&fit=crop&w=400&h=400&q=80',
+    image: '/linea_premium.webp',
     deliveryAvailable: true,
-    isPackaged: true
+    onlyDelivery: true,
+    isPackaged: true,
+    isCustomizable: true
   },
   {
-    id: 'g7',
-    name: 'Helado 1 Lt Película',
-    description: 'Sabores especiales de película en presentación de un litro.',
+    id: 'gelato-1lt-pelicula',
+    name: '1LT Linea de pelicula',
+    description: 'Un litro de nuestro gelato artesanal Línea de Película. Elige tu sabor favorito.',
     price: 16.10,
     category: 'gelato',
-    image: 'https://images.unsplash.com/photo-1501443762994-82bd5dabb892?auto=format&fit=crop&w=400&h=400&q=80',
+    image: '/linea_pelicula.webp',
     deliveryAvailable: true,
-    isPackaged: true
+    onlyDelivery: true,
+    isPackaged: true,
+    isCustomizable: true
   },
   {
-    id: 'g8',
-    name: 'Helado 1 Lt Deluxe',
-    description: 'Nuestra gama más alta de sabores en presentación de un litro.',
+    id: 'gelato-1lt-deluxe',
+    name: '1LT Linea deluxe',
+    description: 'Un litro de nuestro gelato artesanal Línea Deluxe. Elige tu sabor favorito.',
     price: 23.50,
     category: 'gelato',
-    image: 'https://images.unsplash.com/photo-1501443762994-82bd5dabb892?auto=format&fit=crop&w=400&h=400&q=80',
+    image: '/linea_deluxe.webp',
     deliveryAvailable: true,
-    isPackaged: true
+    onlyDelivery: true,
+    isPackaged: true,
+    isCustomizable: true
+  },
+  // Pick-up only Gelato (Gelateria Stores only)
+  {
+    id: 'barquilla-1-porcion-custom',
+    name: 'Barquilla 1 Porciòn',
+    description: 'Elige tu línea de helado y sabor favorito para tu barquilla de una porción.',
+    price: 1.72,
+    category: 'gelato',
+    image: '/barquilla 1porcion.webp',
+    deliveryAvailable: false,
+    onlyInStore: true,
+    isCustomizable: true
   },
   {
-    id: 'g9',
-    name: 'Combo Holly Conos Básico 1Lt',
-    description: 'Un litro de helado básico más conos crujientes para compartir.',
-    price: 11.55,
+    id: 'barquillon-1-porcion-custom',
+    name: 'Barquillon 1 Porciòn',
+    description: 'Elige tu línea de helado y sabor favorito para tu barquillón de una porción.',
+    price: 2.48,
     category: 'gelato',
-    image: 'https://images.unsplash.com/photo-1501443762994-82bd5dabb892?auto=format&fit=crop&w=400&h=400&q=80',
-    deliveryAvailable: true,
-    isPackaged: true
+    image: '/barquillon 1porcion.webp',
+    deliveryAvailable: false,
+    onlyInStore: true,
+    isCustomizable: true
   },
   {
-    id: 'g10',
-    name: 'Combo Holly Conos Premium 1 Lt',
-    description: 'Un litro de helado premium más conos crujientes para compartir.',
-    price: 14.85,
+    id: 'barquillon-2-porciones-custom',
+    name: 'Barquillon 2 Porciones',
+    description: 'Elige tu línea de helado y sabores favoritos para tu barquillón de dos porciones.',
+    price: 3.87,
     category: 'gelato',
-    image: 'https://images.unsplash.com/photo-1501443762994-82bd5dabb892?auto=format&fit=crop&w=400&h=400&q=80',
-    deliveryAvailable: true,
-    isPackaged: true
+    image: '/barquillon 2 porciones.webp',
+    deliveryAvailable: false,
+    onlyInStore: true,
+    isCustomizable: true
   },
   {
-    id: 'g11',
-    name: 'Combo Holly Conos Película 1 Lt',
-    description: 'Un litro de helado película más conos crujientes para compartir.',
-    price: 18.15,
+    id: 'tina-1-porcion-custom',
+    name: 'Tina 1 Porciòn',
+    description: 'Elige tu línea de helado y sabor favorito para tu tina de una porción.',
+    price: 1.70,
     category: 'gelato',
-    image: 'https://images.unsplash.com/photo-1501443762994-82bd5dabb892?auto=format&fit=crop&w=400&h=400&q=80',
-    deliveryAvailable: true,
-    isPackaged: true
+    image: '/tina1porcion.webp',
+    deliveryAvailable: false,
+    onlyInStore: true,
+    isCustomizable: true
   },
   {
-    id: 'g12',
-    name: 'Combo Holly Conos Deluxe 1 Lt',
-    description: 'Un litro de helado deluxe más conos crujientes para compartir.',
-    price: 25.50,
+    id: 'tina-2-porciones-custom',
+    name: 'Tina 2 Porciones',
+    description: 'Elige tu línea de helado y sabores favoritos para tu tina de dos porciones.',
+    price: 3.09,
     category: 'gelato',
-    image: 'https://images.unsplash.com/photo-1501443762994-82bd5dabb892?auto=format&fit=crop&w=400&h=400&q=80',
-    deliveryAvailable: true,
-    isPackaged: true
+    image: '/tina2porciones.webp',
+    deliveryAvailable: false,
+    onlyInStore: true,
+    isCustomizable: true
   },
   {
-    id: 'g13',
-    name: 'Helado Fresa 16oz',
-    description: 'Clásico y refrescante gelato de fresas naturales en 16oz.',
-    price: 4.40,
+    id: 'milkshakes-custom-gelato',
+    name: 'Merengadas Gelato',
+    description: 'Elige tu sabor favorito de merengada gelato: Reess, Oreo, Nutella, B-ready, Raffaello o Ferrero.',
+    price: 7.80,
     category: 'gelato',
-    image: 'https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?auto=format&fit=crop&w=400&h=400&q=80',
-    deliveryAvailable: true,
-    isPackaged: true
+    image: '/milkshakegelato.webp',
+    deliveryAvailable: false,
+    onlyInStore: true,
+    isCustomizable: true
   },
   {
-    id: 'g14',
-    name: 'Helado Chocolattisimo 16oz',
-    description: 'La experiencia definitiva para los amantes del chocolate en 16oz.',
-    price: 4.40,
+    id: 'frapuccinos-custom-gelato',
+    name: 'Frappuccinos Gelato',
+    description: 'Elige tu sabor favorito de frappuccino gelato: Original o Tiramisu.',
+    price: 7.34,
     category: 'gelato',
-    image: 'https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?auto=format&fit=crop&w=400&h=400&q=80',
-    deliveryAvailable: true,
-    isPackaged: true
+    image: '/frappuccinogelato.webp',
+    deliveryAvailable: false,
+    onlyInStore: true,
+    isCustomizable: true
   },
   {
-    id: 'g15',
-    name: 'Helado Ron Pasas 16oz',
-    description: 'Tradicional sabor de ron con pasas en nuestra base cremosa de 16oz.',
-    price: 4.40,
+    id: 'cookies-chip',
+    name: 'Cookies Chip',
+    description: 'Galleta con chispas de chocolate. Elige tu sabor de helado favorito.',
+    price: 4.83,
     category: 'gelato',
-    image: 'https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?auto=format&fit=crop&w=400&h=400&q=80',
-    deliveryAvailable: true,
-    isPackaged: true
+    image: '/COOKIE.webp',
+    deliveryAvailable: false,
+    onlyInStore: true,
+    isCustomizable: true
   },
   {
-    id: 'g16',
-    name: 'Helado Brownie Snickers 16oz',
-    description: 'Mezcla explosiva de brownie y trozos de Snickers en 16oz.',
-    price: 6.05,
+    id: 'brownie-fudge',
+    name: 'Brownie Fugde',
+    description: 'Brownie de chocolate fudge. Elige tu sabor de helado favorito.',
+    price: 5.11,
     category: 'gelato',
-    image: 'https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?auto=format&fit=crop&w=400&h=400&q=80',
-    deliveryAvailable: true,
-    isPackaged: true
+    image: '/BROWNIE FUDG.webp',
+    deliveryAvailable: false,
+    onlyInStore: true,
+    isCustomizable: true
   },
+  // Promos / Combos
   {
-    id: 'g17',
-    name: 'Helado Brazo Gitano de Coco 16oz',
-    description: 'Inspirado en el postre tradicional con el toque tropical del coco en 16oz.',
-    price: 6.05,
+    id: 'promos-grouped',
+    name: 'Promos / Combos',
+    description: 'Descubre nuestras promociones especiales y combos de helado.',
+    price: 0, // Will be determined by selection
     category: 'gelato',
-    image: 'https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?auto=format&fit=crop&w=400&h=400&q=80',
+    image: '/Promos.webp', // Main image for the promos group
     deliveryAvailable: true,
-    isPackaged: true
-  },
-  {
-    id: 'g18',
-    name: 'Helado Pistacho 16oz',
-    description: 'Auténtico gelato de pistacho italiano, cremoso y delicioso en 16oz.',
-    price: 8.25,
-    category: 'gelato',
-    image: 'https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?auto=format&fit=crop&w=400&h=400&q=80',
-    deliveryAvailable: true,
-    isPackaged: true
+    onlyDelivery: true,
+    isPackaged: true,
+    isCustomizable: true
   },
   // Soft
   {
@@ -252,11 +403,11 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 's4',
-    name: 'Tina Galleta 14oz',
+    name: 'Tina Galleta',
     description: 'Tina de helado soft acompañada de galletas crujientes.',
     price: 5.70,
     category: 'soft',
-    image: '/Tinas.webp',
+    image: '/tina_cesta.webp',
     deliveryAvailable: false,
     isCustomizable: true
   },
@@ -266,7 +417,7 @@ export const PRODUCTS: Product[] = [
     description: 'Waffle esponjoso con burbujas, helado soft y tus toppings favoritos.',
     price: 7.00,
     category: 'soft',
-    image: '/bubble waffle.webp',
+    image: '/bubble_waffle.webp',
     deliveryAvailable: false,
     isCustomizable: true
   },
@@ -320,22 +471,22 @@ export const PRODUCTS: Product[] = [
     isCustomizable: true
   },
   {
-    id: 'milkshakes-custom',
-    name: 'MILKSHAKES',
-    description: 'Elige tu sabor favorito de milkshake: Oreo, Toddy Crunch, Brownie Snickers, Ferrero Rochers o Frutos del Bosque.',
+    id: 'milkshakes-custom-soft',
+    name: 'Milkshakes Soft',
+    description: 'Elige tu sabor favorito de milkshake soft: Oreo, Toddy Crunch, Brownie Snickers, Ferrero Rochers o Frutos del Bosque.',
     price: 4.40,
     category: 'soft',
-    image: '/milkshake.webp',
+    image: '/milkshakesoft.webp',
     deliveryAvailable: false,
     isCustomizable: true
   },
   {
-    id: 'frapuccinos-custom',
-    name: 'FRAPUCCINOS',
-    description: 'Elige tu sabor favorito de frapuccino: Original, Tiramisú o Nutella.',
+    id: 'frapuccinos-custom-soft',
+    name: 'Frappuccinos Soft',
+    description: 'Elige tu sabor favorito de frappuccino soft: Original, Tiramisú, Nutella, Pistacho o Nocciola.',
     price: 4.95,
     category: 'soft',
-    image: '/frappu.webp',
+    image: '/frappuccinosoft.webp',
     deliveryAvailable: false,
     isCustomizable: true
   }
@@ -350,7 +501,7 @@ export const HOLLYWOOD_STORES: StoreLocation[] = [
     lng: -71.6482119,
     city: 'Maracaibo',
     type: 'gelateria',
-    phone: '584120000001'
+    phone: '584121000643'
   },
   {
     id: 'cab-farmak',
@@ -360,7 +511,7 @@ export const HOLLYWOOD_STORES: StoreLocation[] = [
     lng: -71.4607155,
     city: 'Cabimas',
     type: 'gelateria',
-    phone: '584120000002'
+    phone: '584146829225'
   },
   {
     id: 'mcbo-cima',
@@ -370,7 +521,7 @@ export const HOLLYWOOD_STORES: StoreLocation[] = [
     lng: -71.6184280,
     city: 'Maracaibo',
     type: 'gelateria',
-    phone: '584120000003'
+    phone: '584246290925'
   },
   {
     id: 'mcbo-zonanorte',
@@ -380,7 +531,7 @@ export const HOLLYWOOD_STORES: StoreLocation[] = [
     lng: -71.6227916,
     city: 'Maracaibo',
     type: 'gelateria',
-    phone: '584120000004'
+    phone: '584247643040'
   },
   {
     id: 'cab-costamall',
@@ -390,7 +541,7 @@ export const HOLLYWOOD_STORES: StoreLocation[] = [
     lng: -71.4176744,
     city: 'Cabimas',
     type: 'soft',
-    phone: '584120000005'
+    phone: '584246142820'
   },
   {
     id: 'mcbo-cima-soft',
@@ -400,7 +551,7 @@ export const HOLLYWOOD_STORES: StoreLocation[] = [
     lng: -71.6184280,
     city: 'Maracaibo',
     type: 'soft',
-    phone: '584120000006'
+    phone: '584246211655'
   },
   {
     id: 'mcbo-mallpaseo',
@@ -410,7 +561,7 @@ export const HOLLYWOOD_STORES: StoreLocation[] = [
     lng: -71.6558,
     city: 'Maracaibo',
     type: 'soft',
-    phone: '584120000007'
+    phone: '584246463591'
   },
   {
     id: 'mcbo-sanfelipe',
@@ -420,7 +571,7 @@ export const HOLLYWOOD_STORES: StoreLocation[] = [
     lng: -71.6141801,
     city: 'Maracaibo',
     type: 'soft',
-    phone: '584120000008'
+    phone: '584246571962'
   },
   {
     id: 'mcbo-72',
@@ -430,7 +581,7 @@ export const HOLLYWOOD_STORES: StoreLocation[] = [
     lng: -71.6172572,
     city: 'Maracaibo',
     type: 'soft',
-    phone: '584120000009'
+    phone: '584126501375'
   },
   {
     id: 'val-naguanagua',
@@ -440,7 +591,7 @@ export const HOLLYWOOD_STORES: StoreLocation[] = [
     lng: -68.0090645,
     city: 'Valencia',
     type: 'soft',
-    phone: '584120000010'
+    phone: '584126974229'
   }
 ];
 

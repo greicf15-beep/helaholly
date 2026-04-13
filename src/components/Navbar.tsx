@@ -20,7 +20,6 @@ export function Navbar({ cartCount, onCartClick, orderMode, onChangeMode }: Navb
               src="/logo_holly.png" 
               alt="Heladería Hollywood" 
               className="h-8 sm:h-14 w-auto object-contain"
-              referrerPolicy="no-referrer"
             />
           </div>
           

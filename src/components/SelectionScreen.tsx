@@ -49,7 +49,6 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
             src="/logo_holly.png" 
             alt="Heladería Hollywood" 
             className="h-20 sm:h-32 w-auto object-contain mx-auto mb-4 sm:mb-6"
-            referrerPolicy="no-referrer"
           />
           <h1 className="text-3xl sm:text-5xl font-display font-bold text-holly-brown mb-2 sm:mb-4">
             ¿Cómo quieres tu pedido?
@@ -109,7 +108,6 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
             src="/logo_holly.png" 
             alt="Heladería Hollywood" 
             className="h-20 sm:h-32 w-auto object-contain mx-auto mb-4"
-            referrerPolicy="no-referrer"
           />
           {orderMode && (
             <div className="flex flex-col items-center mb-4 sm:mb-6">
@@ -204,7 +202,6 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
             src="/logo_holly.png" 
             alt="Heladería Hollywood" 
             className="h-16 sm:h-24 w-auto object-contain mb-3 sm:mb-4"
-            referrerPolicy="no-referrer"
           />
           <div className="flex flex-col items-center">
             <span className="text-[7px] sm:text-[10px] font-bold text-holly-brown/40 uppercase tracking-widest mb-1">Modo Seleccionado</span>
@@ -274,7 +271,6 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
               src="/gelato.webp" 
               alt="Gelato Premium"
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-              referrerPolicy="no-referrer"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-holly-brown/20 to-transparent" />
           </div>
@@ -303,7 +299,6 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
               src="/soft.webp" 
               alt="Soft Serve"
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-              referrerPolicy="no-referrer"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-holly-brown/20 to-transparent" />
           </div>

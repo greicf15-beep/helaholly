@@ -262,7 +262,6 @@ export default function App() {
                             src="/logo_holly.png" 
                             alt="Heladería Hollywood" 
                             className="h-16 w-auto object-contain brightness-0 invert"
-                            referrerPolicy="no-referrer"
                           />
                         </div>
                         <p className="text-holly-white/60 font-medium leading-relaxed">

@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
 
@@ -22,10 +23,28 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(__dirname, 'dist');
-    app.use(express.static(distPath));
+    const distPath = path.join(process.cwd(), 'dist');
+    
+    if (!fs.existsSync(distPath)) {
+      console.error(`ERROR: The 'dist' directory does not exist at ${distPath}. Did you run 'npm run build'?`);
+      // Fallback to serving public folder if dist is missing (not ideal for production but helps debug)
+      app.use(express.static(path.join(process.cwd(), 'public')));
+    } else {
+      console.log(`Serving static files from: ${distPath}`);
+      app.use(express.static(distPath, {
+        maxAge: '1d',
+        index: false
+      }));
+    }
+
+    // Fallback for SPA
     app.get('*', (req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
+      const indexPath = path.join(distPath, 'index.html');
+      if (fs.existsSync(indexPath)) {
+        res.sendFile(indexPath);
+      } else {
+        res.status(404).send("Error: index.html not found in dist folder. Please ensure the build process completed successfully.");
+      }
     });
   }
 

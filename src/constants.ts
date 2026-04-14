@@ -1,37 +1,36 @@
 import { Product, StoreType, StoreLocation } from './types';
-import IMAGES_BASE64 from './assets/images.json';
 
-// Image helpers to use Base64 strings
-const comboBasicoImg = IMAGES_BASE64['combobasico.webp'];
-const hollyLunchImg = IMAGES_BASE64['hollylunch.webp'];
-const hollywoodCasaImg = IMAGES_BASE64['hollywoodatucasa.webp'];
-const hollywoodCasaPeliculaImg = IMAGES_BASE64['hollywoodatucasapelicula.webp'];
-const hollywoodCasaDeluxeImg = IMAGES_BASE64['hollywoodatucasadeluxe.webp'];
-const gelato16ozImg = IMAGES_BASE64['16oz.webp'];
-const heladoCocoImg = IMAGES_BASE64['helado_coco_en_concha.webp'];
-const lineaBasicaImg = IMAGES_BASE64['linea_basica.webp'];
-const lineaPremiumImg = IMAGES_BASE64['linea_premium.webp'];
-const lineaPeliculaImg = IMAGES_BASE64['linea_pelicula.webp'];
-const lineaDeluxeImg = IMAGES_BASE64['linea_deluxe.webp'];
-const barquilla1PorcionImg = IMAGES_BASE64['barquilla_1porcion.webp'];
-const barquillon1PorcionImg = IMAGES_BASE64['barquillon_1porcion.webp'];
-const barquillon2PorcionesImg = IMAGES_BASE64['barquillon_2_porciones.webp'];
-const tina1PorcionImg = IMAGES_BASE64['tina1porcion.webp'];
-const tina2PorcionesImg = IMAGES_BASE64['tina2porciones.webp'];
-const milkshakeGelatoImg = IMAGES_BASE64['milkshakegelato.webp'];
-const frappuccinoGelatoImg = IMAGES_BASE64['frappuccinogelato.webp'];
-const cookieImg = IMAGES_BASE64['cookie.webp'];
-const brownieFudgeImg = IMAGES_BASE64['brownie_fudge.webp'];
-const promosImg = IMAGES_BASE64['promos.webp'];
-const tinasImg = IMAGES_BASE64['tinas.webp'];
-const tinaCestaImg = IMAGES_BASE64['tina_cesta.webp'];
-const bubbleWaffleImg = IMAGES_BASE64['bubble_waffle.webp'];
-const sundaeImg = IMAGES_BASE64['sundae.webp'];
-const frostyImg = IMAGES_BASE64['frosty.webp'];
-const barquillaImg = IMAGES_BASE64['barquilla.webp'];
-const maxiImg = IMAGES_BASE64['maxi.webp'];
-const milkshakeSoftImg = IMAGES_BASE64['milkshakesoft.webp'];
-const frappuccinoSoftImg = IMAGES_BASE64['frappuccinosoft.webp'];
+// Image helpers to use absolute paths from public folder
+const comboBasicoImg = '/assets/combobasico.webp';
+const hollyLunchImg = '/assets/hollylunch.webp';
+const hollywoodCasaImg = '/assets/hollywoodatucasa.webp';
+const hollywoodCasaPeliculaImg = '/assets/hollywoodatucasapelicula.webp';
+const hollywoodCasaDeluxeImg = '/assets/hollywoodatucasadeluxe.webp';
+const gelato16ozImg = '/assets/16oz.webp';
+const heladoCocoImg = '/assets/helado_coco_en_concha.webp';
+const lineaBasicaImg = '/assets/linea_basica.webp';
+const lineaPremiumImg = '/assets/linea_premium.webp';
+const lineaPeliculaImg = '/assets/linea_pelicula.webp';
+const lineaDeluxeImg = '/assets/linea_deluxe.webp';
+const barquilla1PorcionImg = '/assets/barquilla_1porcion.webp';
+const barquillon1PorcionImg = '/assets/barquillon_1porcion.webp';
+const barquillon2PorcionesImg = '/assets/barquillon_2_porciones.webp';
+const tina1PorcionImg = '/assets/tina1porcion.webp';
+const tina2PorcionesImg = '/assets/tina2porciones.webp';
+const milkshakeGelatoImg = '/assets/milkshakegelato.webp';
+const frappuccinoGelatoImg = '/assets/frappuccinogelato.webp';
+const cookieImg = '/assets/cookie.webp';
+const brownieFudgeImg = '/assets/brownie_fudge.webp';
+const promosImg = '/assets/promos.webp';
+const tinasImg = '/assets/tinas.webp';
+const tinaCestaImg = '/assets/tina_cesta.webp';
+const bubbleWaffleImg = '/assets/bubble_waffle.webp';
+const sundaeImg = '/assets/sundae.webp';
+const frostyImg = '/assets/frosty.webp';
+const barquillaImg = '/assets/barquilla.webp';
+const maxiImg = '/assets/maxi.webp';
+const milkshakeSoftImg = '/assets/milkshakesoft.webp';
+const frappuccinoSoftImg = '/assets/frappuccinosoft.webp';
 
 export const TOPPINGS = [
   "Topping Cereales Azucarado", "Topping Cereales Crispy", "Topping Cereales Fruti Aro", "Topping Cereales Pop",

@@ -16,9 +16,8 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { handleFirestoreError, OperationType } from './errorUtils';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import { Home, IceCream, IceCreamBowl, ShoppingCart } from 'lucide-react';
-import IMAGES_BASE64 from './assets/images.json';
 
-const logoHolly = IMAGES_BASE64['logo_holly.png'];
+const logoHolly = '/assets/logo_holly.png';
 
 const API_KEY = process.env.GOOGLE_MAPS_PLATFORM_KEY || '';
 

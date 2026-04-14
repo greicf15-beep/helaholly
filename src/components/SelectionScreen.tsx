@@ -3,11 +3,10 @@ import { motion } from 'motion/react';
 import { HOLLYWOOD_STORES } from '../constants';
 import { OrderMode, Category, StoreLocation } from '../types';
 import { MapPin, Store as StoreIcon, ChevronRight, Navigation, Truck, ShoppingBag, ArrowLeft } from 'lucide-react';
-import IMAGES_BASE64 from '../assets/images.json';
 
-const logoHolly = IMAGES_BASE64['logo_holly.png'];
-const gelatoImg = IMAGES_BASE64['gelato.webp'];
-const softImg = IMAGES_BASE64['soft.webp'];
+const logoHolly = '/assets/logo_holly.png';
+const gelatoImg = '/assets/gelato.webp';
+const softImg = '/assets/soft.webp';
 
 interface SelectionScreenProps {
   orderMode: OrderMode | null;

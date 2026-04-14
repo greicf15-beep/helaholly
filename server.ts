@@ -29,21 +29,35 @@ async function startServer() {
 
   // API routes
   app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok', mode: process.env.NODE_ENV });
+    res.json({ 
+      status: 'ok', 
+      mode: process.env.NODE_ENV,
+      cwd: process.cwd(),
+      dirName: __dirname
+    });
   });
 
-  app.get('/api/check-image/:name', (req, res) => {
-    const name = req.params.name;
-    const distPath = path.resolve(process.cwd(), 'dist', name);
-    const publicPath = path.resolve(process.cwd(), 'public', name);
+  // Neutral diagnostic route to avoid proxy interception
+  app.get('/api/debug-site', (req, res) => {
+    const distPath = path.resolve(process.cwd(), 'dist');
+    const publicPath = path.resolve(process.cwd(), 'public');
     
+    let distFiles: string[] = [];
+    try {
+      if (fs.existsSync(distPath)) {
+        distFiles = fs.readdirSync(distPath).filter(f => !f.startsWith('.'));
+      }
+    } catch (e) {
+      distFiles = ['Error reading dist'];
+    }
+
     res.json({
-      name,
+      message: 'Hollywood Server Debug',
+      cwd: process.cwd(),
       distExists: fs.existsSync(distPath),
       publicExists: fs.existsSync(publicPath),
-      distPath,
-      publicPath,
-      cwd: process.cwd()
+      distFiles: distFiles.slice(0, 20), // Show first 20 files
+      env: process.env.NODE_ENV
     });
   });
 

@@ -259,9 +259,8 @@ export default function App() {
                       <div className="space-y-6">
                         <div className="flex items-center">
                           <img 
-                            src="/logo_holly.png" 
+                            src="logo_holly.png" 
                             alt="Heladería Hollywood" 
-                            referrerPolicy="no-referrer"
                             className="h-16 w-auto object-contain brightness-0 invert"
                           />
                         </div>

@@ -149,7 +149,7 @@ export const PROMOS: Product[] = [
     description: '1 Helado Basico 1 lt + 10 Conos. Elige tu sabor favorito.',
     price: 11.55,
     category: 'gelato',
-    image: '/combobasico.webp',
+    image: 'combobasico.webp',
     deliveryAvailable: true,
     isPackaged: true,
     isCustomizable: true
@@ -160,7 +160,7 @@ export const PROMOS: Product[] = [
     description: '1 Helado Premium 1 lt. + 1 Caja Holly Conos + 1 Bolso Hollylonchera. Elige tu sabor favorito.',
     price: 19.25,
     category: 'gelato',
-    image: '/hollylunch.webp',
+    image: 'hollylunch.webp',
     deliveryAvailable: true,
     isPackaged: true,
     isCustomizable: true
@@ -171,7 +171,7 @@ export const PROMOS: Product[] = [
     description: '1 Helado Premium 1 lt. + 1 Caja de Holly Conos + 1 Cuchara para helados. Elige tu sabor favorito.',
     price: 18.50,
     category: 'gelato',
-    image: '/hollywoodatucasa.webp',
+    image: 'hollywoodatucasa.webp',
     deliveryAvailable: true,
     isPackaged: true,
     isCustomizable: true
@@ -182,7 +182,7 @@ export const PROMOS: Product[] = [
     description: '1 Helado Pelicula 1 lt + 1 Caja de Holly Conos. Elige tu sabor favorito.',
     price: 18.15,
     category: 'gelato',
-    image: '/hollywoodatucasapelicula.webp',
+    image: 'hollywoodatucasapelicula.webp',
     deliveryAvailable: true,
     isPackaged: true,
     isCustomizable: true
@@ -193,7 +193,7 @@ export const PROMOS: Product[] = [
     description: '1 Helado Deluxe 1 lt + 1 Caja Holly Conos. Elige tu sabor favorito.',
     price: 25.50,
     category: 'gelato',
-    image: '/hollywoodatucasadeluxe.webp',
+    image: 'hollywoodatucasadeluxe.webp',
     deliveryAvailable: true,
     isPackaged: true,
     isCustomizable: true
@@ -212,7 +212,7 @@ export const PRODUCTS: Product[] = [
     description: 'Nuestro gelato artesanal en presentación de 16oz. Elige tu línea y sabor favorito.',
     price: 4.40,
     category: 'gelato',
-    image: '/16oz.webp',
+    image: '16oz.webp',
     deliveryAvailable: true,
     onlyDelivery: true,
     isPackaged: true,
@@ -224,7 +224,7 @@ export const PRODUCTS: Product[] = [
     description: 'Delicioso helado servido en una auténtica concha de coco.',
     price: 3.20,
     category: 'gelato',
-    image: '/helado_coco_en_concha.webp',
+    image: 'helado_coco_en_concha.webp',
     deliveryAvailable: true,
     onlyDelivery: true,
     isPackaged: true
@@ -235,7 +235,7 @@ export const PRODUCTS: Product[] = [
     description: 'Un litro de nuestro gelato artesanal Línea Básica. Elige tu sabor favorito.',
     price: 9.65,
     category: 'gelato',
-    image: '/linea_basica.webp',
+    image: 'linea_basica.webp',
     deliveryAvailable: true,
     onlyDelivery: true,
     isPackaged: true,
@@ -247,7 +247,7 @@ export const PRODUCTS: Product[] = [
     description: 'Un litro de nuestro gelato artesanal Línea Premium. Elige tu sabor favorito.',
     price: 12.95,
     category: 'gelato',
-    image: '/linea_premium.webp',
+    image: 'linea_premium.webp',
     deliveryAvailable: true,
     onlyDelivery: true,
     isPackaged: true,
@@ -259,7 +259,7 @@ export const PRODUCTS: Product[] = [
     description: 'Un litro de nuestro gelato artesanal Línea de Película. Elige tu sabor favorito.',
     price: 16.10,
     category: 'gelato',
-    image: '/linea_pelicula.webp',
+    image: 'linea_pelicula.webp',
     deliveryAvailable: true,
     onlyDelivery: true,
     isPackaged: true,
@@ -271,7 +271,7 @@ export const PRODUCTS: Product[] = [
     description: 'Un litro de nuestro gelato artesanal Línea Deluxe. Elige tu sabor favorito.',
     price: 23.50,
     category: 'gelato',
-    image: '/linea_deluxe.webp',
+    image: 'linea_deluxe.webp',
     deliveryAvailable: true,
     onlyDelivery: true,
     isPackaged: true,
@@ -284,7 +284,7 @@ export const PRODUCTS: Product[] = [
     description: 'Elige tu línea de helado y sabor favorito para tu barquilla de una porción.',
     price: 1.72,
     category: 'gelato',
-    image: '/barquilla_1porcion.webp',
+    image: 'barquilla_1porcion.webp',
     deliveryAvailable: false,
     onlyInStore: true,
     isCustomizable: true
@@ -295,7 +295,7 @@ export const PRODUCTS: Product[] = [
     description: 'Elige tu línea de helado y sabor favorito para tu barquillón de una porción.',
     price: 2.48,
     category: 'gelato',
-    image: '/barquillon_1porcion.webp',
+    image: 'barquillon_1porcion.webp',
     deliveryAvailable: false,
     onlyInStore: true,
     isCustomizable: true
@@ -306,7 +306,7 @@ export const PRODUCTS: Product[] = [
     description: 'Elige tu línea de helado y sabores favoritos para tu barquillón de dos porciones.',
     price: 3.87,
     category: 'gelato',
-    image: '/barquillon_2_porciones.webp',
+    image: 'barquillon_2_porciones.webp',
     deliveryAvailable: false,
     onlyInStore: true,
     isCustomizable: true
@@ -317,7 +317,7 @@ export const PRODUCTS: Product[] = [
     description: 'Elige tu línea de helado y sabor favorito para tu tina de una porción.',
     price: 1.70,
     category: 'gelato',
-    image: '/tina1porcion.webp',
+    image: 'tina1porcion.webp',
     deliveryAvailable: false,
     onlyInStore: true,
     isCustomizable: true
@@ -328,7 +328,7 @@ export const PRODUCTS: Product[] = [
     description: 'Elige tu línea de helado y sabores favoritos para tu tina de dos porciones.',
     price: 3.09,
     category: 'gelato',
-    image: '/tina2porciones.webp',
+    image: 'tina2porciones.webp',
     deliveryAvailable: false,
     onlyInStore: true,
     isCustomizable: true
@@ -339,7 +339,7 @@ export const PRODUCTS: Product[] = [
     description: 'Elige tu sabor favorito de merengada gelato: Reess, Oreo, Nutella, B-ready, Raffaello o Ferrero.',
     price: 7.80,
     category: 'gelato',
-    image: '/milkshakegelato.webp',
+    image: 'milkshakegelato.webp',
     deliveryAvailable: false,
     onlyInStore: true,
     isCustomizable: true
@@ -350,7 +350,7 @@ export const PRODUCTS: Product[] = [
     description: 'Elige tu sabor favorito de frappuccino gelato: Original o Tiramisu.',
     price: 7.34,
     category: 'gelato',
-    image: '/frappuccinogelato.webp',
+    image: 'frappuccinogelato.webp',
     deliveryAvailable: false,
     onlyInStore: true,
     isCustomizable: true
@@ -361,7 +361,7 @@ export const PRODUCTS: Product[] = [
     description: 'Galleta con chispas de chocolate. Elige tu sabor de helado favorito.',
     price: 4.83,
     category: 'gelato',
-    image: '/cookie.webp',
+    image: 'cookie.webp',
     deliveryAvailable: false,
     onlyInStore: true,
     isCustomizable: true
@@ -372,7 +372,7 @@ export const PRODUCTS: Product[] = [
     description: 'Brownie de chocolate fudge. Elige tu sabor de helado favorito.',
     price: 5.11,
     category: 'gelato',
-    image: '/brownie_fudge.webp',
+    image: 'brownie_fudge.webp',
     deliveryAvailable: false,
     onlyInStore: true,
     isCustomizable: true
@@ -384,7 +384,7 @@ export const PRODUCTS: Product[] = [
     description: 'Descubre nuestras promociones especiales y combos de helado.',
     price: 0, // Will be determined by selection
     category: 'gelato',
-    image: '/promos.webp', // Main image for the promos group
+    image: 'promos.webp', // Main image for the promos group
     deliveryAvailable: true,
     onlyDelivery: true,
     isPackaged: true,
@@ -397,7 +397,7 @@ export const PRODUCTS: Product[] = [
     description: 'Personaliza tu tina con tu tamaño, sabor y 3 contornos favoritos.',
     price: 3.50,
     category: 'soft',
-    image: '/tinas.webp',
+    image: 'tinas.webp',
     deliveryAvailable: true,
     isCustomizable: true
   },
@@ -407,7 +407,7 @@ export const PRODUCTS: Product[] = [
     description: 'Tina de helado soft acompañada de galletas crujientes.',
     price: 5.70,
     category: 'soft',
-    image: '/tina_cesta.webp',
+    image: 'tina_cesta.webp',
     deliveryAvailable: false,
     isCustomizable: true
   },
@@ -417,7 +417,7 @@ export const PRODUCTS: Product[] = [
     description: 'Waffle esponjoso con burbujas, helado soft y tus toppings favoritos.',
     price: 7.00,
     category: 'soft',
-    image: '/bubble_waffle.webp',
+    image: 'bubble_waffle.webp',
     deliveryAvailable: false,
     isCustomizable: true
   },

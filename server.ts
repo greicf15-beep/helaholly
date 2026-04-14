@@ -24,17 +24,27 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), 'dist');
+    const publicPath = path.join(process.cwd(), 'public');
     
-    if (!fs.existsSync(distPath)) {
-      console.error(`ERROR: The 'dist' directory does not exist at ${distPath}. Did you run 'npm run build'?`);
-      // Fallback to serving public folder if dist is missing (not ideal for production but helps debug)
-      app.use(express.static(path.join(process.cwd(), 'public')));
-    } else {
-      console.log(`Serving static files from: ${distPath}`);
+    console.log(`--- Debug Info ---`);
+    console.log(`Current Working Directory: ${process.cwd()}`);
+    console.log(`Files in CWD: ${fs.readdirSync(process.cwd()).join(', ')}`);
+    
+    if (fs.existsSync(distPath)) {
+      console.log(`'dist' folder found at: ${distPath}`);
+      console.log(`Files in 'dist': ${fs.readdirSync(distPath).slice(0, 5).join(', ')}...`);
       app.use(express.static(distPath, {
         maxAge: '1d',
         index: false
       }));
+    } else {
+      console.warn(`'dist' folder NOT found. Falling back to 'public' folder.`);
+      if (fs.existsSync(publicPath)) {
+        console.log(`'public' folder found at: ${publicPath}`);
+        app.use(express.static(publicPath));
+      } else {
+        console.error(`CRITICAL: Neither 'dist' nor 'public' folders were found!`);
+      }
     }
 
     // Fallback for SPA

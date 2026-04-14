@@ -1,5 +1,5 @@
 import { Product, StoreType, StoreLocation } from './types';
-import { IMAGES_BASE64 } from './assets/base64';
+import IMAGES_BASE64 from './assets/images.json';
 
 // Image helpers to use Base64 strings
 const comboBasicoImg = IMAGES_BASE64['combobasico.webp'];

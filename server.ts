@@ -31,37 +31,47 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    // Usamos path.resolve(__dirname) para asegurar que la ruta sea absoluta desde la raíz del proyecto
-    const distPath = path.resolve(__dirname, 'dist');
-    const publicPath = path.resolve(__dirname, 'public');
-    
+    // Intentamos encontrar la carpeta 'dist' en varios lugares comunes de Hostinger
+    const possiblePaths = [
+      path.resolve(__dirname, 'dist'),
+      path.join(process.cwd(), 'dist'),
+      path.resolve(__dirname, '../dist'),
+      path.join(process.cwd(), 'public') // Último recurso
+    ];
+
+    let distPath = '';
+    for (const p of possiblePaths) {
+      if (fs.existsSync(p) && fs.existsSync(path.join(p, 'index.html'))) {
+        distPath = p;
+        break;
+      }
+    }
+
     console.log(`--- DEBUG DE RUTAS ---`);
-    console.log(`Directorio del servidor (__dirname): ${__dirname}`);
-    console.log(`Buscando carpeta 'dist' en: ${distPath}`);
+    console.log(`Directorio actual (cwd): ${process.cwd()}`);
+    console.log(`Directorio del script (__dirname): ${__dirname}`);
     
-    if (fs.existsSync(distPath)) {
-      console.log(`¡Carpeta 'dist' encontrada! Contenido: ${fs.readdirSync(distPath).slice(0, 10).join(', ')}`);
-      // Servir estáticos de dist
+    if (distPath) {
+      console.log(`¡Carpeta de producción encontrada en: ${distPath}`);
       app.use(express.static(distPath, {
         maxAge: '1d',
         index: false
       }));
+      
+      // Fallback para SPA (React Router)
+      app.get('*', (req, res) => {
+        res.sendFile(path.join(distPath, 'index.html'));
+      });
     } else {
-      console.error(`ERROR: No se encontró la carpeta 'dist'. Intentando servir desde 'public'.`);
-      if (fs.existsSync(publicPath)) {
-        app.use(express.static(publicPath));
-      }
+      console.error(`ERROR CRÍTICO: No se encontró la carpeta 'dist' ni 'index.html' en ninguna ruta conocida.`);
+      console.log(`Rutas intentadas: ${possiblePaths.join(' | ')}`);
+      
+      // Intentar servir lo que sea que haya en el CWD como emergencia
+      app.use(express.static(process.cwd()));
+      app.get('*', (req, res) => {
+        res.status(404).send("Error: No se encontró la carpeta de compilación (dist). Revisa los logs de despliegue.");
+      });
     }
-
-    // Fallback para SPA (React Router)
-    app.get('*', (req, res) => {
-      const indexPath = path.resolve(distPath, 'index.html');
-      if (fs.existsSync(indexPath)) {
-        res.sendFile(indexPath);
-      } else {
-        res.status(404).send("Error: No se encontró index.html. Revisa los logs de compilación.");
-      }
-    });
   }
 
   app.listen(PORT, '0.0.0.0', () => {

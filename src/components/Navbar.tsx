@@ -17,7 +17,7 @@ export function Navbar({ cartCount, onCartClick, orderMode, onChangeMode }: Navb
         <div className="flex flex-col items-center justify-center h-16 sm:h-28 py-1 sm:py-2">
           <div className="flex items-center">
             <img 
-              src="/logo_holly.png" 
+              src="logo_holly.png" 
               alt="Heladería Hollywood" 
               className="h-8 sm:h-14 w-auto object-contain"
             />

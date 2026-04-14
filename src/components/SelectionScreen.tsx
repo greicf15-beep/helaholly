@@ -4,6 +4,11 @@ import { HOLLYWOOD_STORES } from '../constants';
 import { OrderMode, Category, StoreLocation } from '../types';
 import { MapPin, Store as StoreIcon, ChevronRight, Navigation, Truck, ShoppingBag, ArrowLeft } from 'lucide-react';
 
+// Import assets
+import logoHolly from '../assets/logo_holly.png';
+import gelatoImg from '../assets/gelato.webp';
+import softImg from '../assets/soft.webp';
+
 interface SelectionScreenProps {
   orderMode: OrderMode | null;
   onOrderModeSelect: (mode: OrderMode) => void;
@@ -46,8 +51,9 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
           className="text-center mb-8 sm:mb-12"
         >
           <img 
-            src="logo_holly.png" 
+            src={logoHolly} 
             alt="Heladería Hollywood" 
+            referrerPolicy="no-referrer"
             className="h-20 sm:h-32 w-auto object-contain mx-auto mb-4 sm:mb-6"
           />
           <h1 className="text-3xl sm:text-5xl font-display font-bold text-holly-brown mb-2 sm:mb-4">
@@ -105,8 +111,9 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
           className="text-center mb-8 sm:mb-12"
         >
           <img 
-            src="logo_holly.png" 
+            src={logoHolly} 
             alt="Heladería Hollywood" 
+            referrerPolicy="no-referrer"
             className="h-20 sm:h-32 w-auto object-contain mx-auto mb-4"
           />
           {orderMode && (
@@ -199,8 +206,9 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
       >
         <div className="flex flex-col items-center mb-6 sm:mb-12">
           <img 
-            src="logo_holly.png" 
+            src={logoHolly} 
             alt="Heladería Hollywood" 
+            referrerPolicy="no-referrer"
             className="h-16 sm:h-24 w-auto object-contain mb-3 sm:mb-4"
           />
           <div className="flex flex-col items-center">
@@ -268,8 +276,9 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
         >
           <div className="w-full aspect-square mb-4 sm:mb-6 overflow-hidden rounded-[15px] sm:rounded-[20px] bg-holly-cream relative">
             <img 
-              src="gelato.webp" 
+              src={gelatoImg} 
               alt="Gelato Premium"
+              referrerPolicy="no-referrer"
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-holly-brown/20 to-transparent" />
@@ -296,8 +305,9 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
         >
           <div className="w-full aspect-square mb-4 sm:mb-6 overflow-hidden rounded-[15px] sm:rounded-[20px] bg-holly-cream relative">
             <img 
-              src="soft.webp" 
+              src={softImg} 
               alt="Soft Serve"
+              referrerPolicy="no-referrer"
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-holly-brown/20 to-transparent" />

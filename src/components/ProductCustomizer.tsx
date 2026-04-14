@@ -334,6 +334,7 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                             <img 
                               src={promo.image} 
                               alt={promo.name} 
+                              referrerPolicy="no-referrer"
                               className="w-full h-full object-cover"
                             />
                           </div>

@@ -17,6 +17,9 @@ import { handleFirestoreError, OperationType } from './errorUtils';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import { Home, IceCream, IceCreamBowl, ShoppingCart } from 'lucide-react';
 
+// Import assets
+import logoHolly from './assets/logo_holly.png';
+
 const API_KEY = process.env.GOOGLE_MAPS_PLATFORM_KEY || '';
 
 if (!API_KEY) {
@@ -259,8 +262,9 @@ export default function App() {
                       <div className="space-y-6">
                         <div className="flex items-center">
                           <img 
-                            src="logo_holly.png" 
+                            src={logoHolly} 
                             alt="Heladería Hollywood" 
+                            referrerPolicy="no-referrer"
                             className="h-16 w-auto object-contain brightness-0 invert"
                           />
                         </div>

@@ -171,7 +171,7 @@ export const PROMOS: Product[] = [
     description: '1 Helado Premium 1 lt. + 1 Caja de Holly Conos + 1 Cuchara para helados. Elige tu sabor favorito.',
     price: 18.50,
     category: 'gelato',
-    image: 'Hollywoodatucasa.webp',
+    image: 'hollywoodatucasa.webp',
     deliveryAvailable: true,
     isPackaged: true,
     isCustomizable: true
@@ -284,7 +284,7 @@ export const PRODUCTS: Product[] = [
     description: 'Elige tu línea de helado y sabor favorito para tu barquilla de una porción.',
     price: 1.72,
     category: 'gelato',
-    image: 'barquilla 1porcion.webp',
+    image: 'barquilla_1porcion.webp',
     deliveryAvailable: false,
     onlyInStore: true,
     isCustomizable: true
@@ -295,7 +295,7 @@ export const PRODUCTS: Product[] = [
     description: 'Elige tu línea de helado y sabor favorito para tu barquillón de una porción.',
     price: 2.48,
     category: 'gelato',
-    image: 'barquillon 1porcion.webp',
+    image: 'barquillon_1porcion.webp',
     deliveryAvailable: false,
     onlyInStore: true,
     isCustomizable: true
@@ -306,7 +306,7 @@ export const PRODUCTS: Product[] = [
     description: 'Elige tu línea de helado y sabores favoritos para tu barquillón de dos porciones.',
     price: 3.87,
     category: 'gelato',
-    image: 'barquillon 2 porciones.webp',
+    image: 'barquillon_2_porciones.webp',
     deliveryAvailable: false,
     onlyInStore: true,
     isCustomizable: true
@@ -361,7 +361,7 @@ export const PRODUCTS: Product[] = [
     description: 'Galleta con chispas de chocolate. Elige tu sabor de helado favorito.',
     price: 4.83,
     category: 'gelato',
-    image: 'COOKIE.webp',
+    image: 'cookie.webp',
     deliveryAvailable: false,
     onlyInStore: true,
     isCustomizable: true
@@ -372,7 +372,7 @@ export const PRODUCTS: Product[] = [
     description: 'Brownie de chocolate fudge. Elige tu sabor de helado favorito.',
     price: 5.11,
     category: 'gelato',
-    image: 'BROWNIE FUDG.webp',
+    image: 'brownie_fudge.webp',
     deliveryAvailable: false,
     onlyInStore: true,
     isCustomizable: true
@@ -384,7 +384,7 @@ export const PRODUCTS: Product[] = [
     description: 'Descubre nuestras promociones especiales y combos de helado.',
     price: 0, // Will be determined by selection
     category: 'gelato',
-    image: 'Promos.webp', // Main image for the promos group
+    image: 'promos.webp', // Main image for the promos group
     deliveryAvailable: true,
     onlyDelivery: true,
     isPackaged: true,
@@ -397,7 +397,7 @@ export const PRODUCTS: Product[] = [
     description: 'Personaliza tu tina con tu tamaño, sabor y 3 contornos favoritos.',
     price: 3.50,
     category: 'soft',
-    image: 'Tinas.webp',
+    image: 'tinas.webp',
     deliveryAvailable: true,
     isCustomizable: true
   },

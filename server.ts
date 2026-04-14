@@ -53,14 +53,45 @@ async function startServer() {
     
     if (distPath) {
       console.log(`¡Carpeta de producción encontrada en: ${distPath}`);
+      
+      // Debug route to see what's in the dist folder
+      app.get('/api/debug-files', (req, res) => {
+        try {
+          const files = fs.readdirSync(distPath);
+          const assets = fs.existsSync(path.join(distPath, 'assets')) 
+            ? fs.readdirSync(path.join(distPath, 'assets'))
+            : [];
+          res.json({ 
+            distPath, 
+            cwd: process.cwd(),
+            files,
+            assets,
+            env: process.env.NODE_ENV
+          });
+        } catch (err) {
+          res.status(500).json({ error: String(err), distPath });
+        }
+      });
+
       app.use(express.static(distPath, {
         maxAge: '1d',
-        index: false
+        index: ['index.html']
       }));
+      
+      // También intentar servir desde 'public' por si acaso el build falló
+      const publicPath = path.join(process.cwd(), 'public');
+      if (fs.existsSync(publicPath)) {
+        app.use(express.static(publicPath));
+      }
       
       // Fallback para SPA (React Router)
       app.get('*', (req, res) => {
-        res.sendFile(path.join(distPath, 'index.html'));
+        const indexPath = path.join(distPath, 'index.html');
+        if (fs.existsSync(indexPath)) {
+          res.sendFile(indexPath);
+        } else {
+          res.status(404).send("index.html not found in dist");
+        }
       });
     } else {
       console.error(`ERROR CRÍTICO: No se encontró la carpeta 'dist' ni 'index.html' en ninguna ruta conocida.`);

@@ -105,7 +105,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
           className="text-center mb-8 sm:mb-12"
         >
           <img 
-            src="/logo_holly.png" 
+            src="logo_holly.png" 
             alt="Heladería Hollywood" 
             className="h-20 sm:h-32 w-auto object-contain mx-auto mb-4"
           />

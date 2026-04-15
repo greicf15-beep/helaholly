@@ -35,9 +35,10 @@ interface StoreMapProps {
   selectedStore: StoreLocation | null;
   onStoreSelect?: (store: StoreLocation) => void;
   onLocationChange?: (location: { lat: number; lng: number }) => void;
+  isAddressConfirmed?: boolean;
 }
 
-function MapContent({ userLocation, selectedStore, onLocationChange }: StoreMapProps) {
+function MapContent({ userLocation, selectedStore, onLocationChange, isAddressConfirmed }: StoreMapProps) {
   const map = useMap();
   const routesLib = useMapsLibrary('routes');
   const [directionsService, setDirectionsService] = useState<google.maps.DirectionsService | null>(null);
@@ -81,6 +82,14 @@ function MapContent({ userLocation, selectedStore, onLocationChange }: StoreMapP
   // Draw route and fit bounds when both locations are available
   useEffect(() => {
     if (!userLocation || !selectedStore || !map) return;
+
+    if (!isAddressConfirmed) {
+      if (directionsRenderer) directionsRenderer.setMap(null);
+      setRoutePath(null);
+      map.setCenter(userLocation);
+      map.setZoom(17);
+      return;
+    }
 
     // If directions service is not available yet or fails, we'll use a straight line as fallback
     if (!directionsService || !directionsRenderer) {
@@ -133,7 +142,7 @@ function MapContent({ userLocation, selectedStore, onLocationChange }: StoreMapP
         }
       }
     );
-  }, [directionsService, directionsRenderer, userLocation, selectedStore, map]);
+  }, [directionsService, directionsRenderer, userLocation, selectedStore, map, isAddressConfirmed]);
 
   const handleDragEnd = (e: google.maps.MapMouseEvent) => {
     if (e.latLng && onLocationChange) {
@@ -180,7 +189,7 @@ function MapContent({ userLocation, selectedStore, onLocationChange }: StoreMapP
   );
 }
 
-export function StoreMap({ userLocation, selectedStore, onStoreSelect, onLocationChange }: StoreMapProps) {
+export function StoreMap({ userLocation, selectedStore, onStoreSelect, onLocationChange, isAddressConfirmed }: StoreMapProps) {
   if (!hasValidKey) {
     return (
       <div className="w-full h-64 bg-holly-cream rounded-[30px] flex items-center justify-center p-8 text-center border-2 border-dashed border-holly-orange/20">
@@ -201,11 +210,13 @@ export function StoreMap({ userLocation, selectedStore, onStoreSelect, onLocatio
         defaultZoom={11}
         style={{ width: '100%', height: '100%' }}
         disableDefaultUI={true}
+        gestureHandling={'greedy'}
       >
         <MapContent 
           userLocation={userLocation} 
           selectedStore={selectedStore}
           onLocationChange={onLocationChange}
+          isAddressConfirmed={isAddressConfirmed}
         />
       </Map>
     </div>

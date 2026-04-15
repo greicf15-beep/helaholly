@@ -4,10 +4,6 @@ import { HOLLYWOOD_STORES } from '../constants';
 import { OrderMode, Category, StoreLocation } from '../types';
 import { MapPin, Store as StoreIcon, ChevronRight, Navigation, Truck, ShoppingBag, ArrowLeft } from 'lucide-react';
 
-const logoHolly = '/assets/logo_holly.png';
-const gelatoImg = '/assets/gelato.webp';
-const softImg = '/assets/soft.webp';
-
 interface SelectionScreenProps {
   orderMode: OrderMode | null;
   onOrderModeSelect: (mode: OrderMode) => void;
@@ -50,9 +46,10 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
           className="text-center mb-8 sm:mb-12"
         >
           <img 
-            src={logoHolly} 
+            src="/logo_holly.png" 
             alt="Heladería Hollywood" 
             className="h-20 sm:h-32 w-auto object-contain mx-auto mb-4 sm:mb-6"
+            referrerPolicy="no-referrer"
           />
           <h1 className="text-3xl sm:text-5xl font-display font-bold text-holly-brown mb-2 sm:mb-4">
             ¿Cómo quieres tu pedido?
@@ -109,9 +106,10 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
           className="text-center mb-8 sm:mb-12"
         >
           <img 
-            src={logoHolly} 
+            src="/logo_holly.png" 
             alt="Heladería Hollywood" 
             className="h-20 sm:h-32 w-auto object-contain mx-auto mb-4"
+            referrerPolicy="no-referrer"
           />
           {orderMode && (
             <div className="flex flex-col items-center mb-4 sm:mb-6">
@@ -203,9 +201,10 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
       >
         <div className="flex flex-col items-center mb-6 sm:mb-12">
           <img 
-            src={logoHolly} 
+            src="/logo_holly.png" 
             alt="Heladería Hollywood" 
             className="h-16 sm:h-24 w-auto object-contain mb-3 sm:mb-4"
+            referrerPolicy="no-referrer"
           />
           <div className="flex flex-col items-center">
             <span className="text-[7px] sm:text-[10px] font-bold text-holly-brown/40 uppercase tracking-widest mb-1">Modo Seleccionado</span>
@@ -270,13 +269,13 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
           onClick={() => onCategorySelect('gelato')}
           className="relative group bg-white rounded-[55px] p-6 sm:p-8 shadow-xl border-2 border-holly-brown/5 transition-all duration-500 flex flex-col items-center"
         >
-          <div className="w-full aspect-square mb-4 sm:mb-6 overflow-hidden rounded-[15px] sm:rounded-[20px] bg-holly-cream relative">
+          <div className="w-full aspect-square mb-4 sm:mb-6 overflow-hidden rounded-[15px] sm:rounded-[20px] bg-transparent relative flex items-center justify-center">
             <img 
-              src={gelatoImg} 
+              src="/gelato.webp" 
               alt="Gelato Premium"
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700"
+              referrerPolicy="no-referrer"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-holly-brown/20 to-transparent" />
           </div>
           <h2 className="text-2xl sm:text-3xl font-display font-bold text-holly-brown mb-1 sm:mb-2 tracking-normal uppercase">GELATO</h2>
           <p className="text-holly-brown/40 text-[9px] sm:text-[11px] font-sans font-medium uppercase tracking-[1px]">
@@ -298,13 +297,13 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
             selectedStore.type === 'gelateria' ? 'opacity-50 grayscale cursor-not-allowed' : 'hover:border-holly-orange'
           }`}
         >
-          <div className="w-full aspect-square mb-4 sm:mb-6 overflow-hidden rounded-[15px] sm:rounded-[20px] bg-holly-cream relative">
+          <div className="w-full aspect-square mb-4 sm:mb-6 overflow-hidden rounded-[15px] sm:rounded-[20px] bg-transparent relative flex items-center justify-center">
             <img 
-              src={softImg} 
+              src="/soft.webp" 
               alt="Soft Serve"
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700"
+              referrerPolicy="no-referrer"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-holly-brown/20 to-transparent" />
           </div>
           <h2 className="text-2xl sm:text-3xl font-display font-bold text-holly-brown mb-1 sm:mb-2 tracking-normal uppercase">SOFT</h2>
           <p className="text-holly-brown/40 text-[9px] sm:text-[11px] font-sans font-medium uppercase tracking-[1px]">

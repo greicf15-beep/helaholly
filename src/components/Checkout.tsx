@@ -28,6 +28,7 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
   const [storeDistances, setStoreDistances] = useState<Record<string, number>>({});
   const [deliveryFee, setDeliveryFee] = useState(0);
   const [whatsappUrl, setWhatsappUrl] = useState('');
+  const [isAddressConfirmed, setIsAddressConfirmed] = useState(false);
 
   const isMaracaiboStore = useMemo(() => {
     if (!selectedStore) return false;
@@ -42,6 +43,43 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
   }, [selectedStore]);
   
   const distanceMatrixLib = useMapsLibrary('routes');
+  const placesLib = useMapsLibrary('places');
+  const addressInputRef = useRef<HTMLInputElement>(null);
+  const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
+
+  useEffect(() => {
+    if (!placesLib || !addressInputRef.current || !isOpen || success) return;
+
+    const options = {
+      fields: ['geometry', 'name', 'formatted_address'],
+      componentRestrictions: { country: 've' } // Restrict to Venezuela
+    };
+
+    const autocompleteInstance = new placesLib.Autocomplete(addressInputRef.current, options);
+    setAutocomplete(autocompleteInstance);
+
+    const listener = autocompleteInstance.addListener('place_changed', () => {
+      const place = autocompleteInstance.getPlace();
+      if (!place.geometry || !place.geometry.location) {
+        return;
+      }
+
+      const newLocation = {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng(),
+      };
+      
+      setLocation(newLocation);
+      setAddress(place.formatted_address || place.name || '');
+      setIsAddressConfirmed(false);
+    });
+
+    return () => {
+      if (listener) {
+        listener.remove();
+      }
+    };
+  }, [placesLib, mode, isOpen, success]);
 
   const availableStores = useMemo(() => {
     const hasSoft = cart.some(item => item.category === 'soft');
@@ -157,6 +195,7 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
 
   const handleLocationUpdate = (newLocation: { lat: number; lng: number }) => {
     setLocation(newLocation);
+    setIsAddressConfirmed(false);
     setLoading(true);
     
     if (!window.google) {
@@ -394,13 +433,17 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
                               <Search className="w-5 h-5 sm:w-6 sm:h-6" />
                             </div>
                             <input
+                              ref={addressInputRef}
                               required
-                              readOnly
                               type="text"
                               value={address}
-                              className="w-full pl-8 sm:pl-10 pr-0 py-2 sm:py-4 bg-transparent border-b-2 border-holly-orange/10 text-holly-brown focus:outline-none focus:border-holly-orange transition-all text-lg sm:text-2xl font-display font-bold uppercase tracking-widest placeholder:text-holly-brown/10 mb-4 sm:mb-8 cursor-not-allowed"
-                              placeholder="USA EL BOTÓN O MUEVE EL MAPA..."
+                              onChange={(e) => setAddress(e.target.value)}
+                              className="w-full pl-8 sm:pl-10 pr-0 py-2 sm:py-4 bg-transparent border-b-2 border-holly-orange/10 text-holly-brown focus:outline-none focus:border-holly-orange transition-all text-lg sm:text-2xl font-display font-bold uppercase tracking-widest placeholder:text-holly-brown/10 mb-2 sm:mb-4"
+                              placeholder="ESCRIBE TU DIRECCIÓN AQUÍ..."
                             />
+                            <p className="text-[10px] sm:text-xs text-holly-brown/60 font-medium uppercase tracking-wider mb-4 sm:mb-8">
+                              ¿Quieres enviar a otra dirección? Escríbela arriba o mueve el pin en el mapa.
+                            </p>
                           </div>
                         )}
 
@@ -430,13 +473,33 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
                                 )}
                               </div>
 
-                              <div className="h-64 sm:h-80">
+                              <div className="h-[350px] sm:h-[500px]">
                                 <StoreMap 
                                   userLocation={location} 
                                   selectedStore={selectedStore}
                                   onLocationChange={handleLocationUpdate}
+                                  isAddressConfirmed={isAddressConfirmed}
                                 />
                               </div>
+
+                              {location && !isAddressConfirmed && (
+                                <motion.div 
+                                  initial={{ opacity: 0, y: 10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  className="p-4 sm:p-5 bg-holly-orange/10 border-2 border-holly-orange rounded-xl sm:rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg"
+                                >
+                                  <p className="text-xs sm:text-sm font-bold text-holly-brown text-center sm:text-left uppercase tracking-widest leading-relaxed">
+                                    ¿Confirmas esta dirección para la entrega de tu pedido?
+                                  </p>
+                                  <button
+                                    type="button"
+                                    onClick={() => setIsAddressConfirmed(true)}
+                                    className="w-full sm:w-auto px-6 py-3 bg-holly-orange text-white rounded-xl font-display font-bold uppercase tracking-widest hover:bg-holly-brown transition-colors whitespace-nowrap shadow-md"
+                                  >
+                                    Confirmar
+                                  </button>
+                                </motion.div>
+                              )}
                             </>
                           )}
 
@@ -528,7 +591,7 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
                       <span className="text-5xl sm:text-7xl font-display font-bold text-holly-brown">${(total + deliveryFee).toFixed(2)}</span>
                     </div>
                     <button
-                      disabled={loading || !selectedStore || (mode === 'delivery' && !location) || availableStores.length === 0}
+                      disabled={loading || !selectedStore || (mode === 'delivery' && (!location || !isAddressConfirmed)) || availableStores.length === 0}
                       type="submit"
                       className="w-full py-4 sm:py-6 bg-holly-brown text-white font-sans font-semibold text-[12px] sm:text-[14px] uppercase tracking-[2px] hover:bg-holly-orange disabled:bg-holly-brown/20 disabled:text-holly-brown/40 disabled:cursor-not-allowed transition-all duration-500 shadow-xl flex items-center justify-center gap-4 sm:gap-6 rounded-xl sm:rounded-[15px]"
                     >

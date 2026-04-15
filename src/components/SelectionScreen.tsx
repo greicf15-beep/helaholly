@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { HOLLYWOOD_STORES } from '../constants';
 import { OrderMode, Category, StoreLocation } from '../types';
 import { MapPin, Store as StoreIcon, ChevronRight, Navigation, Truck, ShoppingBag, ArrowLeft } from 'lucide-react';
+import { logoBase64 } from '../logoBase64';
 
 interface SelectionScreenProps {
   orderMode: OrderMode | null;
@@ -46,7 +47,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
           className="text-center mb-8 sm:mb-12"
         >
           <img 
-            src="/logo_holly.png" 
+            src={logoBase64} 
             alt="Heladería Hollywood" 
             className="h-20 sm:h-32 w-auto object-contain mx-auto mb-4 sm:mb-6"
             referrerPolicy="no-referrer"
@@ -106,7 +107,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
           className="text-center mb-8 sm:mb-12"
         >
           <img 
-            src="/logo_holly.png" 
+            src={logoBase64} 
             alt="Heladería Hollywood" 
             className="h-20 sm:h-32 w-auto object-contain mx-auto mb-4"
             referrerPolicy="no-referrer"
@@ -201,7 +202,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
       >
         <div className="flex flex-col items-center mb-6 sm:mb-12">
           <img 
-            src="/logo_holly.png" 
+            src={logoBase64} 
             alt="Heladería Hollywood" 
             className="h-16 sm:h-24 w-auto object-contain mb-3 sm:mb-4"
             referrerPolicy="no-referrer"

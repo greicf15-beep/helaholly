@@ -16,8 +16,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { handleFirestoreError, OperationType } from './errorUtils';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import { Home, IceCream, IceCreamBowl, ShoppingCart } from 'lucide-react';
-import { logoBase64 } from './logo_holly_base64';
-const img_logo_holly_png = logoBase64;
+import { logoBase64 } from './logoBase64';
 
 const API_KEY = process.env.GOOGLE_MAPS_PLATFORM_KEY || '';
 
@@ -261,10 +260,10 @@ export default function App() {
                       <div className="space-y-6">
                         <div className="flex items-center">
                           <img 
-                            src={img_logo_holly_png} 
+                            src={logoBase64} 
                             alt="Heladería Hollywood" 
                             className="h-16 w-auto object-contain brightness-0 invert"
-                            
+                            referrerPolicy="no-referrer"
                           />
                         </div>
                         <p className="text-holly-white/60 font-medium leading-relaxed">

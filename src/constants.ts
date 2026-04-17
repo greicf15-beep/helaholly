@@ -25,7 +25,7 @@ import img_linea_basica_webp from './assets/images/linea_basica.webp';
 import img_linea_deluxe_webp from './assets/images/linea_deluxe.webp';
 import img_linea_pelicula_webp from './assets/images/linea_pelicula.webp';
 import img_linea_premium_webp from './assets/images/linea_premium.webp';
-import img_logo_holly_png from './assets/images/logo_holly.png';
+import img_logo_holly_png from './assets/images/logo_holly.webp';
 import img_maxi_webp from './assets/images/maxi.webp';
 import img_milkshakegelato_webp from './assets/images/milkshakegelato.webp';
 import img_milkshakesoft_webp from './assets/images/milkshakesoft.webp';

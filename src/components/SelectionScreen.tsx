@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { HOLLYWOOD_STORES } from '../constants';
 import { OrderMode, Category, StoreLocation } from '../types';
 import { MapPin, Store as StoreIcon, ChevronRight, Navigation, Truck, ShoppingBag, ArrowLeft } from 'lucide-react';
-import img_logo_holly_png from '../assets/images/logo_holly.png';
+import img_logo_holly_png from '../assets/images/logo_holly.webp';
 import img_gelato_webp from '../assets/images/gelato.webp';
 import img_soft_webp from '../assets/images/soft.webp';
 

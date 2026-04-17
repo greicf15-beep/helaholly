@@ -2,7 +2,7 @@ import React from 'react';
 import { ShoppingCart, Menu as MenuIcon, X, Truck, Store } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { OrderMode } from '../types';
-import img_logo_holly_png from '../assets/images/logo_holly.webp';
+const img_logo_holly_png = '/logo_holly.png';
 
 interface NavbarProps {
   cartCount: number;

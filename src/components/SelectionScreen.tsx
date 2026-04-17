@@ -52,7 +52,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
             src={img_logo_holly_png} 
             alt="Heladería Hollywood" 
             className="h-20 sm:h-32 w-auto object-contain mx-auto mb-4 sm:mb-6"
-            referrerPolicy="no-referrer"
+            
           />
           <h1 className="text-3xl sm:text-5xl font-display font-bold text-holly-brown mb-2 sm:mb-4">
             ¿Cómo quieres tu pedido?
@@ -112,7 +112,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
             src={img_logo_holly_png} 
             alt="Heladería Hollywood" 
             className="h-20 sm:h-32 w-auto object-contain mx-auto mb-4"
-            referrerPolicy="no-referrer"
+            
           />
           {orderMode && (
             <div className="flex flex-col items-center mb-4 sm:mb-6">
@@ -207,7 +207,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
             src={img_logo_holly_png} 
             alt="Heladería Hollywood" 
             className="h-16 sm:h-24 w-auto object-contain mb-3 sm:mb-4"
-            referrerPolicy="no-referrer"
+            
           />
           <div className="flex flex-col items-center">
             <span className="text-[7px] sm:text-[10px] font-bold text-holly-brown/40 uppercase tracking-widest mb-1">Modo Seleccionado</span>
@@ -277,7 +277,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
               src={img_gelato_webp} 
               alt="Gelato Premium"
               className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700"
-              referrerPolicy="no-referrer"
+              
             />
           </div>
           <h2 className="text-2xl sm:text-3xl font-display font-bold text-holly-brown mb-1 sm:mb-2 tracking-normal uppercase">GELATO</h2>
@@ -305,7 +305,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
               src={img_soft_webp} 
               alt="Soft Serve"
               className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700"
-              referrerPolicy="no-referrer"
+              
             />
           </div>
           <h2 className="text-2xl sm:text-3xl font-display font-bold text-holly-brown mb-1 sm:mb-2 tracking-normal uppercase">SOFT</h2>

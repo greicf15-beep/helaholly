@@ -12,6 +12,8 @@ interface SelectionScreenProps {
   onCategorySelect: (category: 'gelato' | 'soft') => void;
 }
 
+import { logoBase64 } from '../logo_holly_base64';
+
 export function SelectionScreen({
   orderMode,
   onOrderModeSelect,
@@ -47,7 +49,7 @@ export function SelectionScreen({
     }
   };
 
-  const img_logo_holly_png = '/logo_holly.png';
+  const img_logo_holly_png = logoBase64;
   const img_gelato_webp = '/gelato.webp';
   const img_soft_webp = '/soft.webp';
 

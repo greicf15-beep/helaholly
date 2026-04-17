@@ -2,7 +2,7 @@ import React from 'react';
 import { ShoppingCart, Menu as MenuIcon, X, Truck, Store } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { OrderMode } from '../types';
-import { logoBase64 } from '../logoBase64';
+import img_logo_holly_png from '../assets/images/logo_holly.png';
 
 interface NavbarProps {
   cartCount: number;
@@ -18,7 +18,7 @@ export function Navbar({ cartCount, onCartClick, orderMode, onChangeMode }: Navb
         <div className="flex flex-col items-center justify-center h-16 sm:h-28 py-1 sm:py-2">
           <div className="flex items-center">
             <img 
-              src={logoBase64} 
+              src={img_logo_holly_png} 
               alt="Heladería Hollywood" 
               className="h-8 sm:h-14 w-auto object-contain"
               referrerPolicy="no-referrer"

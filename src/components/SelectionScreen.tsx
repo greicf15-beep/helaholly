@@ -3,7 +3,9 @@ import { motion } from 'motion/react';
 import { HOLLYWOOD_STORES } from '../constants';
 import { OrderMode, Category, StoreLocation } from '../types';
 import { MapPin, Store as StoreIcon, ChevronRight, Navigation, Truck, ShoppingBag, ArrowLeft } from 'lucide-react';
-import { logoBase64 } from '../logoBase64';
+import img_logo_holly_png from '../assets/images/logo_holly.png';
+import img_gelato_webp from '../assets/images/gelato.webp';
+import img_soft_webp from '../assets/images/soft.webp';
 
 interface SelectionScreenProps {
   orderMode: OrderMode | null;
@@ -47,7 +49,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
           className="text-center mb-8 sm:mb-12"
         >
           <img 
-            src={logoBase64} 
+            src={img_logo_holly_png} 
             alt="Heladería Hollywood" 
             className="h-20 sm:h-32 w-auto object-contain mx-auto mb-4 sm:mb-6"
             referrerPolicy="no-referrer"
@@ -107,7 +109,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
           className="text-center mb-8 sm:mb-12"
         >
           <img 
-            src={logoBase64} 
+            src={img_logo_holly_png} 
             alt="Heladería Hollywood" 
             className="h-20 sm:h-32 w-auto object-contain mx-auto mb-4"
             referrerPolicy="no-referrer"
@@ -202,7 +204,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
       >
         <div className="flex flex-col items-center mb-6 sm:mb-12">
           <img 
-            src={logoBase64} 
+            src={img_logo_holly_png} 
             alt="Heladería Hollywood" 
             className="h-16 sm:h-24 w-auto object-contain mb-3 sm:mb-4"
             referrerPolicy="no-referrer"
@@ -272,7 +274,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
         >
           <div className="w-full aspect-square mb-4 sm:mb-6 overflow-hidden rounded-[15px] sm:rounded-[20px] bg-transparent relative flex items-center justify-center">
             <img 
-              src="/gelato.webp" 
+              src={img_gelato_webp} 
               alt="Gelato Premium"
               className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700"
               referrerPolicy="no-referrer"
@@ -300,7 +302,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
         >
           <div className="w-full aspect-square mb-4 sm:mb-6 overflow-hidden rounded-[15px] sm:rounded-[20px] bg-transparent relative flex items-center justify-center">
             <img 
-              src="/soft.webp" 
+              src={img_soft_webp} 
               alt="Soft Serve"
               className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700"
               referrerPolicy="no-referrer"

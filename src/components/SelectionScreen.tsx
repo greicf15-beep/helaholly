@@ -13,6 +13,8 @@ interface SelectionScreenProps {
 }
 
 import { logoBase64 } from '../logo_holly_base64';
+import img_gelato_webp from '../assets/images/gelato.webp';
+import img_soft_webp from '../assets/images/soft.webp';
 
 export function SelectionScreen({
   orderMode,
@@ -50,8 +52,6 @@ export function SelectionScreen({
   };
 
   const img_logo_holly_png = logoBase64;
-  const img_gelato_webp = '/gelato.webp';
-  const img_soft_webp = '/soft.webp';
 
   // State 3: Mode & Store selected -> Select Category
   if (orderMode && selectedStore) {

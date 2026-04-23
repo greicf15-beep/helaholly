@@ -55,7 +55,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
           <h1 className="text-3xl sm:text-5xl font-display font-bold text-holly-brown mb-2 sm:mb-4">
             ¿Cómo quieres tu pedido?
           </h1>
-          <p className="text-holly-orange font-sans font-semibold uppercase tracking-[1.5px] text-[9px] sm:text-[11px]">
+          <p className="text-holly-orange font-sans font-semibold uppercase tracking-[1.5px] text-[11px] leading-[21.5px]">
             Selecciona tu método de entrega
           </p>
         </motion.div>
@@ -71,7 +71,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
               <Truck className="w-8 h-8 sm:w-12 sm:h-12 text-holly-orange group-hover:text-white" />
             </div>
             <h2 className="text-2xl sm:text-3xl font-display font-bold text-holly-brown mb-1 sm:mb-2 uppercase">Delivery</h2>
-            <p className="text-holly-brown/40 text-[9px] sm:text-[11px] font-sans font-medium uppercase tracking-[1px]">Te lo llevamos a donde estés</p>
+            <p className="text-[#824416] text-[9px] sm:text-[11px] font-sans font-bold uppercase tracking-[1px]">Te lo llevamos a donde estés</p>
           </motion.button>
 
           <motion.button
@@ -84,7 +84,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
               <ShoppingBag className="w-8 h-8 sm:w-12 sm:h-12 text-holly-orange group-hover:text-white" />
             </div>
             <h2 className="text-2xl sm:text-3xl font-display font-bold text-holly-brown mb-1 sm:mb-2 uppercase">Pick Up</h2>
-            <p className="text-holly-brown/40 text-[9px] sm:text-[11px] font-sans font-medium uppercase tracking-[1px]">Retira en tu sede favorita</p>
+            <p className="text-[#824416] text-[9px] sm:text-[11px] font-sans font-bold uppercase tracking-[1px]">Retira en tu sede favorita</p>
           </motion.button>
         </div>
       </div>
@@ -114,16 +114,16 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
           />
           {orderMode && (
             <div className="flex flex-col items-center mb-4 sm:mb-6">
-              <span className="text-[7px] sm:text-[10px] font-bold text-holly-brown/40 uppercase tracking-widest mb-1">Modo Seleccionado</span>
-              <div className="flex items-center gap-1.5 text-holly-orange font-display font-bold text-[10px] sm:text-sm">
+              <span className="text-[9px] font-bold text-[#814d1d] uppercase tracking-widest mb-1">Modo Seleccionado</span>
+              <div className="flex items-center gap-1.5 text-holly-orange font-display font-bold text-[12px]">
                 {orderMode === 'delivery' ? (
                   <>
-                    <Truck className="w-2.5 h-2.5 sm:w-4 sm:h-4" />
+                    <Truck className="w-[25px] h-[25px]" />
                     <span>MODO: DELIVERY</span>
                   </>
                 ) : (
                   <>
-                    <StoreIcon className="w-2.5 h-2.5 sm:w-4 sm:h-4" />
+                    <StoreIcon className="w-[25px] h-[25px]" />
                     <span>MODO: PICK UP</span>
                   </>
                 )}
@@ -208,16 +208,16 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
             referrerPolicy="no-referrer"
           />
           <div className="flex flex-col items-center">
-            <span className="text-[7px] sm:text-[10px] font-bold text-holly-brown/40 uppercase tracking-widest mb-1">Modo Seleccionado</span>
-            <div className="flex items-center gap-1.5 text-holly-orange font-display font-bold text-[10px] sm:text-sm">
+            <span className="text-[9px] font-bold text-[#814d1d] uppercase tracking-widest mb-1">Modo Seleccionado</span>
+            <div className="flex items-center gap-1.5 text-holly-orange font-display font-bold text-[12px]">
               {orderMode === 'delivery' ? (
                 <>
-                  <Truck className="w-2.5 h-2.5 sm:w-4 sm:h-4" />
+                  <Truck className="w-[25px] h-[25px]" />
                   <span>MODO: DELIVERY</span>
                 </>
               ) : (
                 <>
-                  <StoreIcon className="w-2.5 h-2.5 sm:w-4 sm:h-4" />
+                  <StoreIcon className="w-[25px] h-[25px]" />
                   <span>MODO: PICK UP</span>
                 </>
               )}

@@ -59,7 +59,7 @@ export function ProductGrid({ products, onAddToCart, orderMode }: ProductGridPro
                     whileHover={{ scale: 1.02, backgroundColor: '#e1a139' }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => onAddToCart(product)}
-                    className="w-full py-3 bg-holly-brown text-white font-sans font-semibold text-[11px] uppercase tracking-[1.5px] rounded-[15px] shadow-xl"
+                    className="w-full py-3 bg-holly-brown text-white font-sans font-semibold text-[11px] uppercase tracking-[1.5px] rounded-[25px] shadow-xl"
                   >
                     SELECCIONAR
                   </motion.button>
@@ -86,7 +86,7 @@ export function ProductGrid({ products, onAddToCart, orderMode }: ProductGridPro
                 <div className="sm:hidden mt-1.5">
                   <button
                     onClick={() => onAddToCart(product)}
-                    className="w-full py-2 bg-holly-brown text-white font-sans font-bold text-[9px] uppercase tracking-[1px] rounded-lg shadow-md active:scale-95 transition-transform"
+                    className="w-full py-2 bg-holly-brown text-white font-sans font-bold text-[9px] uppercase tracking-[1px] rounded-[25px] shadow-md active:scale-95 transition-transform"
                   >
                     SELECCIONAR
                   </button>

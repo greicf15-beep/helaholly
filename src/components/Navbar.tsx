@@ -14,35 +14,47 @@ interface NavbarProps {
 export function Navbar({ cartCount, onCartClick, orderMode, onChangeMode }: NavbarProps) {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-b border-holly-brown/5">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center justify-center h-16 sm:h-28 py-1 sm:py-2">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#ffffff' }}>
+        <div className="flex flex-col items-center justify-center h-16 sm:h-28 py-1 sm:py-2" style={{ backgroundColor: '#ffffff', marginLeft: '0px', marginBottom: '7px' }}>
           <div className="flex items-center">
             <img 
               src={logoBase64} 
               alt="Heladería Hollywood" 
               className="h-8 sm:h-14 w-auto object-contain"
+              style={{ width: '80px', height: '53px' }}
               referrerPolicy="no-referrer"
             />
           </div>
           
           {orderMode && (
             <div className="flex items-center gap-2 sm:gap-3 mt-0.5 sm:mt-1">
-              <div className="flex items-center gap-1 text-holly-orange font-display font-bold text-[8px] sm:text-xs">
+              <div className="flex items-center gap-1 text-holly-orange font-display font-bold text-[8px] sm:text-xs" style={{ fontSize: '7px', lineHeight: '10px' }}>
                 {orderMode === 'delivery' ? (
                   <>
-                    <Truck className="w-2.5 h-2.5 sm:w-4 sm:h-4" />
-                    <span>MODO: DELIVERY</span>
+                    <Truck className="w-2.5 h-2.5 sm:w-4 sm:h-4" style={{ width: '25px', height: '25px' }} />
+                    <span style={{ fontSize: '13px', lineHeight: '12px' }}>MODO: DELIVERY</span>
                   </>
                 ) : (
                   <>
-                    <Store className="w-2.5 h-2.5 sm:w-4 sm:h-4" />
-                    <span>MODO: PICK UP</span>
+                    <Store className="w-2.5 h-2.5 sm:w-4 sm:h-4" style={{ width: '25px', height: '25px' }} />
+                    <span style={{ fontSize: '13px', lineHeight: '12px' }}>MODO: PICK UP</span>
                   </>
                 )}
               </div>
               <button 
                 onClick={onChangeMode}
-                className="text-[7px] sm:text-[9px] font-bold text-holly-brown/60 hover:text-holly-orange underline decoration-holly-orange/30 underline-offset-4 uppercase tracking-wider transition-colors"
+                className="text-[7px] sm:text-[9px] font-bold text-holly-brown/60 hover:text-holly-orange uppercase tracking-wider transition-colors"
+                style={{
+                  fontSize: '11px',
+                  color: '#dbcec0',
+                  borderWidth: '1px',
+                  borderRadius: '9px',
+                  borderStyle: 'solid',
+                  lineHeight: '17.5px',
+                  backgroundColor: '#593434',
+                  height: '21.5px',
+                  width: '63.6328px'
+                }}
               >
                 Cambiar
               </button>

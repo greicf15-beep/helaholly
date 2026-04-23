@@ -157,7 +157,7 @@ export default function App() {
                   }}
                 />
                 
-                <main className="pt-24">
+                <main className="pt-24" style={{ backgroundColor: '#ffffff' }}>
                   <section id="menu-section" className="py-12 bg-white">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                       <div className="mb-12">

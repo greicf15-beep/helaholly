@@ -1,10 +1,46 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap');
 @import "tailwindcss";
 
+@layer base {
+
+@font-face {
+  font-family: 'Volkswagen-Heavy';
+  src: url('./assets/fonts/Volkswagen-Heavy-Final.otf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Volkswagen-Heavy';
+  src: url('./assets/fonts/Volkswagen-Heavy-Final.otf');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Futura Bk BT';
+  src: url('./assets/fonts/Futura-Bk-BT-Book-Final.ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Futura Bk BT';
+  src: url('./assets/fonts/Futura-Bk-BT-Book-Final.ttf');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+}
+
 @theme {
-  --font-display: "VolkswagenHeavy", "Fredoka", sans-serif;
-  --font-sans: "FuturaBkBTBook", "Montserrat", ui-sans-serif, system-ui, sans-serif;
-  --font-hollywood: "VolkswagenHeavy", sans-serif;
+  --font-display: "Volkswagen-Heavy", "Fredoka", sans-serif;
+  --font-sans: "Futura Bk BT", "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-hollywood: "Volkswagen-Heavy", sans-serif;
   
   --color-holly-orange: #e1a139;
   --color-holly-brown: #8B4513;
@@ -13,20 +49,6 @@
 }
 
 @layer base {
-  @font-face {
-    font-family: 'VolkswagenHeavy';
-    src: url('https://helaholly.com/wp-content/uploads/2026/01/Volkswagen-Heavy.otf') format('opentype');
-    font-weight: bold;
-    font-style: normal;
-  }
-
-  @font-face {
-    font-family: 'FuturaBkBTBook';
-    src: url('https://helaholly.com/wp-content/uploads/2026/01/Futura-Bk-BT-Book.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
-
   body {
     @apply bg-white text-holly-brown font-sans antialiased;
   }
@@ -60,7 +82,7 @@
   border-radius: 12px;
   box-shadow: 0 10px 30px -5px rgba(139, 69, 19, 0.2);
   border: 1px solid rgba(225, 161, 57, 0.2);
-  font-family: "FuturaBkBTBook", "Montserrat", sans-serif;
+  font-family: "Futura Bk BT", "Montserrat", sans-serif;
   margin-top: 4px;
 }
 
@@ -77,12 +99,12 @@
 }
 
 .pac-item-query {
-  font-size: 15px;
+  font-size: 14px;
   color: #8B4513;
   font-weight: 600;
+  padding-right: 4px;
 }
 
 .pac-icon {
   display: none;
 }
-

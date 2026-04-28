@@ -1,19 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Jost:wght@700;800;900&display=swap');
 @import "tailwindcss";
 
 @layer base {
 
 @font-face {
-  font-family: 'Volkswagen-Heavy';
-  src: url('./assets/fonts/Volkswagen-Heavy-Final.otf');
+  font-family: 'Volkswagen Heavy';
+  src: url('./assets/fonts/VolkswagenHeavy.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Volkswagen-Heavy';
-  src: url('./assets/fonts/Volkswagen-Heavy-Final.otf');
+  font-family: 'Volkswagen Heavy';
+  src: url('./assets/fonts/VolkswagenHeavy.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -21,7 +21,7 @@
 
 @font-face {
   font-family: 'Futura Bk BT';
-  src: url('./assets/fonts/Futura-Bk-BT-Book-Final.ttf');
+  src: url('./assets/fonts/Futura-Bk-BT-Book-Final.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -29,7 +29,7 @@
 
 @font-face {
   font-family: 'Futura Bk BT';
-  src: url('./assets/fonts/Futura-Bk-BT-Book-Final.ttf');
+  src: url('./assets/fonts/Futura-Bk-BT-Book-Final.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -38,9 +38,9 @@
 }
 
 @theme {
-  --font-display: "Volkswagen-Heavy", "Fredoka", sans-serif;
+  --font-display: "Volkswagen Heavy", "Montserrat", sans-serif;
   --font-sans: "Futura Bk BT", "Montserrat", ui-sans-serif, system-ui, sans-serif;
-  --font-hollywood: "Volkswagen-Heavy", sans-serif;
+  --font-hollywood: "Volkswagen Heavy", sans-serif;
   
   --color-holly-orange: #e1a139;
   --color-holly-brown: #8B4513;

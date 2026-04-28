@@ -53,7 +53,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
             referrerPolicy="no-referrer"
           />
           <h1 className="text-3xl sm:text-5xl font-display font-bold text-holly-brown mb-2 sm:mb-4">
-            ¿Cómo quieres tu pedido?
+            Cómo quieres tu pedido?
           </h1>
           <p className="text-holly-orange font-sans font-semibold uppercase tracking-[1.5px] text-[11px] leading-[21.5px]">
             Selecciona tu método de entrega
@@ -257,7 +257,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
             Bienvenido a Hollywood
           </p>
           <h1 className="text-3xl sm:text-6xl font-display font-bold text-holly-brown tracking-normal uppercase">
-            ¿Qué te provoca hoy?
+            Qué te provoca hoy?
           </h1>
         </div>
       </motion.div>

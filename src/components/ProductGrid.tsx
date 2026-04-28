@@ -34,9 +34,11 @@ export function ProductGrid({ products, onAddToCart, orderMode }: ProductGridPro
               <div className="absolute inset-0 bg-gradient-to-t from-holly-brown/20 via-transparent to-transparent opacity-60" />
               
               {/* Price Tag Overlay */}
-              <div className="absolute top-3 left-3 sm:top-6 sm:left-6 bg-white/90 backdrop-blur-sm px-2 py-1 sm:px-4 sm:py-2 font-sans font-bold text-xs sm:text-lg tracking-normal sm:tracking-widest text-holly-orange rounded-lg sm:rounded-xl shadow-sm border border-holly-orange/10">
-                ${product.price.toFixed(2)}
-              </div>
+              {product.price > 0 && (
+                <div className="absolute top-3 left-3 sm:top-6 sm:left-6 bg-white/90 backdrop-blur-sm px-2 py-1 sm:px-4 sm:py-2 font-sans font-bold text-xs sm:text-lg tracking-normal sm:tracking-widest text-holly-orange rounded-lg sm:rounded-xl shadow-sm border border-holly-orange/10">
+                  ${product.price.toFixed(2)}
+                </div>
+              )}
 
               {/* Availability Badge */}
               <div className="absolute bottom-3 right-3 sm:top-6 sm:right-6 flex flex-col gap-2 items-end">

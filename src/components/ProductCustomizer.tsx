@@ -340,10 +340,10 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                           </div>
                           <div className="flex-1">
                             <div className="flex justify-between items-start">
-                              <h4 className="font-display font-bold text-holly-brown uppercase tracking-wide">{promo.name}</h4>
-                              <span className="text-sm font-display font-bold text-holly-orange">${promo.price.toFixed(2)}</span>
+                              <h4 className="font-display font-bold text-holly-brown uppercase tracking-wide text-[18px]">{promo.name}</h4>
+                              {promo.price > 0 && <span className="text-[18px] font-display font-bold text-holly-orange">${promo.price.toFixed(2)}</span>}
                             </div>
-                            <p className="text-[10px] text-holly-brown/60 font-sans mt-1 leading-relaxed">{promo.description}</p>
+                            <p className="text-[12px] text-holly-brown/80 font-sans mt-1 leading-relaxed">{promo.description}</p>
                           </div>
                           <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
                             selectedPromo?.id === promo.id ? 'border-holly-orange bg-holly-orange text-white' : 'border-holly-brown/10'

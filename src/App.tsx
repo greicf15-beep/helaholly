@@ -254,44 +254,19 @@ export default function App() {
                   )}
                 </AnimatePresence>
 
-                <footer className="bg-holly-brown text-holly-white py-24 border-t border-holly-orange/10">
-                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-16 border-b border-holly-white/10 pb-16 mb-16">
-                      <div className="space-y-6">
-                        <div className="flex items-center">
-                          <img 
-                            src={logoBase64} 
-                            alt="Heladería Hollywood" 
-                            className="h-16 w-auto object-contain brightness-0 invert"
-                            referrerPolicy="no-referrer"
-                          />
-                        </div>
-                        <p className="text-holly-white/60 font-medium leading-relaxed">
-                          Cremosidad y sabor premium en cada bocado. Disfruta de la experiencia Hollywood.
-                        </p>
-                      </div>
-                      <div>
-                        <h4 className="text-xs font-bold uppercase tracking-[0.5em] text-holly-orange mb-8">Sedes Holly</h4>
-                        <ul className="space-y-4 text-holly-white/80 font-display text-xl uppercase tracking-widest">
-                          <li>Maracaibo</li>
-                          <li>Valencia</li>
-                          <li>Cabimas</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <h4 className="text-xs font-bold uppercase tracking-[0.5em] text-holly-orange mb-8">Redes Sociales</h4>
-                        <ul className="space-y-4 text-holly-white/80 font-display text-xl uppercase tracking-widest">
-                          <li><a href="#" className="hover:text-holly-orange transition-colors">Instagram</a></li>
-                          <li><a href="#" className="hover:text-holly-orange transition-colors">TikTok</a></li>
-                          <li><a href="#" className="hover:text-holly-orange transition-colors">Facebook</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-holly-white/40 text-[10px] font-bold uppercase tracking-[0.4em]">
-                      <p>© 2026 Heladería Hollywood. Todos los derechos reservados.</p>
-                      <p>Premium Ice Cream Experience</p>
-                    </div>
-                  </div>
+                <footer className="bg-[#f6b40c] text-holly-brown py-20 pb-32 md:pb-20 border-t border-holly-orange/10 flex flex-col items-center justify-center text-center px-4">
+                  <img 
+                    src={logoBase64} 
+                    alt="Heladería Hollywood" 
+                    className="h-24 w-auto object-contain mb-6 drop-shadow-md"
+                    referrerPolicy="no-referrer"
+                  />
+                  <h3 className="font-sans font-bold text-3xl md:text-4xl tracking-wider mb-12 text-[#5a2f0f]">
+                    Heladería Hollywood
+                  </h3>
+                  <p className="font-sans font-bold text-xl md:text-2xl tracking-wider text-[#5a2f0f] h-[32px] ml-0 mt-[-32px]">
+                    Copyright 2026© Creado y diseñado por Kroma Design
+                  </p>
                 </footer>
 
                 <Cart

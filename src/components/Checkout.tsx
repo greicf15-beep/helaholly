@@ -442,7 +442,7 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
                               placeholder="ESCRIBE TU DIRECCIÓN AQUÍ..."
                             />
                             <p className="text-[10px] sm:text-xs text-holly-brown/60 font-medium uppercase tracking-wider mb-4 sm:mb-8">
-                              ¿Quieres enviar a otra dirección? Escríbela arriba o mueve el pin en el mapa.
+                              Quieres enviar a otra dirección? Escríbela arriba o mueve el pin en el mapa.
                             </p>
                           </div>
                         )}
@@ -489,7 +489,7 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
                                   className="p-4 sm:p-5 bg-holly-orange/10 border-2 border-holly-orange rounded-xl sm:rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg"
                                 >
                                   <p className="text-xs sm:text-sm font-bold text-holly-brown text-center sm:text-left uppercase tracking-widest leading-relaxed">
-                                    ¿Confirmas esta dirección para la entrega de tu pedido?
+                                    Confirmas esta dirección para la entrega de tu pedido?
                                   </p>
                                   <button
                                     type="button"

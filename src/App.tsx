@@ -259,7 +259,6 @@ export default function App() {
                     src={logoBase64} 
                     alt="Heladería Hollywood" 
                     className="h-24 w-auto object-contain mb-6 drop-shadow-md"
-                    referrerPolicy="no-referrer"
                   />
                   <h3 className="font-sans font-bold text-3xl md:text-4xl tracking-wider mb-12 text-[#5a2f0f]">
                     Heladería Hollywood

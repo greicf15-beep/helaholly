@@ -50,7 +50,6 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
             src={logoBase64} 
             alt="Heladería Hollywood" 
             className="h-20 sm:h-32 w-auto object-contain mx-auto mb-4 sm:mb-6"
-            referrerPolicy="no-referrer"
           />
           <h1 className="text-3xl sm:text-5xl font-display font-bold text-holly-brown mb-2 sm:mb-4">
             Cómo quieres tu pedido?
@@ -110,7 +109,6 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
             src={logoBase64} 
             alt="Heladería Hollywood" 
             className="h-20 sm:h-32 w-auto object-contain mx-auto mb-4"
-            referrerPolicy="no-referrer"
           />
           {orderMode && (
             <div className="flex flex-col items-center mb-4 sm:mb-6">
@@ -205,7 +203,6 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
             src={logoBase64} 
             alt="Heladería Hollywood" 
             className="h-16 sm:h-24 w-auto object-contain mb-3 sm:mb-4"
-            referrerPolicy="no-referrer"
           />
           <div className="flex flex-col items-center">
             <span className="text-[9px] font-bold text-[#814d1d] uppercase tracking-widest mb-1">Modo Seleccionado</span>
@@ -272,10 +269,10 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
         >
           <div className="w-full aspect-square mb-4 sm:mb-6 overflow-hidden rounded-[15px] sm:rounded-[20px] bg-transparent relative flex items-center justify-center">
             <img 
-              src="gelato.webp" 
+              src="/gelato.webp" 
               alt="Gelato Premium"
               className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700"
-              referrerPolicy="no-referrer"
+              
             />
           </div>
           <h2 className="text-2xl sm:text-3xl font-display font-bold text-holly-brown mb-1 sm:mb-2 tracking-normal uppercase">GELATO</h2>
@@ -300,10 +297,10 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
         >
           <div className="w-full aspect-square mb-4 sm:mb-6 overflow-hidden rounded-[15px] sm:rounded-[20px] bg-transparent relative flex items-center justify-center">
             <img 
-              src="soft.webp" 
+              src="/soft.webp" 
               alt="Soft Serve"
               className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700"
-              referrerPolicy="no-referrer"
+              
             />
           </div>
           <h2 className="text-2xl sm:text-3xl font-display font-bold text-holly-brown mb-1 sm:mb-2 tracking-normal uppercase">SOFT</h2>

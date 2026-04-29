@@ -22,6 +22,7 @@ export function Navbar({ cartCount, onCartClick, orderMode, onChangeMode }: Navb
               alt="Heladería Hollywood" 
               className="h-8 sm:h-14 w-auto object-contain"
               style={{ width: '80px', height: '53px' }}
+              referrerPolicy="no-referrer"
             />
           </div>
           

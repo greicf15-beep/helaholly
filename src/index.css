@@ -4,17 +4,9 @@
 @layer base {
 
 @font-face {
-  font-family: 'Volkswagen Heavy';
-  src: url('./assets/fonts/VolkswagenHeavy.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Volkswagen Heavy';
-  src: url('./assets/fonts/VolkswagenHeavy.woff') format('woff');
-  font-weight: bold;
+  font-family: 'VolkswagenHeavy';
+  src: url('./assets/fonts/VolkswagenHeavy.otf') format('opentype');
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
@@ -22,15 +14,7 @@
 @font-face {
   font-family: 'Futura Bk BT';
   src: url('./assets/fonts/Futura-Bk-BT-Book-Final.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Futura Bk BT';
-  src: url('./assets/fonts/Futura-Bk-BT-Book-Final.ttf') format('truetype');
-  font-weight: bold;
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
@@ -38,9 +22,9 @@
 }
 
 @theme {
-  --font-display: "Volkswagen Heavy", "Montserrat", sans-serif;
+  --font-display: "VolkswagenHeavy", "Montserrat", sans-serif;
   --font-sans: "Futura Bk BT", "Montserrat", ui-sans-serif, system-ui, sans-serif;
-  --font-hollywood: "Volkswagen Heavy", sans-serif;
+  --font-hollywood: "VolkswagenHeavy", sans-serif;
   
   --color-holly-orange: #e1a139;
   --color-holly-brown: #8B4513;

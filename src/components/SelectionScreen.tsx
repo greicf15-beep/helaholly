@@ -174,7 +174,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
                   </div>
                   <div className="text-left">
                     <span className="block font-display font-bold text-base sm:text-lg text-holly-brown">{store.name}</span>
-                    <span className="text-[9px] sm:text-[11px] text-holly-brown/40 font-sans font-medium uppercase tracking-wider">{store.address}</span>
+                    <span className="text-[9px] sm:text-[11px] text-[#85441b] font-sans font-medium uppercase tracking-wider">{store.address}</span>
                   </div>
                 </div>
                 <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-holly-brown/20 group-hover:text-holly-orange transition-all" />
@@ -272,7 +272,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
         >
           <div className="w-full aspect-square mb-4 sm:mb-6 overflow-hidden rounded-[15px] sm:rounded-[20px] bg-transparent relative flex items-center justify-center">
             <img 
-              src="/gelato.webp" 
+              src="./gelato.webp" 
               alt="Gelato Premium"
               className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700"
               referrerPolicy="no-referrer"
@@ -300,7 +300,7 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
         >
           <div className="w-full aspect-square mb-4 sm:mb-6 overflow-hidden rounded-[15px] sm:rounded-[20px] bg-transparent relative flex items-center justify-center">
             <img 
-              src="/soft.webp" 
+              src="./soft.webp" 
               alt="Soft Serve"
               className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700"
               referrerPolicy="no-referrer"

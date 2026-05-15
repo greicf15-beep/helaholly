@@ -6,7 +6,15 @@
 @font-face {
   font-family: 'VolkswagenHeavy';
   src: url('./assets/fonts/VolkswagenHeavy.otf') format('opentype');
-  font-weight: 100 900;
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'VolkswagenHeavy';
+  src: url('./assets/fonts/VolkswagenHeavy.otf') format('opentype');
+  font-weight: bold;
   font-style: normal;
   font-display: swap;
 }
@@ -14,7 +22,15 @@
 @font-face {
   font-family: 'Futura Bk BT';
   src: url('./assets/fonts/Futura-Bk-BT-Book-Final.ttf') format('truetype');
-  font-weight: 100 900;
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Futura Bk BT';
+  src: url('./assets/fonts/Futura-Bk-BT-Book-Final.ttf') format('truetype');
+  font-weight: bold;
   font-style: normal;
   font-display: swap;
 }

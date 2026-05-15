@@ -261,10 +261,10 @@ export default function App() {
                     className="h-24 w-auto object-contain mb-6 drop-shadow-md"
                     referrerPolicy="no-referrer"
                   />
-                  <h3 className="font-sans font-bold text-3xl md:text-4xl tracking-wider mb-12 text-[#5a2f0f]">
+                  <h3 className="font-sans font-normal text-[26px] tracking-wider mb-12 text-[#5a2f0f]">
                     Heladería Hollywood
                   </h3>
-                  <p className="font-sans font-bold text-xl md:text-2xl tracking-wider text-[#5a2f0f] h-[32px] ml-0 mt-[-32px]">
+                  <p className="font-sans font-normal text-[15px] leading-[18px] tracking-wider text-[#5a2f0f] h-[32px] ml-0 mt-[-32px]">
                     Copyright 2026© Creado y diseñado por Kroma Design
                   </p>
                 </footer>

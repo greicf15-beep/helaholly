@@ -232,7 +232,12 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
       (mode === 'delivery' && isMaracaiboStore ? `🛵 *Vehículo:* ${vehicleType.toUpperCase()}\n` : '') +
       `\n*DETALLE DEL PEDIDO:*\n` +
       cart.map(item => {
-        let itemStr = `✅ *${item.quantity}x ${item.name}* ($${item.price.toFixed(2)} c/u)`;
+        let basePrice = item.price;
+        if (item.customization && item.customization.extraToppings) {
+          const extrasTotal = item.customization.extraToppings.reduce((sum, t) => sum + t.price, 0);
+          basePrice = item.price - extrasTotal;
+        }
+        let itemStr = `✅ *${item.quantity}x ${item.name}* ($${basePrice.toFixed(2)} c/u)`;
         if (item.customization) {
           if (item.customization.flavor) itemStr += `\n   _Sabor: ${item.customization.flavor}_`;
           if (item.customization.toppings && item.customization.toppings.length > 0) {
@@ -522,7 +527,7 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
                                       </span>
                                     )}
                                   </div>
-                                  <p className="text-[10px] sm:text-xs text-holly-brown/60 font-medium truncate">{selectedStore.address}</p>
+                                  <p className="text-[10px] sm:text-xs text-[#85441b] font-medium truncate">{selectedStore.address}</p>
                                 </div>
                               </div>
                             ) : (

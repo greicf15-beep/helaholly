@@ -5,7 +5,8 @@
 
 @font-face {
   font-family: 'VolkswagenHeavy';
-  src: url('./assets/fonts/VolkswagenHeavy.otf') format('opentype');
+  src: url('./assets/fonts/VolkswagenHeavy.woff') format('woff'),
+       url('./assets/fonts/VolkswagenHeavy.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -13,7 +14,8 @@
 
 @font-face {
   font-family: 'VolkswagenHeavy';
-  src: url('./assets/fonts/VolkswagenHeavy.otf') format('opentype');
+  src: url('./assets/fonts/VolkswagenHeavy.woff') format('woff'),
+       url('./assets/fonts/VolkswagenHeavy.otf') format('opentype');
   font-weight: bold;
   font-style: normal;
   font-display: swap;

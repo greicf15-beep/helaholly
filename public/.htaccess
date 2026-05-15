@@ -9,4 +9,8 @@
 
 <IfModule mod_mime.c>
   AddType image/webp .webp
+  AddType font/woff .woff
+  AddType font/woff2 .woff2
+  AddType font/otf .otf
+  AddType font/ttf .ttf
 </IfModule>

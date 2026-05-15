@@ -1,35 +1,97 @@
 const fs = require('fs');
 
-let css = fs.readFileSync('src/index.css', 'utf8');
+const css = `@import "./fonts.css";
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Jost:wght@700;800;900&display=swap');
+@import "tailwindcss";
 
-// Strip out current @font-face blocks (the giant base64 ones)
-css = css.replace(/@font-face\s*\{[^}]+\}/g, '');
-
-const newFonts = `
+@theme {
+  --font-display: "VolkswagenHeavy", "Montserrat", sans-serif;
+  --font-sans: "Futura Bk BT", "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-hollywood: "VolkswagenHeavy", sans-serif;
+  
+  --color-holly-orange: #e1a139;
+  --color-holly-brown: #8B4513;
+  --color-holly-white: #ffffff;
+  --color-holly-cream: #fdfcf5;
+}
 
 @layer base {
 
-@font-face {
-  font-family: 'VolkswagenHeavy';
-  src: url('/Volkswagen-Heavy.otf') format('opentype');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
+  @font-face {
+    font-family: 'Futura Bk BT';
+    src: url('./assets/fonts/Futura-Bk-BT-Book-Final.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Futura Bk BT';
+    src: url('./assets/fonts/Futura-Bk-BT-Book-Final.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  body {
+    @apply bg-white text-holly-brown font-sans antialiased;
+  }
 }
 
-@font-face {
-  font-family: 'FuturaBkBTBook';
-  src: url('/Futura-Bk-BT-Book.ttf') format('truetype');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
+.card-shadow {
+  box-shadow: 0 10px 30px -5px rgba(139, 69, 19, 0.1);
 }
 
+.btn-hover-effect {
+  @apply transition-all duration-300 active:scale-95 hover:shadow-lg;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e1a139;
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #8B4513;
+}
+
+/* Google Places Autocomplete Custom Styling */
+.pac-container {
+  z-index: 10000 !important;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px -5px rgba(139, 69, 19, 0.2);
+  border: 1px solid rgba(225, 161, 57, 0.2);
+  font-family: "Futura Bk BT", "Montserrat", sans-serif;
+  margin-top: 4px;
+}
+
+.pac-item {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #8B4513;
+  border-top: 1px solid rgba(225, 161, 57, 0.1);
+}
+
+.pac-item:hover {
+  background-color: rgba(225, 161, 57, 0.05);
+}
+
+.pac-item-query {
+  font-size: 14px;
+  color: #8B4513;
+  font-weight: 600;
+  padding-right: 4px;
+}
+
+.pac-icon {
+  display: none;
 }
 `;
 
-// Insert the new fonts
-css = css.replace('@import "tailwindcss";', '@import "tailwindcss";' + newFonts);
-
 fs.writeFileSync('src/index.css', css);
-console.log("CSS fixed");

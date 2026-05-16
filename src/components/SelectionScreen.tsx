@@ -262,15 +262,15 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
+      <div className="grid grid-cols-2 gap-3 sm:gap-8 w-full max-w-4xl px-2 sm:px-0">
         {/* GELATO CARD */}
         <motion.button
           whileHover={{ scale: 1.03, borderColor: '#e1a139' }}
           whileTap={{ scale: 0.97 }}
           onClick={() => onCategorySelect('gelato')}
-          className="relative group bg-white rounded-[55px] p-6 sm:p-8 shadow-xl border-2 border-holly-brown/5 transition-all duration-500 flex flex-col items-center"
+          className="relative group bg-white rounded-[25px] sm:rounded-[55px] p-3 sm:p-8 shadow-xl border-2 border-holly-brown/5 transition-all duration-500 flex flex-col items-center justify-between"
         >
-          <div className="w-full aspect-square mb-4 sm:mb-6 overflow-hidden rounded-[15px] sm:rounded-[20px] bg-transparent relative flex items-center justify-center">
+          <div className="w-full aspect-square mb-2 sm:mb-6 overflow-hidden rounded-[15px] sm:rounded-[20px] bg-transparent relative flex items-center justify-center">
             <img 
               src="./gelato.webp" 
               alt="Gelato Premium"
@@ -278,13 +278,15 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
               referrerPolicy="no-referrer"
             />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-display font-bold text-holly-brown mb-1 sm:mb-2 tracking-normal uppercase">GELATO</h2>
-          <p className="text-holly-brown/40 text-[9px] sm:text-[11px] font-sans font-medium uppercase tracking-[1px]">
-            {selectedStore.type === 'soft' ? 'Envasados listos para llevar' : 'Cremosidad Italiana Premium'}
-          </p>
-          
-          <div className="mt-4 sm:mt-6 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-holly-brown flex items-center justify-center text-white shadow-lg group-hover:bg-holly-orange transition-colors">
-            <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+          <div className="flex flex-col items-center flex-grow justify-end">
+            <h2 className="text-lg sm:text-3xl font-display font-bold text-holly-brown mb-1 sm:mb-2 tracking-normal uppercase text-center">GELATO</h2>
+            <p className="text-holly-brown/40 text-[7px] sm:text-[11px] font-sans font-medium uppercase tracking-[1px] text-center line-clamp-2 min-h-[20px] sm:min-h-0">
+              {selectedStore.type === 'soft' ? 'Envasados listos para llevar' : 'Cremosidad Italiana Premium'}
+            </p>
+            
+            <div className="mt-2 sm:mt-6 w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-holly-brown flex items-center justify-center text-white shadow-lg group-hover:bg-holly-orange transition-colors shrink-0">
+              <ChevronRight className="h-4 w-4 sm:h-6 sm:w-6" />
+            </div>
           </div>
         </motion.button>
 
@@ -294,11 +296,11 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
           whileTap={{ scale: 0.97 }}
           disabled={selectedStore.type === 'gelateria'}
           onClick={() => onCategorySelect('soft')}
-          className={`relative group bg-white rounded-[55px] p-6 sm:p-8 shadow-xl border-2 border-holly-brown/5 transition-all duration-500 flex flex-col items-center ${
+          className={`relative group bg-white rounded-[25px] sm:rounded-[55px] p-3 sm:p-8 shadow-xl border-2 border-holly-brown/5 transition-all duration-500 flex flex-col items-center justify-between ${
             selectedStore.type === 'gelateria' ? 'opacity-50 grayscale cursor-not-allowed' : 'hover:border-holly-orange'
           }`}
         >
-          <div className="w-full aspect-square mb-4 sm:mb-6 overflow-hidden rounded-[15px] sm:rounded-[20px] bg-transparent relative flex items-center justify-center">
+          <div className="w-full aspect-square mb-2 sm:mb-6 overflow-hidden rounded-[15px] sm:rounded-[20px] bg-transparent relative flex items-center justify-center">
             <img 
               src="./soft.webp" 
               alt="Soft Serve"
@@ -306,13 +308,15 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
               referrerPolicy="no-referrer"
             />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-display font-bold text-holly-brown mb-1 sm:mb-2 tracking-normal uppercase">SOFT</h2>
-          <p className="text-holly-brown/40 text-[9px] sm:text-[11px] font-sans font-medium uppercase tracking-[1px]">
-            {selectedStore.type === 'gelateria' ? 'No disponible en esta sede' : 'Ligero, suave y refrescante'}
-          </p>
+          <div className="flex flex-col items-center flex-grow justify-end">
+            <h2 className="text-lg sm:text-3xl font-display font-bold text-holly-brown mb-1 sm:mb-2 tracking-normal uppercase text-center">SOFT</h2>
+            <p className="text-holly-brown/40 text-[7px] sm:text-[11px] font-sans font-medium uppercase tracking-[1px] text-center line-clamp-2 min-h-[20px] sm:min-h-0">
+              {selectedStore.type === 'gelateria' ? 'No disponible en esta sede' : 'Ligero, suave y refrescante'}
+            </p>
 
-          <div className="mt-4 sm:mt-6 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-holly-brown flex items-center justify-center text-white shadow-lg group-hover:bg-holly-orange transition-colors">
-            <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+            <div className="mt-2 sm:mt-6 w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-holly-brown flex items-center justify-center text-white shadow-lg group-hover:bg-holly-orange transition-colors shrink-0">
+              <ChevronRight className="h-4 w-4 sm:h-6 sm:w-6" />
+            </div>
           </div>
         </motion.button>
       </div>

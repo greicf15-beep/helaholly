@@ -32,6 +32,15 @@ export default function App() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [customizingProduct, setCustomizingProduct] = useState<Product | null>(null);
   const [notification, setNotification] = useState<string | null>(null);
+  const [showPreloader, setShowPreloader] = useState(true);
+
+  useEffect(() => {
+    // Hide preloader after 2.5 seconds to let images load
+    const timer = setTimeout(() => {
+      setShowPreloader(false);
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (notification) {
@@ -119,7 +128,26 @@ export default function App() {
       >
         <div className="min-h-screen bg-holly-cream font-sans selection:bg-holly-orange selection:text-white">
           <AnimatePresence mode="wait">
-            {!selectedStore || !selectedCategory ? (
+            {showPreloader ? (
+              <motion.div
+                key="preloader"
+                initial={{ opacity: 1 }}
+                exit={{ opacity: 0, transition: { duration: 0.5 } }}
+                className="fixed inset-0 z-[9999] bg-holly-cream flex flex-col items-center justify-center p-6"
+              >
+                <motion.div
+                   animate={{ scale: [1, 1.1, 1] }}
+                   transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                >
+                  <img src={logoBase64} alt="Holly Heladería..." className="w-48 sm:w-64 h-auto drop-shadow-xl" referrerPolicy="no-referrer" />
+                </motion.div>
+                <div className="mt-8 flex gap-3">
+                   <motion.div className="w-3 h-3 rounded-full bg-holly-orange" animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0 }} />
+                   <motion.div className="w-3 h-3 rounded-full bg-holly-orange" animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.2 }} />
+                   <motion.div className="w-3 h-3 rounded-full bg-holly-orange" animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.4 }} />
+                </div>
+              </motion.div>
+            ) : !selectedStore || !selectedCategory ? (
               <motion.div
                 key="selection"
                 initial={{ opacity: 0 }}

@@ -27,7 +27,7 @@ function Polyline(props: google.maps.PolylineOptions) {
   return null;
 }
 
-const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_PLATFORM_KEY || '';
+const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_PLATFORM_KEY || 'AIzaSyDivyYuJWC0vqWU3wfep26trd9UNceNMpk';
 const hasValidKey = Boolean(API_KEY) && API_KEY !== '';
 
 interface StoreMapProps {

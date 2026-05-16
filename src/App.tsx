@@ -18,7 +18,7 @@ import { APIProvider } from '@vis.gl/react-google-maps';
 import { Home, IceCream, IceCreamBowl, ShoppingCart } from 'lucide-react';
 import { logoBase64 } from './logoBase64';
 
-const API_KEY = process.env.GOOGLE_MAPS_PLATFORM_KEY || '';
+const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_PLATFORM_KEY || 'AIzaSyDivyYuJWC0vqWU3wfep26trd9UNceNMpk';
 
 if (!API_KEY) {
   console.warn('GOOGLE_MAPS_PLATFORM_KEY is missing. Please add it to the Secrets panel in AI Studio.');

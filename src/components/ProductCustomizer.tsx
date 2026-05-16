@@ -324,13 +324,13 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                         <button
                           key={promo.id}
                           onClick={() => setSelectedPromo(promo)}
-                          className={`p-4 rounded-[20px] border-2 transition-all flex items-center gap-4 text-left ${
+                          className={`p-3 sm:p-4 rounded-[20px] border-2 transition-all flex flex-row items-center gap-3 sm:gap-4 text-left ${
                             selectedPromo?.id === promo.id
                               ? 'border-holly-orange bg-holly-orange/5'
                               : 'border-holly-brown/5 hover:border-holly-orange/30'
                           }`}
                         >
-                          <div className="w-20 h-20 rounded-[15px] overflow-hidden flex-shrink-0 bg-holly-cream">
+                          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-[12px] sm:rounded-[15px] overflow-hidden flex-shrink-0 bg-holly-cream self-start sm:self-center">
                             <img 
                               src={promo.image} 
                               alt={promo.name} 
@@ -338,23 +338,28 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                               referrerPolicy="no-referrer"
                             />
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex flex-row justify-between items-start gap-2">
-                              <h4 className="font-display font-bold text-holly-brown uppercase tracking-wide text-[16px] sm:text-[18px] break-words flex-1 min-w-0 pr-2 leading-tight">
-                                {promo.name}
-                              </h4>
-                              {promo.price > 0 && (
-                                <span className="text-[16px] sm:text-[18px] font-display font-bold text-holly-orange flex-shrink-0 whitespace-nowrap">
-                                  ${promo.price.toFixed(2)}
-                                </span>
-                              )}
-                            </div>
-                            <p className="text-[10px] sm:text-[12px] text-holly-brown/80 font-sans mt-1 leading-relaxed break-words">{promo.description}</p>
+                          <div className="flex-1 min-w-0 flex flex-col self-start sm:self-center">
+                            <h4 className="font-display font-bold text-holly-brown uppercase tracking-wide text-[16px] sm:text-[18px] leading-[1.1]">
+                              {promo.name.split(' ').map((word, i) => (
+                                <span key={i} className="block">{word}</span>
+                              ))}
+                            </h4>
+                            <p className="text-[9px] sm:text-[12px] text-holly-brown/80 font-sans mt-2 leading-relaxed">
+                              {promo.description}
+                            </p>
                           </div>
-                          <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                            selectedPromo?.id === promo.id ? 'border-holly-orange bg-holly-orange text-white' : 'border-holly-brown/10'
-                          }`}>
-                            {selectedPromo?.id === promo.id && <Check className="w-3 h-3" />}
+                          
+                          <div className="flex flex-col items-end gap-3 flex-shrink-0 ml-1 self-start sm:self-center">
+                            {promo.price > 0 && (
+                              <span className="text-[16px] sm:text-[18px] font-display font-bold text-holly-orange whitespace-nowrap inline-block mt-[-2px]">
+                                ${promo.price.toFixed(2)}
+                              </span>
+                            )}
+                            <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 flex items-center justify-center ${
+                              selectedPromo?.id === promo.id ? 'border-holly-orange bg-holly-orange text-white' : 'border-holly-brown/10'
+                            }`}>
+                              {selectedPromo?.id === promo.id && <Check className="w-3 h-3" />}
+                            </div>
                           </div>
                         </button>
                       ))}

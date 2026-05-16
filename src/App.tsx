@@ -282,17 +282,17 @@ export default function App() {
                   )}
                 </AnimatePresence>
 
-                <footer className="bg-[#f6b40c] text-holly-brown py-20 pb-32 md:pb-20 border-t border-holly-orange/10 flex flex-col items-center justify-center text-center px-4">
+                <footer className="bg-[#f6b40c] text-holly-brown py-12 pb-28 md:pb-12 border-t border-holly-orange/10 flex flex-col items-center justify-center text-center px-4">
                   <img 
                     src={logoBase64} 
                     alt="Heladería Hollywood" 
-                    className="h-24 w-auto object-contain mb-6 drop-shadow-md"
+                    className="h-20 w-auto object-contain mb-3 drop-shadow-md"
                     referrerPolicy="no-referrer"
                   />
-                  <h3 className="font-sans font-normal text-[26px] tracking-wider mb-12 text-[#5a2f0f]">
+                  <h3 className="font-sans font-bold text-[17px] tracking-widest mb-1 text-[#5a2f0f]">
                     Heladería Hollywood
                   </h3>
-                  <p className="font-sans font-normal text-[15px] leading-[18px] tracking-wider text-[#5a2f0f] h-[32px] ml-0 mt-[-32px]">
+                  <p className="font-sans font-normal text-[15px] tracking-wider text-[#5a2f0f]">
                     Copyright 2026© Creado y diseñado por Kroma Design
                   </p>
                 </footer>

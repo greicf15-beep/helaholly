@@ -279,8 +279,8 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
             />
           </div>
           <div className="flex flex-col items-center flex-grow justify-end">
-            <h2 className="text-lg sm:text-3xl font-display font-bold text-holly-brown mb-1 sm:mb-2 tracking-normal uppercase text-center">GELATO</h2>
-            <p className="text-holly-brown/40 text-[7px] sm:text-[11px] font-sans font-medium uppercase tracking-[1px] text-center line-clamp-2 min-h-[20px] sm:min-h-0">
+            <h2 className="text-[21px] sm:text-3xl font-display font-bold text-holly-brown mb-1 sm:mb-2 tracking-normal uppercase text-center">GELATO</h2>
+            <p className="text-[#a96330] text-[9px] sm:text-[11px] font-sans font-medium uppercase tracking-[1px] text-center line-clamp-2 min-h-[20px] sm:min-h-0">
               {selectedStore.type === 'soft' ? 'Envasados listos para llevar' : 'Cremosidad Italiana Premium'}
             </p>
             
@@ -309,8 +309,8 @@ export function SelectionScreen({ orderMode, onOrderModeSelect, selectedStore, o
             />
           </div>
           <div className="flex flex-col items-center flex-grow justify-end">
-            <h2 className="text-lg sm:text-3xl font-display font-bold text-holly-brown mb-1 sm:mb-2 tracking-normal uppercase text-center">SOFT</h2>
-            <p className="text-holly-brown/40 text-[7px] sm:text-[11px] font-sans font-medium uppercase tracking-[1px] text-center line-clamp-2 min-h-[20px] sm:min-h-0">
+            <h2 className="text-[21px] sm:text-3xl font-display font-bold text-holly-brown mb-1 sm:mb-2 tracking-normal uppercase text-center">SOFT</h2>
+            <p className="text-[#a96330] text-[9px] sm:text-[11px] font-sans font-medium uppercase tracking-[1px] text-center line-clamp-2 min-h-[20px] sm:min-h-0">
               {selectedStore.type === 'gelateria' ? 'No disponible en esta sede' : 'Ligero, suave y refrescante'}
             </p>
 

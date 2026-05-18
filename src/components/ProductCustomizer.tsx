@@ -44,7 +44,18 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
   const isSundae = product.id === 's6';
   const isFrosty = product.id === 's7';
   const isSundaeOrFrosty = isSundae || isFrosty;
+  const isMaxiSundae = product.id === 's9' || product.id === 's10';
+  const isMaxiSundaePremium = product.id === 's10';
   
+  const MAXI_PREMIUM_TOPPINGS = [
+    'Gotas de Chocolate Oscuro', 'Gotas de Chocolate Blanco', 'Dandy', 'Flips', 
+    'Choco Crunch', 'Miramar', 'Lluvia de Colores', 'Lluvia de Chocolate', 'Mani', 'Oreo'
+  ];
+
+  const MAGIC_LAYERS = [
+    'Chocolate Oscuro', 'Chocolate Blanco'
+  ];
+
   const isGelato1Lt = product.id.startsWith('gelato-1lt-');
   const isGelato16oz = product.id === 'gelato-16oz-custom';
   const isBarquilla1 = product.id === 'barquilla-1-porcion-custom';
@@ -139,6 +150,9 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
   }, [selectedLine, gelatoFlavors, isGroupedGelato, isCookieOrBrownie]);
   const [selectedToppings, setSelectedToppings] = useState<string[]>([]);
   const [selectedExtraToppings, setSelectedExtraToppings] = useState<{ name: string; price: number; flavor?: string }[]>([]);
+  const [selectedTeam, setSelectedTeam] = useState<string>('Piru');
+  const [selectedPremiumTopping, setSelectedPremiumTopping] = useState<string>('Gotas de Chocolate Oscuro');
+  const [selectedMagicLayer, setSelectedMagicLayer] = useState<string>('Chocolate Oscuro');
   const [toppingError, setToppingError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -258,7 +272,10 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
       customization: {
         size: isTina && selectedSize ? selectedSize.label : undefined,
         flavor: (isBarquillon2 || isTina2) ? selectedFlavors.join(', ') : selectedFlavor,
-        toppings: (isFrapuccino || isMilkshake || isSundaeOrFrosty || isGroupedGelato || isCookieOrBrownie) ? [] : selectedToppings,
+        team: isMaxiSundae ? selectedTeam : undefined,
+        premiumTopping: isMaxiSundaePremium ? selectedPremiumTopping : undefined,
+        magicLayer: isMaxiSundaePremium ? selectedMagicLayer : undefined,
+        toppings: (isFrapuccino || isMilkshake || isSundaeOrFrosty || isGroupedGelato || isCookieOrBrownie || isMaxiSundaePremium) ? [] : selectedToppings,
         extraToppings: selectedExtraToppings
       }
     };
@@ -517,12 +534,93 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                   </section>
                 )}
 
-                {/* Toppings Selection - Not for Frappuccinos, Milkshakes, Sundae/Frosty, Grouped Gelato, or Cookies/Brownies */}
-                {(!isFrapuccino && !isMilkshake && !isSundaeOrFrosty && !isGroupedGelato && !isCookieOrBrownie) && (
+                {/* Team Selection - Only for Maxi Sundae */}
+                {isMaxiSundae && (
                   <section>
                     <div className="flex justify-between items-end mb-4">
                       <h3 className="text-[11px] font-sans font-bold uppercase tracking-[1.5px] text-holly-brown">
-                        {isTina ? '3.' : '2.'} Elige 3 Contornos Gratis
+                        2. Selecciona tu Team
+                      </h3>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      {['Piru', 'Panki', 'Loli'].map((team) => (
+                        <button
+                          key={team}
+                          onClick={() => setSelectedTeam(team)}
+                          className={`p-4 rounded-[15px] border-2 transition-all text-center flex flex-col gap-1 ${
+                            selectedTeam === team
+                              ? 'border-holly-orange bg-holly-orange/5 text-holly-orange'
+                              : 'border-holly-brown/5 text-holly-brown hover:border-holly-orange/30'
+                          }`}
+                        >
+                          <span className="font-display font-bold uppercase tracking-wider">{team}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </section>
+                )}
+
+                {/* Premium Topping & Magic Layer Selection - Only for Maxi Sundae Premium */}
+                {isMaxiSundaePremium && (
+                  <>
+                    <section>
+                      <div className="flex justify-between items-end mb-4">
+                        <h3 className="text-[11px] font-sans font-bold uppercase tracking-[1.5px] text-holly-brown">
+                          3. ELIGE TU TOPPING PREMIUM
+                        </h3>
+                      </div>
+                      <div className="relative">
+                        <div className="grid grid-cols-2 gap-3 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
+                          {MAXI_PREMIUM_TOPPINGS.map((topping, index) => (
+                            <button
+                              key={index}
+                              onClick={() => setSelectedPremiumTopping(topping)}
+                              className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center justify-center text-center gap-2 ${
+                                selectedPremiumTopping === topping
+                                  ? 'border-holly-orange bg-holly-orange/5 text-holly-orange shadow-md'
+                                  : 'border-holly-brown/5 text-holly-brown hover:border-holly-brown/20'
+                              }`}
+                            >
+                              <span className="font-sans font-bold text-[10px] sm:text-[11px] leading-tight flex-1 flex items-center justify-center uppercase">{topping}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </section>
+
+                    <section className="mt-8">
+                      <div className="flex justify-between items-end mb-4">
+                        <h3 className="text-[11px] font-sans font-bold uppercase tracking-[1.5px] text-holly-brown">
+                          4. ELIGE TU CAPITA MÁGICA
+                        </h3>
+                      </div>
+                      <div className="relative">
+                        <div className="grid grid-cols-2 gap-3 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
+                          {MAGIC_LAYERS.map((layer, index) => (
+                            <button
+                              key={index}
+                              onClick={() => setSelectedMagicLayer(layer)}
+                              className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center justify-center text-center gap-2 ${
+                                selectedMagicLayer === layer
+                                  ? 'border-holly-orange bg-holly-orange/5 text-holly-orange shadow-md'
+                                  : 'border-holly-brown/5 text-holly-brown hover:border-holly-brown/20'
+                              }`}
+                            >
+                              <span className="font-sans font-bold text-[10px] sm:text-[11px] leading-tight flex-1 flex items-center justify-center uppercase">{layer}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </section>
+                  </>
+                )}
+
+                {/* Toppings Selection - Not for Frappuccinos, Milkshakes, Sundae/Frosty, Grouped Gelato, or Cookies/Brownies */}
+                {(!isFrapuccino && !isMilkshake && !isSundaeOrFrosty && !isGroupedGelato && !isCookieOrBrownie && !isMaxiSundaePremium) && (
+                  <section>
+                    <div className="flex justify-between items-end mb-4">
+                      <h3 className="text-[11px] font-sans font-bold uppercase tracking-[1.5px] text-holly-brown">
+                        {isMaxiSundae ? '3.' : isTina ? '3.' : '2.'} Elige 3 Contornos Gratis
                       </h3>
                       <span className="text-[9px] font-sans font-bold uppercase bg-holly-orange/10 text-holly-orange px-2 py-1 rounded-full tracking-wider">
                         {selectedToppings.length} / 3 Seleccionados
@@ -599,7 +697,7 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                   <section>
                     <div className="flex justify-between items-end mb-4">
                       <h3 className="text-[11px] font-sans font-bold uppercase tracking-[1.5px] text-holly-brown">
-                        {isTina ? '4.' : (isFrapuccino || isMilkshake || isSundae) ? '2.' : '1.'} Contornos Extra (Costo adicional)
+                        {isMaxiSundaePremium ? '5.' : isMaxiSundae ? '4.' : isTina ? '4.' : (isFrapuccino || isMilkshake || isSundae) ? '2.' : '1.'} Contornos Extra (Costo adicional)
                       </h3>
                     </div>
 

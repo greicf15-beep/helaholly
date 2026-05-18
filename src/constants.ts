@@ -466,7 +466,7 @@ export const PRODUCTS: Product[] = [
     description: 'Maxi Sundae con toppings premium y sabores especiales.',
     price: 4.80,
     category: 'soft',
-    image: './maxi.webp',
+    image: './maxi_premium.webp',
     deliveryAvailable: false,
     isCustomizable: true
   },

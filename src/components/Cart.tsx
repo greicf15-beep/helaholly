@@ -71,6 +71,21 @@ export function Cart({ isOpen, onClose, items, onUpdateQuantity, onRemove, onChe
                               <p className="text-[9px] sm:text-[10px] font-bold uppercase text-holly-orange tracking-widest">
                                 Sabor: {item.customization.flavor}
                               </p>
+                              {item.customization.team && (
+                                <p className="text-[9px] sm:text-[10px] font-bold uppercase text-[#ec277b] tracking-widest">
+                                  Team: {item.customization.team}
+                                </p>
+                              )}
+                              {item.customization.premiumTopping && (
+                                <p className="text-[9px] sm:text-[10px] font-bold uppercase text-holly-brown tracking-widest">
+                                  Topping Premium: {item.customization.premiumTopping}
+                                </p>
+                              )}
+                              {item.customization.magicLayer && (
+                                <p className="text-[9px] sm:text-[10px] font-bold uppercase text-holly-brown tracking-widest">
+                                  Capa Mágica: {item.customization.magicLayer}
+                                </p>
+                              )}
                               {item.customization.toppings && item.customization.toppings.length > 0 && (
                                 <p className="text-[9px] sm:text-[10px] font-medium text-holly-brown/60 uppercase leading-tight line-clamp-2">
                                   Contornos: {item.customization.toppings.map(t => t.replace('Topping ', '').replace('Toppping ', '')).join(', ')}

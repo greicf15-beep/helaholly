@@ -22,6 +22,9 @@ export interface CartItem extends Product {
   customization?: {
     size?: string;
     flavor?: string;
+    team?: string;
+    premiumTopping?: string;
+    magicLayer?: string;
     toppings?: string[];
     extraToppings?: { name: string; price: number; flavor?: string }[];
   };

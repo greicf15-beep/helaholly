@@ -240,6 +240,9 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
         let itemStr = `✅ *${item.quantity}x ${item.name}* ($${basePrice.toFixed(2)} c/u)`;
         if (item.customization) {
           if (item.customization.flavor) itemStr += `\n   _Sabor: ${item.customization.flavor}_`;
+          if (item.customization.team) itemStr += `\n   _Team: ${item.customization.team}_`;
+          if (item.customization.premiumTopping) itemStr += `\n   _Topping Premium: ${item.customization.premiumTopping}_`;
+          if (item.customization.magicLayer) itemStr += `\n   _Capa Mágica: ${item.customization.magicLayer}_`;
           if (item.customization.toppings && item.customization.toppings.length > 0) {
             itemStr += `\n   _Toppings: ${item.customization.toppings.join(', ')}_`;
           }
@@ -558,6 +561,21 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
                                 {item.customization.flavor && (
                                   <p className="text-[9px] sm:text-[10px] text-holly-brown/60 font-medium uppercase tracking-wider">
                                     Sabor: {item.customization.flavor}
+                                  </p>
+                                )}
+                                {item.customization.team && (
+                                  <p className="text-[9px] sm:text-[10px] text-[#ec277b] font-medium uppercase tracking-wider">
+                                    Team: {item.customization.team}
+                                  </p>
+                                )}
+                                {item.customization.premiumTopping && (
+                                  <p className="text-[9px] sm:text-[10px] text-holly-brown font-medium uppercase tracking-wider">
+                                    Topping Premium: {item.customization.premiumTopping}
+                                  </p>
+                                )}
+                                {item.customization.magicLayer && (
+                                  <p className="text-[9px] sm:text-[10px] text-holly-brown font-medium uppercase tracking-wider">
+                                    Capa Mágica: {item.customization.magicLayer}
                                   </p>
                                 )}
                                 {item.customization.toppings && item.customization.toppings.length > 0 && (

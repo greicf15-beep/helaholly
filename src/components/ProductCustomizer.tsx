@@ -464,7 +464,7 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                             <img 
                               src={`./flavors/${flavor.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '')}.png`}
                               alt={flavor.name}
-                              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                              className="absolute inset-0 w-full h-full object-cover scale-[1.75] transition-transform duration-500 group-hover:scale-[1.85]"
                               onError={(e) => {
                                 e.currentTarget.style.opacity = '0';
                               }}
@@ -492,7 +492,7 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                             <img 
                               src={`./flavors/${flavor.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '')}.png`}
                               alt={flavor.name}
-                              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                              className="absolute inset-0 w-full h-full object-cover scale-[1.75] transition-transform duration-500 group-hover:scale-[1.85]"
                               onError={(e) => {
                                 e.currentTarget.style.opacity = '0';
                               }}
@@ -537,7 +537,7 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                               <img 
                                 src={`./flavors/${flavor.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '')}.png`}
                                 alt={flavor}
-                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                className="absolute inset-0 w-full h-full object-cover scale-[1.75] transition-transform duration-500 group-hover:scale-[1.85]"
                                 onError={(e) => {
                                   e.currentTarget.style.opacity = '0';
                                 }}
@@ -563,7 +563,7 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                             <img 
                               src={`./flavors/${flavor.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '')}.png`}
                               alt={flavor}
-                              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                              className="absolute inset-0 w-full h-full object-cover scale-[1.75] transition-transform duration-500 group-hover:scale-[1.85]"
                               onError={(e) => {
                                 e.currentTarget.style.opacity = '0';
                               }}

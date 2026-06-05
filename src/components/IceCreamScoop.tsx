@@ -6,6 +6,23 @@ export const FLAVOR_IMAGES: Record<string, string> = {
   'Fresa': '/fresa.webp',
   'Mantecado': '/mantecado.webp',
   'Napolitano': '/napolitano.webp',
+  'Tiramisu': '/tiramisu.webp',
+  'Biscotti Dolci': '/biscottidolci.webp',
+  'Brazo Gitano de Coco': '/brazogitanodecoco.webp',
+  "Hershey's": '/hersheys.webp',
+  'Sundae de Arequipe': '/sundaearequipe.webp',
+  'Sundae de Chocolate': '/sundaechocolate.webp',
+  'Sundae de Fresa': '/sundaefresa.webp',
+  'Brownie Snickers': '/browniesnickers.webp',
+  'Oreo': '/oreo.webp',
+  'Ron Pasas': '/ronpasas.webp',
+  'Tia Gesua': '/tiagesua.webp',
+  'Cheesecake de Fresa': '/cheesecakefresa.webp',
+  'Chocolatissimo': '/chocolatissimo.webp',
+  'Chocolattisimo': '/chocolatissimo.webp',
+  'Brownie': '/brownie.webp',
+  'Brownie Fudge': '/browniefudge.webp',
+  'Coco': '/coco.webp',
 };
 
 export const FLAVOR_COLORS: Record<string, string | string[]> = {

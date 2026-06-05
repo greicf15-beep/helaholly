@@ -449,31 +449,21 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                         </span>
                       )}
                     </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       {isFrapuccino ? (
                         frapuccinoFlavors.map((flavor) => (
                           <button
                             key={flavor.name}
                             onClick={() => setSelectedFlavor(flavor.name)}
-                            className={`relative overflow-hidden rounded-[15px] border-2 transition-all aspect-[16/10] w-full flex flex-col items-center justify-end p-2 sm:p-3 group ${
+                            className={`p-4 rounded-[15px] border-2 transition-all text-center flex flex-col items-center justify-center gap-2 ${
                               selectedFlavor === flavor.name
-                                ? 'border-holly-orange shadow-md'
-                                : 'border-holly-brown/10 hover:border-holly-orange/50'
+                                ? 'border-holly-orange bg-holly-orange/5 text-holly-orange'
+                                : 'border-holly-brown/5 text-holly-brown hover:border-holly-orange/30'
                             }`}
                           >
-                            <img 
-                              src={`./flavors/${flavor.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '')}.png`}
-                              alt={flavor.name}
-                              className="absolute inset-0 w-full h-full object-cover scale-[1.75] transition-transform duration-500 group-hover:scale-[1.85]"
-                              onError={(e) => {
-                                e.currentTarget.style.opacity = '0';
-                              }}
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-90 pointer-events-none"></div>
-                            <span className="relative z-10 font-display font-black uppercase tracking-wider text-white text-[13px] sm:text-[15px] text-center drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] leading-tight">
-                              {flavor.name}
-                            </span>
-                            <span className={`relative z-10 text-[10px] sm:text-[11px] font-sans font-bold uppercase tracking-wider drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedFlavor === flavor.name ? 'text-holly-orange' : 'text-white'}`}>
+                            <IceCreamScoop flavorName={flavor.name} className="w-10 h-10 mb-1" />
+                            <span className="font-display font-bold uppercase tracking-wider">{flavor.name}</span>
+                            <span className={`text-[10px] font-sans font-bold uppercase tracking-wider ${selectedFlavor === flavor.name ? 'text-holly-orange' : 'text-holly-brown/40'}`}>
                               ${flavor.price.toFixed(2)}
                             </span>
                           </button>
@@ -483,25 +473,15 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                           <button
                             key={flavor.name}
                             onClick={() => setSelectedFlavor(flavor.name)}
-                            className={`relative overflow-hidden rounded-[15px] border-2 transition-all aspect-[16/10] w-full flex flex-col items-center justify-end p-2 sm:p-3 group ${
+                            className={`p-4 rounded-[15px] border-2 transition-all text-center flex flex-col items-center justify-center gap-2 ${
                               selectedFlavor === flavor.name
-                                ? 'border-holly-orange shadow-md'
-                                : 'border-holly-brown/10 hover:border-holly-orange/50'
+                                ? 'border-holly-orange bg-holly-orange/5 text-holly-orange'
+                                : 'border-holly-brown/5 text-holly-brown hover:border-holly-orange/30'
                             }`}
                           >
-                            <img 
-                              src={`./flavors/${flavor.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '')}.png`}
-                              alt={flavor.name}
-                              className="absolute inset-0 w-full h-full object-cover scale-[1.75] transition-transform duration-500 group-hover:scale-[1.85]"
-                              onError={(e) => {
-                                e.currentTarget.style.opacity = '0';
-                              }}
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-90 pointer-events-none"></div>
-                            <span className="relative z-10 font-display font-black uppercase tracking-wider text-white text-[13px] sm:text-[15px] text-center drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] leading-tight">
-                              {flavor.name}
-                            </span>
-                            <span className={`relative z-10 text-[10px] sm:text-[11px] font-sans font-bold uppercase tracking-wider drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedFlavor === flavor.name ? 'text-holly-orange' : 'text-white'}`}>
+                            <IceCreamScoop flavorName={flavor.name} className="w-10 h-10 mb-1" />
+                            <span className="font-display font-bold uppercase tracking-wider">{flavor.name}</span>
+                            <span className={`text-[10px] font-sans font-bold uppercase tracking-wider ${selectedFlavor === flavor.name ? 'text-holly-orange' : 'text-holly-brown/40'}`}>
                               ${flavor.price.toFixed(2)}
                             </span>
                           </button>
@@ -526,26 +506,16 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                                   setSelectedFlavor(flavor);
                                 }
                               }}
-                              className={`relative overflow-hidden rounded-[15px] border-2 transition-all aspect-[16/10] w-full flex flex-col items-center justify-end p-2 sm:p-3 group ${
+                              className={`p-4 rounded-[15px] border-2 transition-all text-center flex flex-col items-center justify-center gap-2 ${
                                 isSelected
-                                  ? 'border-holly-orange shadow-md'
+                                  ? 'border-holly-orange bg-holly-orange/5 text-holly-orange'
                                   : isDisabled
-                                    ? 'border-holly-brown/20 opacity-50 cursor-not-allowed'
-                                    : 'border-holly-brown/10 hover:border-holly-orange/50'
+                                    ? 'border-holly-brown/5 text-holly-brown/20 cursor-not-allowed'
+                                    : 'border-holly-brown/5 text-holly-brown hover:border-holly-orange/30'
                               }`}
                             >
-                              <img 
-                                src={`./flavors/${flavor.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '')}.png`}
-                                alt={flavor}
-                                className="absolute inset-0 w-full h-full object-cover scale-[1.75] transition-transform duration-500 group-hover:scale-[1.85]"
-                                onError={(e) => {
-                                  e.currentTarget.style.opacity = '0';
-                                }}
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-90 pointer-events-none"></div>
-                              <span className="relative z-10 font-display font-black uppercase tracking-wider text-white text-[13px] sm:text-[15px] text-center drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] leading-tight">
-                                {flavor}
-                              </span>
+                              <IceCreamScoop flavorName={flavor} className="w-12 h-12 mb-1" />
+                              <span className="font-display font-bold uppercase tracking-wider">{flavor}</span>
                             </button>
                           );
                         })
@@ -554,24 +524,14 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                           <button
                             key={flavor}
                             onClick={() => setSelectedFlavor(flavor)}
-                            className={`relative overflow-hidden rounded-[15px] border-2 transition-all aspect-[16/10] w-full flex flex-col items-center justify-end p-2 sm:p-3 group ${
+                            className={`p-4 rounded-[15px] border-2 transition-all text-center flex flex-col items-center justify-center gap-2 ${
                               selectedFlavor === flavor
-                                ? 'border-holly-orange shadow-md'
-                                : 'border-holly-brown/10 hover:border-holly-orange/50'
+                                ? 'border-holly-orange bg-holly-orange/5 text-holly-orange'
+                                : 'border-holly-brown/5 text-holly-brown hover:border-holly-orange/30'
                             }`}
                           >
-                            <img 
-                              src={`./flavors/${flavor.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '')}.png`}
-                              alt={flavor}
-                              className="absolute inset-0 w-full h-full object-cover scale-[1.75] transition-transform duration-500 group-hover:scale-[1.85]"
-                              onError={(e) => {
-                                e.currentTarget.style.opacity = '0';
-                              }}
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-90 pointer-events-none"></div>
-                            <span className="relative z-10 font-display font-black uppercase tracking-wider text-white text-[13px] sm:text-[15px] text-center drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] leading-tight">
-                              {flavor}
-                            </span>
+                            <IceCreamScoop flavorName={flavor} className="w-12 h-12 mb-1" />
+                            <span className="font-display font-bold uppercase tracking-wider">{flavor}</span>
                           </button>
                         ))
                       )}

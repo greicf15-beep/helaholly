@@ -1,4 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+export const FLAVOR_IMAGES: Record<string, string> = {
+  'Chocolate Malteado': '/chocolatemalteado.webp',
+  'Chocolate': '/chocolatemalteado.webp',
+  'Fresa': '/fresa.webp',
+  'Mantecado': '/mantecado.webp',
+  'Napolitano': '/napolitano.webp',
+};
 
 export const FLAVOR_COLORS: Record<string, string | string[]> = {
   'Fresa': '#ffbfa3',
@@ -45,49 +53,66 @@ export const FLAVOR_COLORS: Record<string, string | string[]> = {
 };
 
 export const IceCreamScoop = ({ flavorName, className = "w-8 h-8" }: { flavorName: string, className?: string }) => {
+  const [imgError, setImgError] = useState(false);
   const colorDef = FLAVOR_COLORS[flavorName] || '#fffdd0';
   const isGradient = Array.isArray(colorDef);
   const colorId = flavorName.replace(/[^a-zA-Z0-9]/g, '');
+  const imageUrl = FLAVOR_IMAGES[flavorName];
 
-  if (isGradient) {
+  const renderSvg = () => {
+    if (isGradient) {
+      return (
+        <svg viewBox="0 0 100 100" className={`filter drop-shadow-md ${className}`} fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id={`grad-${colorId}`} x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor={colorDef[0]} />
+              <stop offset="33%" stopColor={colorDef[0]} />
+              <stop offset="33%" stopColor={colorDef[1]} />
+              <stop offset="66%" stopColor={colorDef[1]} />
+              <stop offset="66%" stopColor={colorDef[2]} />
+              <stop offset="100%" stopColor={colorDef[2]} />
+            </linearGradient>
+            <linearGradient id={`shadow-${colorId}`} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#000000" stopOpacity="0.05" />
+              <stop offset="100%" stopColor="#000000" stopOpacity="0.3" />
+            </linearGradient>
+          </defs>
+          <path d="M50 8C27.9086 8 10 25.9086 10 48C10 65.097 20.7303 79.6896 35.8858 85.5786C36.6853 87.218 38.3842 88.3333 40.3333 88.3333C42.4746 88.3333 44.3168 87.0396 45 85.1633C46.5492 85.7196 48.2393 86.0152 50 86.0152C51.6841 86.0152 53.3045 85.7483 54.8016 85.2443C55.4975 87.0347 57.29 88.2652 59.3561 88.2652C61.3533 88.2652 63.0903 87.1147 63.8166 85.4214C78.96 79.6108 89.6667 65.0592 89.6667 48C89.6667 25.9086 71.758 8 49.6667 8H50Z" fill={`url(#grad-${colorId})`}/>
+          <path d="M50 8C27.9086 8 10 25.9086 10 48C10 65.097 20.7303 79.6896 35.8858 85.5786C36.6853 87.218 38.3842 88.3333 40.3333 88.3333C42.4746 88.3333 44.3168 87.0396 45 85.1633C46.5492 85.7196 48.2393 86.0152 50 86.0152C51.6841 86.0152 53.3045 85.7483 54.8016 85.2443C55.4975 87.0347 57.29 88.2652 59.3561 88.2652C61.3533 88.2652 63.0903 87.1147 63.8166 85.4214C78.96 79.6108 89.6667 65.0592 89.6667 48C89.6667 25.9086 71.758 8 49.6667 8H50Z" fill={`url(#shadow-${colorId})`}/>
+          <path d="M30 30 C 40 15, 60 15, 70 30" stroke="#FFFFFF" strokeWidth="6" strokeLinecap="round" fill="none" strokeOpacity="0.4" />
+        </svg>
+      );
+    }
+
+    const hexColor = colorDef as string;
+    
     return (
       <svg viewBox="0 0 100 100" className={`filter drop-shadow-md ${className}`} fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id={`grad-${colorId}`} x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor={colorDef[0]} />
-            <stop offset="33%" stopColor={colorDef[0]} />
-            <stop offset="33%" stopColor={colorDef[1]} />
-            <stop offset="66%" stopColor={colorDef[1]} />
-            <stop offset="66%" stopColor={colorDef[2]} />
-            <stop offset="100%" stopColor={colorDef[2]} />
-          </linearGradient>
-          <linearGradient id={`shadow-${colorId}`} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#000000" stopOpacity="0.05" />
-            <stop offset="100%" stopColor="#000000" stopOpacity="0.3" />
+          <linearGradient id={`grad-${colorId}`} x1="20%" y1="0%" x2="80%" y2="100%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.2" />
+            <stop offset="20%" stopColor={hexColor} stopOpacity="1" />
+            <stop offset="80%" stopColor={hexColor} stopOpacity="1" />
+            <stop offset="100%" stopColor="#000000" stopOpacity="0.25" />
           </linearGradient>
         </defs>
         <path d="M50 8C27.9086 8 10 25.9086 10 48C10 65.097 20.7303 79.6896 35.8858 85.5786C36.6853 87.218 38.3842 88.3333 40.3333 88.3333C42.4746 88.3333 44.3168 87.0396 45 85.1633C46.5492 85.7196 48.2393 86.0152 50 86.0152C51.6841 86.0152 53.3045 85.7483 54.8016 85.2443C55.4975 87.0347 57.29 88.2652 59.3561 88.2652C61.3533 88.2652 63.0903 87.1147 63.8166 85.4214C78.96 79.6108 89.6667 65.0592 89.6667 48C89.6667 25.9086 71.758 8 49.6667 8H50Z" fill={`url(#grad-${colorId})`}/>
-        <path d="M50 8C27.9086 8 10 25.9086 10 48C10 65.097 20.7303 79.6896 35.8858 85.5786C36.6853 87.218 38.3842 88.3333 40.3333 88.3333C42.4746 88.3333 44.3168 87.0396 45 85.1633C46.5492 85.7196 48.2393 86.0152 50 86.0152C51.6841 86.0152 53.3045 85.7483 54.8016 85.2443C55.4975 87.0347 57.29 88.2652 59.3561 88.2652C61.3533 88.2652 63.0903 87.1147 63.8166 85.4214C78.96 79.6108 89.6667 65.0592 89.6667 48C89.6667 25.9086 71.758 8 49.6667 8H50Z" fill={`url(#shadow-${colorId})`}/>
         <path d="M30 30 C 40 15, 60 15, 70 30" stroke="#FFFFFF" strokeWidth="6" strokeLinecap="round" fill="none" strokeOpacity="0.4" />
+        <path d="M35.8858 85.5786C36.6853 87.218 38.3842 88.3333 40.3333 88.3333C42.4746 88.3333 44.3168 87.0396 45 85.1633C46.5492 85.7196 48.2393 86.0152 50 86.0152C51.6841 86.0152 53.3045 85.7483 54.8016 85.2443C55.4975 87.0347 57.29 88.2652 59.3561 88.2652C61.3533 88.2652 63.0903 87.1147 63.8166 85.4214" stroke="#000000" strokeWidth="1" strokeOpacity="0.2" fill="none" strokeLinecap="round"/>
       </svg>
-    )
+    );
+  };
+
+  if (imageUrl && !imgError) {
+    return (
+      <img 
+        src={imageUrl} 
+        alt={`Helado sabor ${flavorName}`} 
+        className={`object-contain filter drop-shadow-md rounded-full ${className}`} 
+        onError={() => setImgError(true)}
+      />
+    );
   }
 
-  const hexColor = colorDef as string;
-  
-  return (
-    <svg viewBox="0 0 100 100" className={`filter drop-shadow-md ${className}`} fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id={`grad-${colorId}`} x1="20%" y1="0%" x2="80%" y2="100%">
-          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.2" />
-          <stop offset="20%" stopColor={hexColor} stopOpacity="1" />
-          <stop offset="80%" stopColor={hexColor} stopOpacity="1" />
-          <stop offset="100%" stopColor="#000000" stopOpacity="0.25" />
-        </linearGradient>
-      </defs>
-      <path d="M50 8C27.9086 8 10 25.9086 10 48C10 65.097 20.7303 79.6896 35.8858 85.5786C36.6853 87.218 38.3842 88.3333 40.3333 88.3333C42.4746 88.3333 44.3168 87.0396 45 85.1633C46.5492 85.7196 48.2393 86.0152 50 86.0152C51.6841 86.0152 53.3045 85.7483 54.8016 85.2443C55.4975 87.0347 57.29 88.2652 59.3561 88.2652C61.3533 88.2652 63.0903 87.1147 63.8166 85.4214C78.96 79.6108 89.6667 65.0592 89.6667 48C89.6667 25.9086 71.758 8 49.6667 8H50Z" fill={`url(#grad-${colorId})`}/>
-      <path d="M30 30 C 40 15, 60 15, 70 30" stroke="#FFFFFF" strokeWidth="6" strokeLinecap="round" fill="none" strokeOpacity="0.4" />
-      <path d="M35.8858 85.5786C36.6853 87.218 38.3842 88.3333 40.3333 88.3333C42.4746 88.3333 44.3168 87.0396 45 85.1633C46.5492 85.7196 48.2393 86.0152 50 86.0152C51.6841 86.0152 53.3045 85.7483 54.8016 85.2443C55.4975 87.0347 57.29 88.2652 59.3561 88.2652C61.3533 88.2652 63.0903 87.1147 63.8166 85.4214" stroke="#000000" strokeWidth="1" strokeOpacity="0.2" fill="none" strokeLinecap="round"/>
-    </svg>
-  );
+  return renderSvg();
 };

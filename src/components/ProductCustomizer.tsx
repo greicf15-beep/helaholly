@@ -449,7 +449,7 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                         </span>
                       )}
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                       {isFrapuccino ? (
                         frapuccinoFlavors.map((flavor) => (
                           <button
@@ -461,7 +461,7 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                                 : 'border-holly-brown/5 text-holly-brown hover:border-holly-orange/30'
                             }`}
                           >
-                            <IceCreamScoop flavorName={flavor.name} className="w-10 h-10 mb-1" />
+                            <IceCreamScoop flavorName={flavor.name} className="w-16 h-16 mb-1" />
                             <span className="font-display font-bold uppercase tracking-wider">{flavor.name}</span>
                             <span className={`text-[10px] font-sans font-bold uppercase tracking-wider ${selectedFlavor === flavor.name ? 'text-holly-orange' : 'text-holly-brown/40'}`}>
                               ${flavor.price.toFixed(2)}
@@ -479,7 +479,7 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                                 : 'border-holly-brown/5 text-holly-brown hover:border-holly-orange/30'
                             }`}
                           >
-                            <IceCreamScoop flavorName={flavor.name} className="w-10 h-10 mb-1" />
+                            <IceCreamScoop flavorName={flavor.name} className="w-16 h-16 mb-1" />
                             <span className="font-display font-bold uppercase tracking-wider">{flavor.name}</span>
                             <span className={`text-[10px] font-sans font-bold uppercase tracking-wider ${selectedFlavor === flavor.name ? 'text-holly-orange' : 'text-holly-brown/40'}`}>
                               ${flavor.price.toFixed(2)}
@@ -514,7 +514,7 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                                     : 'border-holly-brown/5 text-holly-brown hover:border-holly-orange/30'
                               }`}
                             >
-                              <IceCreamScoop flavorName={flavor} className="w-12 h-12 mb-1" />
+                              <IceCreamScoop flavorName={flavor} className="w-16 h-16 mb-1" />
                               <span className="font-display font-bold uppercase tracking-wider">{flavor}</span>
                             </button>
                           );
@@ -530,7 +530,7 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                                 : 'border-holly-brown/5 text-holly-brown hover:border-holly-orange/30'
                             }`}
                           >
-                            <IceCreamScoop flavorName={flavor} className="w-12 h-12 mb-1" />
+                            <IceCreamScoop flavorName={flavor} className="w-16 h-16 mb-1" />
                             <span className="font-display font-bold uppercase tracking-wider">{flavor}</span>
                           </button>
                         ))

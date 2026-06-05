@@ -514,7 +514,26 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                                     : 'border-holly-brown/5 text-holly-brown hover:border-holly-orange/30'
                               }`}
                             >
-                              <IceCreamScoop flavorName={flavor} className="w-16 h-16 mb-1" />
+                              <div className="flex items-center justify-center gap-1 mb-1">
+                                {isGelato16oz ? (
+                                  <img 
+                                    src={
+                                      flavor === 'Fresa' ? '/16ozfresa.webp' :
+                                      flavor === 'Chocolattisimo' ? '/16ozchocolat.webp' :
+                                      flavor === 'Ron Pasas' ? '/16ozronpasas.webp' :
+                                      flavor === 'Brownie Snickers' ? '/16ozbrowniesnickers.webp' :
+                                      flavor === 'Brazo Gitano de Coco' ? '/16ozbrazogitanococ.webp' :
+                                      flavor === 'Pistacho' ? '/16ozpist.webp' :
+                                      flavor.toLowerCase().includes('chocolate') || flavor.toLowerCase().includes('brownie') || flavor.toLowerCase().includes('oreo') ? '/16ozbrown.webp' : 
+                                      '/16oz.webp'
+                                    } 
+                                    alt={`Helado 16oz ${flavor}`} 
+                                    className="w-24 h-24 object-contain filter drop-shadow-md" 
+                                  />
+                                ) : (
+                                  <IceCreamScoop flavorName={flavor} className="w-16 h-16" />
+                                )}
+                              </div>
                               <span className="font-display font-bold uppercase tracking-wider">{flavor}</span>
                             </button>
                           );

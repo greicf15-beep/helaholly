@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Check, Info, ChevronDown } from 'lucide-react';
+import { X, Check, Info, ChevronDown, Plus, Minus } from 'lucide-react';
 import { Product, CartItem } from '../types';
 import { IceCreamScoop } from './IceCreamScoop';
 import { 
@@ -186,15 +186,22 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
     }
   }, [isOpen, selectedToppings, selectedExtraToppings]);
 
-  const handleToppingToggle = (topping: string) => {
-    if (selectedToppings.includes(topping)) {
-      setSelectedToppings(selectedToppings.filter(t => t !== topping));
-      setToppingError(null);
-    } else if (selectedToppings.length < 3) {
+  const handleToppingAdd = (topping: string) => {
+    if (selectedToppings.length < 3) {
       setSelectedToppings([...selectedToppings, topping]);
       setToppingError(null);
     } else {
-      setToppingError('Solo puedes seleccionar hasta 3 contornos gratis');
+      setToppingError('Has alcanzado el límite de 60g de contornos gratis');
+    }
+  };
+
+  const handleToppingRemove = (topping: string) => {
+    const index = selectedToppings.indexOf(topping);
+    if (index > -1) {
+      const newToppings = [...selectedToppings];
+      newToppings.splice(index, 1);
+      setSelectedToppings(newToppings);
+      setToppingError(null);
     }
   };
 
@@ -430,7 +437,7 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                 {isTina && (
                   <div className="flex flex-col gap-6">
                     {/* Selected Size Image */}
-                    <div className="w-full h-64 sm:h-80 bg-gradient-to-b from-white to-gray-100 rounded-[20px] relative overflow-hidden flex items-center justify-center border border-gray-100">
+                    <div className="w-full h-64 sm:h-80 relative flex items-center justify-center">
                       <img 
                         src={
                           selectedSize?.label === '16oz' ? '/tina16oz.webp' : 
@@ -438,7 +445,7 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                           '/tina6oz.webp'
                         } 
                         alt={`Tina ${selectedSize?.label || '6oz'}`} 
-                        className="w-full h-full object-contain relative z-10 filter drop-shadow-lg"
+                        className="w-full h-full object-contain relative z-10"
                       />
                     </div>
 
@@ -730,13 +737,25 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                 {/* Toppings Selection - Not for Frappuccinos, Milkshakes, Sundae/Frosty, Grouped Gelato, or Cookies/Brownies */}
                 {(!isFrapuccino && !isMilkshake && !isSundaeOrFrosty && !isGroupedGelato && !isCookieOrBrownie && !isMaxiSundaePremium) && (
                   <section>
-                    <div className="flex justify-between items-end mb-4">
-                      <h3 className="text-[11px] font-sans font-bold uppercase tracking-[1.5px] text-holly-brown">
-                        {isMaxiSundae ? '3.' : isTina ? '3.' : '2.'} Elige 3 Contornos Gratis
-                      </h3>
-                      <span className="text-[9px] font-sans font-bold uppercase bg-holly-orange/10 text-holly-orange px-2 py-1 rounded-full tracking-wider">
-                        {selectedToppings.length} / 3 Seleccionados
-                      </span>
+                    <div className="flex flex-col gap-2 mb-4">
+                      <div className="flex justify-between items-end">
+                        <h3 className="text-[11px] font-sans font-bold uppercase tracking-[1.5px] text-holly-brown">
+                          {isMaxiSundae ? '3.' : isTina ? '3.' : '2.'} Contornos Gratis (Máx 60g)
+                        </h3>
+                        <span className="text-[9px] font-sans font-bold uppercase bg-holly-orange/10 text-holly-orange px-2 py-1 rounded-full tracking-wider">
+                          {selectedToppings.length * 20}g / 60g
+                        </span>
+                      </div>
+                      
+                      {/* Progress Bar */}
+                      <div className="w-full h-2 bg-holly-brown/10 rounded-full overflow-hidden">
+                        <motion.div 
+                          initial={{ width: 0 }}
+                          animate={{ width: `${(selectedToppings.length / 3) * 100}%` }}
+                          className="h-full bg-holly-orange"
+                          transition={{ duration: 0.3 }}
+                        />
+                      </div>
                     </div>
 
                     {/* Toppings Error Message */}
@@ -748,8 +767,8 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                           exit={{ opacity: 0, y: -10 }}
                           className="bg-red-50 border border-red-200 text-red-600 px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider flex items-center gap-2 mb-4"
                         >
-                          <Info className="w-3 h-3" />
-                          {toppingError}
+                          <Info className="w-3 h-3 flex-shrink-0" />
+                          <span className="leading-tight">{toppingError}</span>
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -758,28 +777,58 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                       <div 
                         ref={toppingsRef}
                         onScroll={() => checkScroll(toppingsRef, setShowToppingsScroll)}
-                        className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar"
+                        className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar pb-2"
                       >
                         {TOPPINGS.map((topping) => {
-                          const isSelected = selectedToppings.includes(topping);
-                          const isDisabled = !isSelected && selectedToppings.length >= 3;
+                          const count = selectedToppings.filter(t => t === topping).length;
+                          const isDisabled = selectedToppings.length >= 3;
                           
                           return (
-                            <button
+                            <div
                               key={topping}
-                              disabled={isDisabled}
-                              onClick={() => handleToppingToggle(topping)}
-                              className={`p-3 rounded-[12px] border text-left text-[10px] font-sans font-bold transition-all flex items-center justify-between gap-2 ${
-                                isSelected
-                                  ? 'border-holly-orange bg-holly-orange text-white'
-                                  : isDisabled
-                                    ? 'border-holly-brown/5 text-holly-brown/20 cursor-not-allowed'
-                                    : 'border-holly-brown/5 text-holly-brown hover:border-holly-orange/40'
+                              className={`p-3 rounded-[12px] border transition-all flex flex-col justify-between gap-2 min-h-[72px] ${
+                                count > 0
+                                  ? 'border-holly-orange bg-holly-orange/5'
+                                  : 'border-holly-brown/5 bg-white'
                               }`}
                             >
-                              <span className="leading-tight uppercase tracking-wider">{topping.replace('Topping ', '').replace('Toppping ', '')}</span>
-                              {isSelected && <Check className="w-3 h-3 flex-shrink-0" />}
-                            </button>
+                              <span className="text-[9px] font-sans font-bold leading-tight uppercase tracking-wider text-holly-brown">
+                                {topping.replace('Topping ', '').replace('Toppping ', '')}
+                              </span>
+                              
+                              <div className="flex items-center justify-between w-full h-6">
+                                {count > 0 ? (
+                                  <div className="flex items-center justify-between bg-white rounded-full px-2 py-1 shadow-sm border border-holly-brown/10 w-full h-full">
+                                    <button 
+                                      onClick={(e) => { e.stopPropagation(); handleToppingRemove(topping); }}
+                                      className="text-holly-brown hover:text-holly-orange transition-colors flex items-center justify-center p-0.5"
+                                    >
+                                      <Minus className="w-3 h-3" />
+                                    </button>
+                                    <span className="text-[10px] font-bold text-holly-brown w-6 text-center">{count * 20}g</span>
+                                    <button 
+                                      onClick={(e) => { e.stopPropagation(); handleToppingAdd(topping); }}
+                                      disabled={isDisabled}
+                                      className={`transition-colors flex items-center justify-center p-0.5 ${isDisabled ? 'text-holly-brown/30 cursor-not-allowed' : 'text-holly-brown hover:text-holly-orange'}`}
+                                    >
+                                      <Plus className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <button 
+                                    onClick={() => handleToppingAdd(topping)}
+                                    disabled={isDisabled}
+                                    className={`w-full h-full rounded-full text-[9px] font-bold uppercase tracking-wider transition-all flex items-center justify-center ${
+                                      isDisabled 
+                                        ? 'bg-holly-brown/5 text-holly-brown/30 cursor-not-allowed' 
+                                        : 'bg-holly-orange/10 text-holly-orange hover:bg-holly-orange hover:text-white'
+                                    }`}
+                                  >
+                                    Agregar
+                                  </button>
+                                )}
+                              </div>
+                            </div>
                           );
                         })}
                       </div>

@@ -428,25 +428,40 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
 
                 {/* Size Selection - Only for Tinas */}
                 {isTina && (
-                  <section>
-                    <h3 className="text-[11px] font-sans font-bold uppercase tracking-[1.5px] text-holly-brown mb-4">1. Selecciona el Tamaño</h3>
-                    <div className="grid grid-cols-3 gap-3">
-                      {TINA_SIZES.map((size) => (
-                        <button
-                          key={size.id}
-                          onClick={() => setSelectedSize(size)}
-                          className={`p-4 rounded-[15px] border-2 transition-all flex flex-col items-center gap-1 ${
-                            selectedSize?.id === size.id
-                              ? 'border-holly-orange bg-holly-orange/5 text-holly-orange'
-                              : 'border-holly-brown/5 text-holly-brown hover:border-holly-orange/30'
-                          }`}
-                        >
-                          <span className="text-xl font-display font-bold">{size.label}</span>
-                          <span className="text-[10px] font-sans font-bold uppercase tracking-wider opacity-60">${size.price.toFixed(2)}</span>
-                        </button>
-                      ))}
+                  <div className="flex flex-col gap-6">
+                    {/* Selected Size Image */}
+                    <div className="w-full h-64 sm:h-80 bg-gradient-to-b from-white to-gray-100 rounded-[20px] relative overflow-hidden flex items-center justify-center border border-gray-100">
+                      <img 
+                        src={
+                          selectedSize?.label === '16oz' ? '/tina16oz.webp' : 
+                          selectedSize?.label === '12oz' ? '/tina12oz.webp' : 
+                          '/tina6oz.webp'
+                        } 
+                        alt={`Tina ${selectedSize?.label || '6oz'}`} 
+                        className="w-full h-full object-contain relative z-10 filter drop-shadow-lg"
+                      />
                     </div>
-                  </section>
+
+                    <section>
+                      <h3 className="text-[11px] font-sans font-bold uppercase tracking-[1.5px] text-holly-brown mb-4">1. Selecciona el Tamaño</h3>
+                      <div className="grid grid-cols-3 gap-3">
+                        {TINA_SIZES.map((size) => (
+                          <button
+                            key={size.id}
+                            onClick={() => setSelectedSize(size)}
+                            className={`p-4 sm:p-6 rounded-[15px] border-2 transition-all flex flex-col items-center justify-center gap-2 ${
+                              selectedSize?.id === size.id
+                                ? 'border-holly-orange bg-holly-orange/5 text-holly-orange'
+                                : 'border-holly-brown/5 text-holly-brown hover:border-holly-orange/30'
+                            }`}
+                          >
+                            <span className="text-2xl sm:text-3xl font-display font-black uppercase tracking-wider leading-none">{size.label}</span>
+                            <span className="text-[10px] sm:text-[11px] font-sans font-bold uppercase tracking-wider opacity-60">${size.price.toFixed(2)}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </section>
+                  </div>
                 )}
 
                 {/* Line Selection - Only for Grouped Gelato (16oz, Barquilla 1, Barquillon 1/2, Tina 1/2) - 1LT is now separate products */}
@@ -588,20 +603,44 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                           );
                         })
                       ) : (
-                        TINA_FLAVORS.map((flavor) => (
-                          <button
-                            key={flavor}
-                            onClick={() => setSelectedFlavor(flavor)}
-                            className={`p-4 rounded-[15px] border-2 transition-all text-center flex flex-col items-center justify-center gap-2 ${
-                              selectedFlavor === flavor
-                                ? 'border-holly-orange bg-holly-orange/5 text-holly-orange'
-                                : 'border-holly-brown/5 text-holly-brown hover:border-holly-orange/30'
-                            }`}
-                          >
-                            <IceCreamScoop flavorName={flavor} className="w-16 h-16 mb-1" />
-                            <span className="font-display font-bold uppercase tracking-wider">{flavor}</span>
-                          </button>
-                        ))
+                        TINA_FLAVORS.map((flavor) => {
+                          let flavorImg = '';
+                          if (flavor === 'Mantecado') flavorImg = '/mantecadosoft.webp';
+                          else if (flavor === 'Chocolate') flavorImg = '/chocolatesoft.webp';
+                          else if (flavor === 'Dulce de Leche') flavorImg = '/dulcedelechesoft.webp';
+                          
+                          return (
+                            <button
+                              key={flavor}
+                              onClick={() => setSelectedFlavor(flavor)}
+                              className={`relative overflow-hidden h-28 sm:h-32 rounded-[15px] border-2 transition-all text-center flex flex-col items-center justify-end ${
+                                selectedFlavor === flavor
+                                  ? 'border-holly-orange'
+                                  : 'border-transparent hover:border-holly-orange/50'
+                              } shadow-sm`}
+                            >
+                              {flavorImg ? (
+                                <>
+                                  <img src={flavorImg} alt={flavor} className="absolute inset-0 w-full h-full object-cover" />
+                                  <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent"></div>
+                                </>
+                              ) : (
+                                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-holly-orange/5">
+                                  <IceCreamScoop flavorName={flavor} className="w-16 h-16" />
+                                </div>
+                              )}
+                              <span 
+                                className={`relative z-10 pb-3 px-2 font-display font-black uppercase tracking-wider text-[13px] sm:text-[15px] ${flavorImg ? 'text-white' : 'text-holly-brown'}`}
+                                style={flavorImg ? { 
+                                  textShadow: '0 2px 4px rgba(0,0,0,0.6), 0 0 2px rgba(0,0,0,0.8)',
+                                  WebkitTextStroke: '0.5px rgba(0,0,0,0.2)'
+                                } : {}}
+                              >
+                                {flavor}
+                              </span>
+                            </button>
+                          );
+                        })
                       )}
                     </div>
                   </section>

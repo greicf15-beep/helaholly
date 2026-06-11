@@ -352,7 +352,7 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                   <div className="flex justify-center">
                     <img 
                       src={'/frappuccinogelatosinfondo.webp'} 
-                      alt={product.name} 
+                      alt={selectedFlavor || product.name} 
                       className="w-48 h-48 sm:w-56 sm:h-56 object-contain filter drop-shadow-xl"
                       referrerPolicy="no-referrer"
                     />
@@ -502,7 +502,15 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                                 : 'border-holly-brown/5 text-holly-brown hover:border-holly-orange/30'
                             }`}
                           >
-                            <IceCreamScoop flavorName={flavor.name} className="w-16 h-16 mb-1" />
+                            <div className="w-16 h-16 mb-1 relative flex items-center justify-center">
+                              {flavor.name.toLowerCase().includes('original') || flavor.name.toLowerCase().includes('café') ? (
+                                <img src="/frappuccinocafe.webp" alt={flavor.name} className="w-16 h-16 object-contain" />
+                              ) : flavor.name.toLowerCase().includes('tiramisu') || flavor.name.toLowerCase().includes('tiramisú') ? (
+                                <img src="/frappuccinotiramisu.webp" alt={flavor.name} className="w-16 h-16 object-contain" />
+                              ) : (
+                                <IceCreamScoop flavorName={flavor.name} className="w-full h-full" />
+                              )}
+                            </div>
                             <span className="font-display font-bold uppercase tracking-wider">{flavor.name}</span>
                             <span className={`text-[10px] font-sans font-bold uppercase tracking-wider ${selectedFlavor === flavor.name ? 'text-holly-orange' : 'text-holly-brown/40'}`}>
                               ${flavor.price.toFixed(2)}

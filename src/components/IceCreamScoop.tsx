@@ -23,6 +23,11 @@ export const FLAVOR_IMAGES: Record<string, string> = {
   'Brownie': '/brownie.webp',
   'Brownie Fudge': '/browniefudge.webp',
   'Coco': '/coco.webp',
+  'Pistacho': '/pistacho.webp',
+  'Ferrero Rocher': '/ferrerorocher.webp',
+  'Chocolate Dubai': '/chocolatedubai.webp',
+  'Ferrero Rochers': '/ferrerorocher.webp',
+  'Merengada Ferrero': '/ferrerorocher.webp',
 };
 
 export const FLAVOR_COLORS: Record<string, string | string[]> = {

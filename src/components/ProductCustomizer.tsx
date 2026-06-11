@@ -342,25 +342,10 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
               </div>
 
               <div className="space-y-10">
-                {isMilkshake && product.category === 'gelato' && (
+                {isMilkshake && (
                   <div className="flex justify-center">
                     <img 
-                      src={selectedFlavor ? `/${selectedFlavor.toLowerCase().replace(/[-\s]/g, '') === 'merengadagelatoferrero' ? 'merengadagelatoferreros' : selectedFlavor.toLowerCase().replace(/[-\s]/g, '')}.webp` : '/merengadasgelato.webp'} 
-                      alt={selectedFlavor || product.name} 
-                      className="w-48 h-48 sm:w-56 sm:h-56 object-contain filter drop-shadow-xl transition-all duration-300"
-                      onError={(e) => {
-                        // Fallback to default if specific flavor image is not found
-                        (e.target as HTMLImageElement).src = '/merengadasgelato.webp';
-                      }}
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
-                )}
-
-                {isMilkshake && product.category === 'soft' && (
-                  <div className="flex justify-center">
-                    <img 
-                      src={product.image || '/milkshakesoft.webp'} 
+                      src="/milkshakeusuario.webp"
                       alt={product.name} 
                       className="w-48 h-48 sm:w-56 sm:h-56 object-contain filter drop-shadow-xl transition-all duration-300"
                       referrerPolicy="no-referrer"
@@ -368,12 +353,23 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                   </div>
                 )}
 
-                {isFrapuccino && product.category === 'gelato' && (
+                {isFrapuccino && (
                   <div className="flex justify-center">
                     <img 
-                      src={'/frappuccinogelatosinfondo.webp'} 
-                      alt={selectedFlavor || product.name} 
-                      className="w-48 h-48 sm:w-56 sm:h-56 object-contain filter drop-shadow-xl"
+                      src="/frappuccinousuario.webp"
+                      alt={product.name} 
+                      className="w-48 h-48 sm:w-56 sm:h-56 object-contain filter drop-shadow-xl transition-all duration-300"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                )}
+
+                {isSundae && (
+                  <div className="flex justify-center">
+                    <img 
+                      src="/sundaeusuario.webp"
+                      alt={product.name} 
+                      className="w-48 h-48 sm:w-56 sm:h-56 object-contain filter drop-shadow-xl transition-all duration-300"
                       referrerPolicy="no-referrer"
                     />
                   </div>

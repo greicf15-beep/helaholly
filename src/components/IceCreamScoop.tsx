@@ -27,7 +27,12 @@ export const FLAVOR_IMAGES: Record<string, string> = {
   'Ferrero Rocher': '/ferrerorocher.webp',
   'Chocolate Dubai': '/chocolatedubai.webp',
   'Ferrero Rochers': '/ferrerorocher.webp',
-  'Merengada Ferrero': '/ferrerorocher.webp',
+  'Merengada Ferrero': '/merengadagelatoferreros.webp',
+  'Merengada Reeses': '/merengadagelatoreeses.webp',
+  'Merengada Oreo': '/merengadagelatooreo.webp',
+  'Merengada Nutella': '/merengadagelatonutella.webp',
+  'Merengada B-ready': '/merengadagelatobready.webp',
+  'Merengada Raffaello': '/merengadagelatoraffaello.webp',
 };
 
 export const FLAVOR_COLORS: Record<string, string | string[]> = {

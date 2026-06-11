@@ -244,7 +244,12 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
           if (item.customization.premiumTopping) itemStr += `\n   _Topping Premium: ${item.customization.premiumTopping}_`;
           if (item.customization.magicLayer) itemStr += `\n   _Capa Mágica: ${item.customization.magicLayer}_`;
           if (item.customization.toppings && item.customization.toppings.length > 0) {
-            itemStr += `\n   _Toppings: ${item.customization.toppings.join(', ')}_`;
+            const groupedToppings = item.customization.toppings.reduce((acc, curr) => {
+              acc[curr] = (acc[curr] || 0) + 1;
+              return acc;
+            }, {} as Record<string, number>);
+            const toppingsStr = Object.entries(groupedToppings).map(([name, count]) => `${name} (${count * 20}g)`).join(', ');
+            itemStr += `\n   _Toppings: ${toppingsStr}_`;
           }
           if (item.customization.extraToppings && item.customization.extraToppings.length > 0) {
             const extras = item.customization.extraToppings.map(t => {
@@ -580,7 +585,10 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
                                 )}
                                 {item.customization.toppings && item.customization.toppings.length > 0 && (
                                   <p className="text-[9px] sm:text-[10px] text-holly-brown/60 font-medium uppercase tracking-wider line-clamp-1">
-                                    Toppings: {item.customization.toppings.join(', ')}
+                                    Toppings: {Object.entries(item.customization.toppings.reduce((acc, curr) => {
+                                      acc[curr] = (acc[curr] || 0) + 1;
+                                      return acc;
+                                    }, {} as Record<string, number>)).map(([name, count]) => `${name} (${count * 20}g)`).join(', ')}
                                   </p>
                                 )}
                                 {item.customization.extraToppings && item.customization.extraToppings.length > 0 && (

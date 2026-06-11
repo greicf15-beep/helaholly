@@ -40,6 +40,8 @@ interface ProductCustomizerProps {
 
 export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: ProductCustomizerProps) {
   const isTina = product.id === 'tinas-custom';
+  const isTinaGalleta = product.id === 's4';
+  const isBubbleWaffle = product.id === 's5';
   const isFrapuccino = product.id.startsWith('frapuccinos-custom');
   const isMilkshake = product.id.startsWith('milkshakes-custom');
   const isSundae = product.id === 's6';
@@ -355,6 +357,17 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                   </div>
                 )}
 
+                {isMilkshake && product.category === 'soft' && (
+                  <div className="flex justify-center">
+                    <img 
+                      src={product.image || '/milkshakesoft.webp'} 
+                      alt={product.name} 
+                      className="w-48 h-48 sm:w-56 sm:h-56 object-contain filter drop-shadow-xl transition-all duration-300"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                )}
+
                 {isFrapuccino && product.category === 'gelato' && (
                   <div className="flex justify-center">
                     <img 
@@ -376,6 +389,28 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                         // Fallback image if sinfondo is not uploaded yet for a specific size
                         (e.target as HTMLImageElement).src = product.image;
                       }}
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                )}
+
+                {isTinaGalleta && (
+                  <div className="flex justify-center">
+                    <img 
+                      src="/tinagalletausuario.webp"
+                      alt={product.name} 
+                      className="w-48 h-48 sm:w-56 sm:h-56 object-contain filter drop-shadow-xl transition-all duration-300"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                )}
+
+                {isBubbleWaffle && (
+                  <div className="flex justify-center">
+                    <img 
+                      src="/bubblewaffleusuario.webp"
+                      alt={product.name} 
+                      className="w-48 h-48 sm:w-56 sm:h-56 object-contain filter drop-shadow-xl transition-all duration-300"
                       referrerPolicy="no-referrer"
                     />
                   </div>
@@ -550,7 +585,26 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                                 : 'border-holly-brown/5 text-holly-brown hover:border-holly-orange/30'
                             }`}
                           >
-                            <IceCreamScoop flavorName={flavor.name} className="w-16 h-16 mb-1" />
+                            {(() => {
+                              if (product.category === 'soft') {
+                                const flavorName = flavor.name.toLowerCase();
+                                let imgSrc = '';
+                                if (flavorName === 'oreo') imgSrc = '/merengadagelatooreo.webp';
+                                else if (flavorName === 'ferrero rochers' || flavorName === 'ferrero') imgSrc = '/merengadagelatoferreros.webp';
+                                else if (flavorName === 'toddy crunch') imgSrc = '/toddy.webp';
+                                else if (flavorName === 'brownie snickers') imgSrc = '/snickers.webp';
+                                else if (flavorName === 'frutos del bosque') imgSrc = '/frutosdelbosque.webp';
+
+                                if (imgSrc) {
+                                  return (
+                                    <div className="w-16 h-16 mb-1 relative flex items-center justify-center">
+                                      <img src={imgSrc} alt={flavor.name} className="w-16 h-16 object-contain" />
+                                    </div>
+                                  );
+                                }
+                              }
+                              return <IceCreamScoop flavorName={flavor.name} className="w-16 h-16 mb-1" />;
+                            })()}
                             <span className="font-display font-bold uppercase tracking-wider">{flavor.name.replace('Merengada ', '')}</span>
                             <span className={`text-[10px] font-sans font-bold uppercase tracking-wider ${selectedFlavor === flavor.name ? 'text-holly-orange' : 'text-holly-brown/40'}`}>
                               ${flavor.price.toFixed(2)}

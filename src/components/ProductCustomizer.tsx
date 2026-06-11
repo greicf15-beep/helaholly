@@ -560,6 +560,12 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                                 <img src="/frappuccinocafe.webp" alt={flavor.name} className="w-16 h-16 object-contain" />
                               ) : flavor.name.toLowerCase().includes('tiramisu') || flavor.name.toLowerCase().includes('tiramisú') ? (
                                 <img src="/frappuccinotiramisu.webp" alt={flavor.name} className="w-16 h-16 object-contain" />
+                              ) : flavor.name.toLowerCase().includes('nutella') ? (
+                                <img src="/frappuccinonutella.webp" alt={flavor.name} className="w-16 h-16 object-contain" />
+                              ) : flavor.name.toLowerCase().includes('pistacho') ? (
+                                <img src="/frappuccinopistacho.webp" alt={flavor.name} className="w-16 h-16 object-contain" />
+                              ) : flavor.name.toLowerCase().includes('nocciola') ? (
+                                <img src="/frappuccinonocciola.webp" alt={flavor.name} className="w-16 h-16 object-contain" />
                               ) : (
                                 <IceCreamScoop flavorName={flavor.name} className="w-full h-full" />
                               )}

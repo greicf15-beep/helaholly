@@ -336,9 +336,39 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                 {isMilkshake && product.category === 'gelato' && (
                   <div className="flex justify-center">
                     <img 
-                      src={'/merengadasgelato.webp'} 
+                      src={selectedFlavor ? `/${selectedFlavor.toLowerCase().replace(/[-\s]/g, '') === 'merengadagelatoferrero' ? 'merengadagelatoferreros' : selectedFlavor.toLowerCase().replace(/[-\s]/g, '')}.webp` : '/merengadasgelato.webp'} 
+                      alt={selectedFlavor || product.name} 
+                      className="w-48 h-48 sm:w-56 sm:h-56 object-contain filter drop-shadow-xl transition-all duration-300"
+                      onError={(e) => {
+                        // Fallback to default if specific flavor image is not found
+                        (e.target as HTMLImageElement).src = '/merengadasgelato.webp';
+                      }}
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                )}
+
+                {isFrapuccino && product.category === 'gelato' && (
+                  <div className="flex justify-center">
+                    <img 
+                      src={'/frappuccinogelatosinfondo.webp'} 
                       alt={product.name} 
                       className="w-48 h-48 sm:w-56 sm:h-56 object-contain filter drop-shadow-xl"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                )}
+
+                {isGelatoWithExtraPortions && (
+                  <div className="flex justify-center">
+                    <img 
+                      src={`/${product.name.toLowerCase().replace(/\s+/g, '').replace('ò', 'o')}sinfondo.webp`}
+                      alt={product.name} 
+                      className="w-48 h-48 sm:w-56 sm:h-56 object-contain filter drop-shadow-xl"
+                      onError={(e) => {
+                        // Fallback image if sinfondo is not uploaded yet for a specific size
+                        (e.target as HTMLImageElement).src = product.image;
+                      }}
                       referrerPolicy="no-referrer"
                     />
                   </div>

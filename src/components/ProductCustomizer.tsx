@@ -717,21 +717,25 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                         2. Selecciona tu Team
                       </h3>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+
+                    <div className="flex justify-center mb-6">
+                      <div className="w-40 h-40 relative flex items-center justify-center">
+                        <img src={`/${selectedTeam.toLowerCase()}.webp`} alt={selectedTeam} className="w-full h-full object-contain drop-shadow-md" />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-3">
                       {['Piru', 'Panki', 'Loli'].map((team) => (
                         <button
                           key={team}
                           onClick={() => setSelectedTeam(team)}
-                          className={`p-4 rounded-[15px] border-2 transition-all text-center flex flex-col items-center justify-center gap-2 ${
+                          className={`py-3 px-2 rounded-[15px] border-2 transition-all text-center flex items-center justify-center ${
                             selectedTeam === team
                               ? 'border-holly-orange bg-holly-orange/5 text-holly-orange'
                               : 'border-holly-brown/5 text-holly-brown hover:border-holly-orange/30'
                           }`}
                         >
-                          <div className="w-16 h-16 mb-1 relative flex items-center justify-center">
-                            <img src={`/${team.toLowerCase()}.webp`} alt={team} className="w-16 h-16 object-contain" />
-                          </div>
-                          <span className="font-display font-bold uppercase tracking-wider">{team}</span>
+                          <span className="font-display font-bold uppercase tracking-wider text-sm sm:text-base">{team}</span>
                         </button>
                       ))}
                     </div>

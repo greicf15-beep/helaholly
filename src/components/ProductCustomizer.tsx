@@ -722,12 +722,15 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                         <button
                           key={team}
                           onClick={() => setSelectedTeam(team)}
-                          className={`p-4 rounded-[15px] border-2 transition-all text-center flex flex-col gap-1 ${
+                          className={`p-4 rounded-[15px] border-2 transition-all text-center flex flex-col items-center justify-center gap-2 ${
                             selectedTeam === team
                               ? 'border-holly-orange bg-holly-orange/5 text-holly-orange'
                               : 'border-holly-brown/5 text-holly-brown hover:border-holly-orange/30'
                           }`}
                         >
+                          <div className="w-16 h-16 mb-1 relative flex items-center justify-center">
+                            <img src={`/${team.toLowerCase()}.webp`} alt={team} className="w-16 h-16 object-contain" />
+                          </div>
                           <span className="font-display font-bold uppercase tracking-wider">{team}</span>
                         </button>
                       ))}

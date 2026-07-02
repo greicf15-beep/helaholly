@@ -51,8 +51,7 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
   const isMaxiSundaePremium = product.id === 's10';
   
   const MAXI_PREMIUM_TOPPINGS = [
-    'Gotas de Chocolate Oscuro', 'Gotas de Chocolate Blanco', 'Dandy', 'Flips', 
-    'Choco Crunch', 'Miramar', 'Lluvia de Colores', 'Lluvia de Chocolate', 'Mani', 'Oreo'
+    'Lluvia de Colores', 'Oreo', 'Maní', 'Lluvia de Chocolate', 'Lluvia de Coco'
   ];
 
   const MAGIC_LAYERS = [
@@ -154,7 +153,7 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
   const [selectedToppings, setSelectedToppings] = useState<string[]>([]);
   const [selectedExtraToppings, setSelectedExtraToppings] = useState<{ name: string; price: number; flavor?: string }[]>([]);
   const [selectedTeam, setSelectedTeam] = useState<string>('Piru');
-  const [selectedPremiumTopping, setSelectedPremiumTopping] = useState<string>('Gotas de Chocolate Oscuro');
+  const [selectedPremiumTopping, setSelectedPremiumTopping] = useState<string>('Lluvia de Colores');
   const [selectedMagicLayer, setSelectedMagicLayer] = useState<string>('Chocolate Oscuro');
   const [toppingError, setToppingError] = useState<string | null>(null);
 

@@ -88,9 +88,7 @@ export const TINA_2_PORCIONES_LINES = [
 export const SOFT_FRAPUCCINO_FLAVORS = [
   { name: "Original", price: 4.95 },
   { name: "Tiramisú", price: 4.95 },
-  { name: "Nutella", price: 8.15 },
-  { name: "PISTACHO", price: 8.15 },
-  { name: "NOCCIOLA", price: 8.15 }
+  { name: "Nutella", price: 8.15 }
 ];
 
 export const SOFT_MILKSHAKE_FLAVORS = [
@@ -483,7 +481,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 'frapuccinos-custom-soft',
     name: 'Frappuccinos Soft',
-    description: 'Elige tu sabor favorito de frappuccino soft: Original, Tiramisú, Nutella, Pistacho o Nocciola.',
+    description: 'Elige tu sabor favorito de frappuccino soft: Original, Tiramisú o Nutella.',
     price: 4.95,
     category: 'soft',
     image: './frappuccinosoft.webp',

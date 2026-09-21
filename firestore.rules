@@ -84,6 +84,14 @@ service cloud.firestore {
              data.createdAt is timestamp;
     }
 
+    function isValidCustomer(data) {
+      return hasRequiredFields(['name', 'email', 'points', 'createdAt', 'updatedAt']) &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             data.email is string && data.email.size() <= 100 &&
+             data.points is int && data.points >= 0 &&
+             data.createdAt is timestamp && data.updatedAt is timestamp;
+    }
+
     // ===============================================================
     // Rules
     // ===============================================================
@@ -98,6 +106,15 @@ service cloud.firestore {
     match /orders/{orderId} {
       allow create: if isValidOrder(request.resource.data);
       allow read, update, delete: if isAdmin();
+    }
+
+    // Customers: Users can read and update their own loyalty profile
+    match /customers/{customerId} {
+      allow read: if isAuthenticated() && request.auth.uid == customerId;
+      allow create: if isAuthenticated() && request.auth.uid == customerId && isValidCustomer(request.resource.data);
+      allow update: if isAuthenticated() && request.auth.uid == customerId && isValidCustomer(request.resource.data) &&
+                    request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if isAdmin();
     }
 
     // Users: Only admins can manage roles

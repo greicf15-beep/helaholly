@@ -27,20 +27,19 @@ if (!API_KEY) {
 export default function App() {
   const [selectedStore, setSelectedStore] = useState<StoreLocation | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-  const [orderMode, setOrderMode] = useState<OrderMode | null>(null);
+  const [orderMode, setOrderMode] = useState<OrderMode | null>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const m = params.get('metodo');
+      if (m === 'pickup') return 'in-store';
+      if (m === 'delivery') return 'delivery';
+    }
+    return null;
+  });
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [customizingProduct, setCustomizingProduct] = useState<Product | null>(null);
   const [notification, setNotification] = useState<string | null>(null);
-  const [showPreloader, setShowPreloader] = useState(true);
-
-  useEffect(() => {
-    // Hide preloader after 2.5 seconds to let images load
-    const timer = setTimeout(() => {
-      setShowPreloader(false);
-    }, 2500);
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     if (notification) {
@@ -50,17 +49,6 @@ export default function App() {
   }, [notification]);
   
   const { cart, addToCart, removeFromCart, updateQuantity, clearCart, total } = useCart();
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const m = params.get('metodo');
-    if (m === 'pickup') {
-      setOrderMode('in-store');
-    } else if (m === 'delivery') {
-      setOrderMode('delivery');
-    }
-    // If no param, we leave it null so SelectionScreen shows the choice
-  }, []);
 
   const filteredProducts = useMemo(() => {
     if (!selectedCategory || !selectedStore) return [];
@@ -109,13 +97,45 @@ export default function App() {
         status: 'pending',
         createdAt: serverTimestamp()
       });
-      
-      setTimeout(() => {
-        clearCart();
-      }, 2000);
     } catch (error) {
       handleFirestoreError(error, OperationType.WRITE, path);
     }
+
+    // Sync with internal API for el sistema administrativo
+    try {
+      await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customer: {
+            name: data.name,
+            phone: data.phone,
+            address: data.address || '',
+            location: data.location || null,
+          },
+          store: data.selectedStore?.name || '',
+          mode: orderMode,
+          vehicleType: data.vehicleType || null,
+          deliveryFee: data.deliveryFee || 0,
+          subtotal: total,
+          total: total + (data.deliveryFee || 0),
+          items: cart.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            subtotal: item.price * item.quantity,
+            customization: item.customization || null,
+          })),
+        }),
+      });
+    } catch (apiError) {
+      console.warn('Note: Could not sync order to internal server API:', apiError);
+    }
+
+    setTimeout(() => {
+      clearCart();
+    }, 2000);
   };
 
   return (
@@ -128,26 +148,7 @@ export default function App() {
       >
         <div className="min-h-screen bg-holly-cream font-sans selection:bg-holly-orange selection:text-white">
           <AnimatePresence mode="wait">
-            {showPreloader ? (
-              <motion.div
-                key="preloader"
-                initial={{ opacity: 1 }}
-                exit={{ opacity: 0, transition: { duration: 0.5 } }}
-                className="fixed inset-0 z-[9999] bg-holly-cream flex flex-col items-center justify-center p-6"
-              >
-                <motion.div
-                   animate={{ scale: [1, 1.1, 1] }}
-                   transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                >
-                  <img src={logoBase64} alt="Holly Heladería..." className="w-48 sm:w-64 h-auto drop-shadow-xl" referrerPolicy="no-referrer" />
-                </motion.div>
-                <div className="mt-8 flex gap-3">
-                   <motion.div className="w-3 h-3 rounded-full bg-holly-orange" animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0 }} />
-                   <motion.div className="w-3 h-3 rounded-full bg-holly-orange" animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.2 }} />
-                   <motion.div className="w-3 h-3 rounded-full bg-holly-orange" animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.4 }} />
-                </div>
-              </motion.div>
-            ) : !selectedStore || !selectedCategory ? (
+            {!selectedStore || !selectedCategory ? (
               <motion.div
                 key="selection"
                 initial={{ opacity: 0 }}

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "ORD-DEMO-001",
+    "createdAt": "2026-09-21T19:22:03.203Z",
+    "customer": {
+      "name": "Cliente Demo",
+      "phone": "584120000000",
+      "address": "Av. 5 de Julio, Maracaibo",
+      "location": {
+        "lat": 10.6698,
+        "lng": -71.6094
+      }
+    },
+    "store": "Sede 5 de Julio",
+    "mode": "delivery",
+    "vehicleType": "moto",
+    "items": [
+      {
+        "id": "sample-1",
+        "name": "Barquilla Hollywood Especial",
+        "price": 3.5,
+        "quantity": 2,
+        "subtotal": 7,
+        "customization": {
+          "flavor": "Chocolate Fudge",
+          "magicLayer": "Capa Mágica de Avellana",
+          "toppings": [
+            "Lluvia de Chocolate (20g)",
+            "Maní Tostado (20g)"
+          ]
+        }
+      }
+    ],
+    "subtotal": 7,
+    "deliveryFee": 2,
+    "total": 9,
+    "status": "facturado",
+    "sistemaSync": {
+      "notes": "Pedido de demostración para pruebas del sistema administrativo",
+      "syncedAt": "2026-09-21T19:22:05.693Z",
+      "invoiceNumber": "FAC-0001"
+    }
+  }
+]

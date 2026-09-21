@@ -46,6 +46,19 @@
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["items", "total", "mode", "customerName", "customerPhone", "status", "createdAt"]
+    },
+    "Customer": {
+      "title": "Customer",
+      "description": "A registered customer with loyalty points.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 100 },
+        "points": { "type": "integer", "description": "Loyalty points accumulated" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "points", "createdAt", "updatedAt"]
     }
   },
   "firestore": {
@@ -56,6 +69,10 @@
     "/orders/{orderId}": {
       "schema": "Order",
       "description": "Collection of customer orders."
+    },
+    "/customers/{customerId}": {
+      "schema": "Customer",
+      "description": "Collection of registered customers."
     }
   }
 }

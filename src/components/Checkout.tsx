@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MapPin, X, Loader2, CheckCircle2, Store as StoreIcon, Truck, Bike, Car, Search } from 'lucide-react';
+import { MapPin, X, Loader2, CheckCircle2, Store as StoreIcon, Truck, Bike, Car, Search, Gift } from 'lucide-react';
 import { OrderMode, CartItem, VehicleType, StoreLocation } from '../types';
 import { StoreMap } from './StoreMap';
 import { HOLLYWOOD_STORES, DELIVERY_RATE_PER_KM } from '../constants';
 import { useMapsLibrary } from '@vis.gl/react-google-maps';
+import { auth, db } from '../firebase';
+import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, User } from 'firebase/auth';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 interface CheckoutProps {
   isOpen: boolean;
@@ -29,6 +32,57 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
   const [deliveryFee, setDeliveryFee] = useState(0);
   const [whatsappUrl, setWhatsappUrl] = useState('');
   const [isAddressConfirmed, setIsAddressConfirmed] = useState(false);
+  
+  const [user, setUser] = useState<User | null>(null);
+  const [userPoints, setUserPoints] = useState<number>(0);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [isSigningIn, setIsSigningIn] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+
+  const pointsToEarn = Math.floor(total);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        if (!name) setName(currentUser.displayName || '');
+        try {
+          const docRef = doc(db, 'customers', currentUser.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            setUserPoints(docSnap.data().points || 0);
+          } else {
+            setUserPoints(0);
+          }
+        } catch (error) {
+          console.error("Error fetching points:", error);
+        }
+      } else {
+        setUserPoints(0);
+      }
+      setAuthLoading(false);
+    });
+    return () => unsubscribe();
+  }, [name]);
+
+  const handleSignIn = async () => {
+    if (isSigningIn) return;
+    setIsSigningIn(true);
+    setAuthError(null);
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+    } catch (error: any) {
+      if (error.code === 'auth/cancelled-popup-request' || error.code === 'auth/popup-closed-by-user') {
+        console.log("Login popup cancelled by user.");
+      } else {
+        console.error("Error signing in:", error);
+        setAuthError("No se pudo iniciar sesión. Por favor intenta de nuevo.");
+      }
+    } finally {
+      setIsSigningIn(false);
+    }
+  };
 
   const isMaracaiboStore = useMemo(() => {
     if (!selectedStore) return false;
@@ -271,6 +325,29 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
     const url = `https://wa.me/${selectedStore?.phone || '584120000000'}?text=${encodeURIComponent(messageText)}`;
     setWhatsappUrl(url);
     
+    if (user) {
+      try {
+        const docRef = doc(db, 'customers', user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          await updateDoc(docRef, {
+            points: (docSnap.data().points || 0) + pointsToEarn,
+            updatedAt: new Date().toISOString()
+          });
+        } else {
+          await setDoc(docRef, {
+            name: user.displayName || name,
+            email: user.email || '',
+            points: pointsToEarn,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          });
+        }
+      } catch (error) {
+        console.error("Error updating points:", error);
+      }
+    }
+
     onSubmit({
       name,
       phone,
@@ -366,7 +443,7 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
               </div>
             ) : (
               <div className="p-5 sm:p-16">
-                <div className="flex justify-between items-start mb-8 sm:mb-16">
+                <div className="flex justify-between items-start mb-6 sm:mb-12">
                   <div className="space-y-1 sm:space-y-2">
                     <span className="text-[9px] sm:text-xs font-bold uppercase tracking-[0.5em] text-holly-orange">Paso Final</span>
                     <h2 className="text-3xl sm:text-6xl font-display font-bold uppercase text-holly-brown tracking-normal">CHECKOUT</h2>
@@ -375,6 +452,52 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
                     <X className="w-6 h-6 sm:w-12 sm:h-12" />
                   </button>
                 </div>
+
+                {!authLoading && (
+                  <div className="mb-8 sm:mb-10 p-4 sm:p-6 rounded-2xl border-2 border-holly-orange/20 bg-holly-orange/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-holly-orange text-white rounded-full flex items-center justify-center shrink-0">
+                        <Gift className="w-6 h-6" />
+                      </div>
+                      <div>
+                        {user ? (
+                          <>
+                            <h3 className="text-sm sm:text-base font-display font-bold uppercase text-holly-brown">
+                              Club Hollywood
+                            </h3>
+                            <p className="text-[10px] sm:text-xs font-medium text-holly-brown/60 uppercase tracking-widest mt-1">
+                              Tienes <span className="font-bold text-holly-orange">{userPoints}</span> puntos.
+                              Sumarás <span className="font-bold text-holly-orange">+{pointsToEarn}</span> pts en este pedido.
+                            </p>
+                          </>
+                        ) : (
+                          <>
+                            <h3 className="text-sm sm:text-base font-display font-bold uppercase text-holly-brown">
+                              Únete al Club Hollywood
+                            </h3>
+                            <p className="text-[10px] sm:text-xs font-medium text-holly-brown/60 uppercase tracking-widest mt-1">
+                              Acumula <span className="font-bold text-holly-orange">{pointsToEarn} puntos</span> con esta compra!
+                            </p>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    {!user && (
+                      <div className="w-full sm:w-auto flex flex-col items-center sm:items-end gap-2">
+                        <button
+                          type="button"
+                          onClick={handleSignIn}
+                          disabled={isSigningIn}
+                          className="w-full sm:w-auto px-6 py-3 bg-holly-brown text-white font-display font-bold uppercase tracking-widest text-xs rounded-xl hover:bg-holly-orange transition-colors whitespace-nowrap shadow-md disabled:opacity-50 flex items-center justify-center gap-2"
+                        >
+                          {isSigningIn && <Loader2 className="w-4 h-4 animate-spin" />}
+                          Iniciar Sesión
+                        </button>
+                        {authError && <span className="text-red-500 text-[10px] sm:text-xs text-center font-medium">{authError}</span>}
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 <form onSubmit={handleSubmit} className="space-y-8 sm:space-y-10">
                   <div className="space-y-6 sm:space-y-8">

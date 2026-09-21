@@ -45,7 +45,7 @@ async function startServer() {
   });
 
   // Internal endpoint called by checkout frontend to register orders
-  app.post('/api/orders', (req, res) => {
+  app.post(['/api/orders', '/api/sistema/orders'], (req, res) => {
     try {
       const orderData = req.body;
       if (!orderData || !orderData.customer || !orderData.items) {

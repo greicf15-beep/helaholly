@@ -1,6 +1,14 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # Permitir cabeceras de autorización en Hostinger/Apache
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+
+  # Rutas de la API para el Sistema Administrativo en Hostinger
+  RewriteRule ^api/sistema(/.*)?$ api/sistema/index.php [QSA,L]
+  RewriteRule ^api/orders(/.*)?$ api/sistema/index.php [QSA,L]
+
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d

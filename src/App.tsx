@@ -76,8 +76,9 @@ export default function App() {
 
   const handleCheckoutSubmit = async (data: any) => {
     const path = 'orders';
+    let firestoreId: string | undefined;
     try {
-      await addDoc(collection(db, path), {
+      const docRef = await addDoc(collection(db, path), {
         items: cart.map(item => ({
           id: item.id,
           name: item.name,
@@ -97,16 +98,18 @@ export default function App() {
         status: 'pending',
         createdAt: serverTimestamp()
       });
+      firestoreId = docRef.id;
     } catch (error) {
       handleFirestoreError(error, OperationType.WRITE, path);
     }
 
     // Sync with internal API for el sistema administrativo
     try {
-      await fetch('/api/orders', {
+      await fetch('/api/sistema/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          id: firestoreId,
           customer: {
             name: data.name,
             phone: data.phone,

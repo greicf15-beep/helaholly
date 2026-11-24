@@ -1,0 +1,93 @@
+[
+  {
+    "id": "cust-1791824461572-535",
+    "name": "María González",
+    "phone": "584121234567",
+    "cleanPhone": "04121234567",
+    "birthdate": "",
+    "stamps": 0,
+    "rewardAvailable": null,
+    "totalPurchasesCount": 0,
+    "totalSpent": 0,
+    "lastVisitAt": "2026-10-12T17:01:01.572Z",
+    "lastStore": {
+      "storeCode": "00000",
+      "storeName": "Hollywood Sede 72 (5 de Julio)",
+      "warehouseCode": "01B"
+    },
+    "history": [
+      {
+        "date": "2026-10-12T17:01:01.572Z",
+        "type": "registered",
+        "detail": "Registro VIP en caja",
+        "store": {
+          "storeCode": "00000",
+          "storeName": "Hollywood Sede 72 (5 de Julio)",
+          "warehouseCode": "01B"
+        },
+        "amount": 0
+      }
+    ],
+    "createdAt": "2026-10-12T17:01:01.572Z",
+    "updatedAt": "2026-10-12T17:01:01.572Z"
+  },
+  {
+    "id": "cust-1",
+    "name": "Valentina Rodríguez",
+    "phone": "0414-9876543",
+    "cleanPhone": "04149876543",
+    "birthdate": "1998-09-28",
+    "stamps": 0,
+    "totalPurchasesCount": 5,
+    "totalSpent": 33,
+    "lastVisitAt": "2026-09-26T00:57:35.439Z",
+    "lastStore": "Sede 5 de Julio",
+    "history": [
+      {
+        "date": "2026-09-26T00:57:35.439Z",
+        "type": "reward_redeemed",
+        "detail": "Premio 5 Sellos entregado: Bubble Waffle ($0.00 GRATIS)",
+        "store": "Sede 5 de Julio"
+      },
+      {
+        "date": "2026-09-26T00:57:33.313Z",
+        "type": "stamp_added",
+        "detail": "¡Sello 5 acumulado! Premio desbloqueado",
+        "store": "Sede 5 de Julio",
+        "amount": 4.5
+      },
+      {
+        "date": "2026-09-26T00:57:31.588Z",
+        "type": "registered",
+        "detail": "Registro inicial VIP",
+        "store": "Sede 5 de Julio"
+      }
+    ],
+    "createdAt": "2026-09-26T00:57:31.588Z",
+    "updatedAt": "2026-09-26T00:57:35.439Z",
+    "rewardAvailable": null
+  },
+  {
+    "id": "cust-2",
+    "name": "Carlos Mendoza",
+    "phone": "0424-5551234",
+    "cleanPhone": "04245551234",
+    "birthdate": "1995-10-15",
+    "stamps": 5,
+    "rewardAvailable": "any",
+    "totalPurchasesCount": 5,
+    "totalSpent": 34,
+    "lastVisitAt": "2026-09-26T00:57:31.588Z",
+    "lastStore": "Sede Delicias Norte",
+    "history": [
+      {
+        "date": "2026-09-26T00:57:31.588Z",
+        "type": "stamp_added",
+        "detail": "Sello 5 acumulado - Premio desbloqueado",
+        "store": "Sede Delicias Norte"
+      }
+    ],
+    "createdAt": "2026-09-26T00:57:31.588Z",
+    "updatedAt": "2026-09-26T00:57:31.588Z"
+  }
+]

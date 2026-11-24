@@ -1,5 +1,60 @@
 [
   {
+    "id": "ORD-TEST-SAINT-001",
+    "store": {
+      "storeCode": "00000",
+      "storeName": "Hollywood Sede 72 (5 de Julio)",
+      "warehouseCode": "01B"
+    },
+    "mode": "delivery",
+    "vehicleType": "moto",
+    "customer": {
+      "docId": "V-18456789",
+      "name": "María González",
+      "phone": "584121234567",
+      "address": "Calle 72 con Av. 15, Casa #14-20"
+    },
+    "payment": {
+      "method": "pago_movil",
+      "notes": "Validación manual por WhatsApp con el operador"
+    },
+    "items": [
+      {
+        "line": 1,
+        "codProd": "010045",
+        "name": "Barquilla Hollywood Especial 2 Sabores",
+        "quantity": 2,
+        "priceUsd": 3.5,
+        "subtotalUsd": 7,
+        "isExempt": true,
+        "customizationText": "Sabores: Chocolate Fudge y Mantecado | Topping: Lluvia Choc"
+      },
+      {
+        "line": 2,
+        "codProd": "SERV-DELIV",
+        "name": "Servicio de Delivery",
+        "quantity": 1,
+        "priceUsd": 2,
+        "subtotalUsd": 2,
+        "isExempt": false
+      }
+    ],
+    "financials": {
+      "subtotalUsd": 7,
+      "deliveryFeeUsd": 2,
+      "taxUsd": 0,
+      "totalUsd": 9,
+      "totalBs": 450,
+      "exchangeRate": 50
+    },
+    "status": "en_caja",
+    "createdAt": "2026-10-12T17:01:01.571Z",
+    "sistemaSync": {
+      "syncedAt": "2026-10-12T17:01:07.868Z",
+      "notes": "Comanda registrada en Saint ERP y enviada a barra de preparación."
+    }
+  },
+  {
     "id": "ORD-DEMO-001",
     "createdAt": "2026-09-21T19:22:03.203Z",
     "customer": {

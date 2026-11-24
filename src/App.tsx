@@ -11,12 +11,17 @@ import { PRODUCTS, HOLLYWOOD_STORES } from './constants';
 import { OrderMode, Category, Product, StoreLocation } from './types';
 import { motion, AnimatePresence } from 'motion/react';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { HollywoodRewardsModal } from './components/HollywoodRewardsModal';
+import { useLoyalty } from './hooks/useLoyalty';
 import { db } from './firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { handleFirestoreError, OperationType } from './errorUtils';
 import { APIProvider } from '@vis.gl/react-google-maps';
-import { Home, IceCream, IceCreamBowl, ShoppingCart } from 'lucide-react';
+import { Home, IceCream, IceCreamBowl, ShoppingCart, Award } from 'lucide-react';
 import { logoBase64 } from './logoBase64';
+import { RewardItem } from './types';
+import { formatItemsForSaint } from './utils/saintUtils';
+import { ClubHollywoodProvider, ClubHollywoodEditorToggle, useClubHollywood } from './context/ClubHollywoodContext';
 
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_PLATFORM_KEY || 'AIzaSyDivyYuJWC0vqWU3wfep26trd9UNceNMpk';
 
@@ -24,7 +29,8 @@ if (!API_KEY) {
   console.warn('GOOGLE_MAPS_PLATFORM_KEY is missing. Please add it to the Secrets panel in AI Studio.');
 }
 
-export default function App() {
+function AppContent() {
+  const { isClubEnabled } = useClubHollywood();
   const [selectedStore, setSelectedStore] = useState<StoreLocation | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [orderMode, setOrderMode] = useState<OrderMode | null>(() => {
@@ -38,8 +44,28 @@ export default function App() {
   });
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isRewardsOpen, setIsRewardsOpen] = useState(false);
   const [customizingProduct, setCustomizingProduct] = useState<Product | null>(null);
   const [notification, setNotification] = useState<string | null>(null);
+
+  const { 
+    profile, 
+    saveProfile, 
+    addPoints, 
+    deductPoints, 
+    signInWithGoogle, 
+    signOut, 
+    isSigningIn 
+  } = useLoyalty(isClubEnabled);
+
+  const { cart, addToCart, removeFromCart, updateQuantity, clearCart, total } = useCart();
+
+  useEffect(() => {
+    if (!isClubEnabled) {
+      if (isRewardsOpen) setIsRewardsOpen(false);
+      cart.filter(item => item.isReward).forEach(item => removeFromCart(item.id, item.customization));
+    }
+  }, [isClubEnabled, isRewardsOpen, cart, removeFromCart]);
 
   useEffect(() => {
     if (notification) {
@@ -47,8 +73,24 @@ export default function App() {
       return () => clearTimeout(timer);
     }
   }, [notification]);
-  
-  const { cart, addToCart, removeFromCart, updateQuantity, clearCart, total } = useCart();
+
+  const handleRedeemReward = (reward: RewardItem) => {
+    addToCart({
+      id: `reward-${reward.id}-${Date.now()}`,
+      name: `${reward.name} (Club Hollywood)`,
+      description: reward.description,
+      price: 0,
+      category: reward.category === 'soft' ? 'soft' : 'gelato',
+      image: reward.image,
+      deliveryAvailable: true,
+      isReward: true,
+      pointsCost: reward.pointsRequired,
+      rewardId: reward.id
+    });
+    setNotification(`¡Recompensa "${reward.name}" añadida gratis!`);
+    setIsRewardsOpen(false);
+    setIsCartOpen(true);
+  };
 
   const filteredProducts = useMemo(() => {
     if (!selectedCategory || !selectedStore) return [];
@@ -77,6 +119,12 @@ export default function App() {
   const handleCheckoutSubmit = async (data: any) => {
     const path = 'orders';
     let firestoreId: string | undefined;
+    const deliveryFee = data.deliveryFee || 0;
+    const totalWithDelivery = total + deliveryFee;
+    const exchangeRate = 50.0;
+    const totalBs = Number((totalWithDelivery * exchangeRate).toFixed(2));
+    const saintItems = formatItemsForSaint(cart, deliveryFee);
+
     try {
       const docRef = await addDoc(collection(db, path), {
         items: cart.map(item => ({
@@ -86,15 +134,18 @@ export default function App() {
           quantity: item.quantity,
           customization: item.customization || null
         })),
-        total,
+        total: totalWithDelivery,
         mode: orderMode,
+        customerDocId: data.docId || 'V-00000000',
         customerName: data.name,
         customerPhone: data.phone,
         customerAddress: data.address || '',
         location: data.location || null,
         selectedStore: data.selectedStore?.name || '',
+        storeCode: data.selectedStore?.storeCode || '00000',
+        paymentMethod: data.paymentMethod || 'pago_movil',
         vehicleType: data.vehicleType || null,
-        deliveryFee: data.deliveryFee || 0,
+        deliveryFee,
         status: 'pending',
         createdAt: serverTimestamp()
       });
@@ -103,33 +154,53 @@ export default function App() {
       handleFirestoreError(error, OperationType.WRITE, path);
     }
 
-    // Sync with internal API for el sistema administrativo
+    // Sync with internal API for el sistema administrativo (Saint Enterprise ERP v2.0 Schema)
     try {
       await fetch('/api/sistema/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           id: firestoreId,
+          store: {
+            storeCode: data.selectedStore?.storeCode || '00000',
+            storeName: data.selectedStore?.name || 'Hollywood Sede 72 (5 de Julio)',
+            warehouseCode: data.selectedStore?.warehouseCode || '01B',
+          },
+          mode: orderMode === 'delivery' ? 'delivery' : 'pickup',
+          vehicleType: data.vehicleType || 'moto',
           customer: {
+            docId: data.docId || 'V-00000000',
             name: data.name,
             phone: data.phone,
             address: data.address || '',
             location: data.location || null,
           },
-          store: data.selectedStore?.name || '',
-          mode: orderMode,
-          vehicleType: data.vehicleType || null,
-          deliveryFee: data.deliveryFee || 0,
+          payment: {
+            method: data.paymentMethod || 'pago_movil',
+            amountUsd: totalWithDelivery,
+            amountBs: totalBs,
+            exchangeRate,
+            notes: 'Pago acordado y validado por el operador en el chat de WhatsApp de la sede',
+          },
+          items: saintItems,
+          financials: {
+            subtotalUsd: total,
+            deliveryFeeUsd: deliveryFee,
+            taxUsd: 0.0,
+            totalUsd: totalWithDelivery,
+            totalBs,
+            exchangeRate,
+          },
           subtotal: total,
-          total: total + (data.deliveryFee || 0),
-          items: cart.map(item => ({
-            id: item.id,
-            name: item.name,
-            price: item.price,
-            quantity: item.quantity,
-            subtotal: item.price * item.quantity,
-            customization: item.customization || null,
-          })),
+          deliveryFee,
+          total: totalWithDelivery,
+          status: 'pending',
+          sistemaSync: {
+            syncedAt: null,
+            saintOrderNumber: null,
+            invoiceNumber: null,
+            terminalId: null,
+          },
         }),
       });
     } catch (apiError) {
@@ -187,6 +258,8 @@ export default function App() {
                     setSelectedCategory(null);
                     clearCart();
                   }}
+                  points={isClubEnabled ? profile?.points : undefined}
+                  onRewardsClick={isClubEnabled ? () => setIsRewardsOpen(true) : undefined}
                 />
                 
                 <main className="pt-24" style={{ backgroundColor: '#ffffff' }}>
@@ -312,6 +385,11 @@ export default function App() {
                     setIsCheckoutOpen(true);
                   }}
                   total={total}
+                  userPoints={isClubEnabled ? profile?.points : undefined}
+                  onOpenRewards={isClubEnabled ? () => {
+                    setIsCartOpen(false);
+                    setIsRewardsOpen(true);
+                  } : undefined}
                 />
 
                 {orderMode && (
@@ -323,6 +401,9 @@ export default function App() {
                     cart={cart}
                     preSelectedStore={selectedStore}
                     onSubmit={handleCheckoutSubmit}
+                    loyaltyProfile={isClubEnabled ? profile : null}
+                    onAddPoints={isClubEnabled ? addPoints : undefined}
+                    onDeductPoints={isClubEnabled ? deductPoints : undefined}
                   />
                 )}
 
@@ -365,6 +446,17 @@ export default function App() {
                     <IceCreamBowl className="w-5 h-5" />
                     <span className="text-[9px] font-bold uppercase tracking-widest">Gelato</span>
                   </button>
+                  {isClubEnabled && (
+                    <button 
+                      onClick={() => setIsRewardsOpen(true)}
+                      className="flex flex-col items-center gap-1 text-holly-brown/60 hover:text-holly-orange transition-colors relative"
+                    >
+                      <Award className="w-5 h-5 text-holly-orange" />
+                      <span className="text-[9px] font-bold uppercase tracking-widest">
+                        {profile ? `${profile.points} pts` : 'Club'}
+                      </span>
+                    </button>
+                  )}
                   <button 
                     onClick={() => setIsCartOpen(true)}
                     className="flex flex-col items-center gap-1 text-holly-brown/60 hover:text-holly-orange transition-colors relative"
@@ -378,11 +470,33 @@ export default function App() {
                     )}
                   </button>
                 </div>
+
+                {isClubEnabled && (
+                  <HollywoodRewardsModal
+                    isOpen={isRewardsOpen}
+                    onClose={() => setIsRewardsOpen(false)}
+                    profile={profile}
+                    onSaveProfile={saveProfile}
+                    onSignInWithGoogle={signInWithGoogle}
+                    onSignOut={signOut}
+                    onRedeemReward={handleRedeemReward}
+                    isSigningIn={isSigningIn}
+                  />
+                )}
               </motion.div>
             )}
           </AnimatePresence>
+          <ClubHollywoodEditorToggle />
         </div>
       </APIProvider>
     </ErrorBoundary>
+  );
+}
+
+export default function App() {
+  return (
+    <ClubHollywoodProvider>
+      <AppContent />
+    </ClubHollywoodProvider>
   );
 }

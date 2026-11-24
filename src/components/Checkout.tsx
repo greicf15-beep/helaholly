@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MapPin, X, Loader2, CheckCircle2, Store as StoreIcon, Truck, Bike, Car, Search, Gift } from 'lucide-react';
-import { OrderMode, CartItem, VehicleType, StoreLocation } from '../types';
+import { OrderMode, CartItem, VehicleType, StoreLocation, CustomerProfile } from '../types';
 import { StoreMap } from './StoreMap';
 import { HOLLYWOOD_STORES, DELIVERY_RATE_PER_KM } from '../constants';
 import { useMapsLibrary } from '@vis.gl/react-google-maps';
 import { auth, db } from '../firebase';
 import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, User } from 'firebase/auth';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { calculateCartAccumulationPoints } from '../loyaltyConstants';
+import { useClubHollywood } from '../context/ClubHollywoodContext';
 
 interface CheckoutProps {
   isOpen: boolean;
@@ -17,15 +19,19 @@ interface CheckoutProps {
   cart: CartItem[];
   preSelectedStore?: StoreLocation | null;
   onSubmit: (data: any) => void;
+  loyaltyProfile?: CustomerProfile | null;
+  onAddPoints?: (amount: number) => Promise<void>;
+  onDeductPoints?: (amount: number) => Promise<boolean>;
 }
 
-export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore, onSubmit }: CheckoutProps) {
+export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore, onSubmit, loyaltyProfile, onAddPoints, onDeductPoints }: CheckoutProps) {
+  const { isClubEnabled } = useClubHollywood();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [address, setAddress] = useState('');
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [name, setName] = useState(loyaltyProfile?.name || '');
+  const [phone, setPhone] = useState(loyaltyProfile?.phone || '');
   const [selectedStore, setSelectedStore] = useState<StoreLocation | null>(preSelectedStore || null);
   const [vehicleType, setVehicleType] = useState<VehicleType>('moto');
   const [storeDistances, setStoreDistances] = useState<Record<string, number>>({});
@@ -33,15 +39,36 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
   const [whatsappUrl, setWhatsappUrl] = useState('');
   const [isAddressConfirmed, setIsAddressConfirmed] = useState(false);
   
+  // Fiscal & Payment Fields (Saint ERP Integration)
+  const [docType, setDocType] = useState<'V' | 'E' | 'J' | 'G'>('V');
+  const [docNumber, setDocNumber] = useState('');
+  const [isFinalConsumer, setIsFinalConsumer] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<'pago_movil' | 'efectivo_usd' | 'zelle' | 'punto'>('pago_movil');
+  
   const [user, setUser] = useState<User | null>(null);
-  const [userPoints, setUserPoints] = useState<number>(0);
+  const [userPoints, setUserPoints] = useState<number>(loyaltyProfile?.points || 0);
   const [authLoading, setAuthLoading] = useState(true);
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
 
-  const pointsToEarn = Math.floor(total);
+  const pointsToEarn = useMemo(() => (isClubEnabled ? calculateCartAccumulationPoints(cart) : 0), [cart, isClubEnabled]);
 
   useEffect(() => {
+    if (isClubEnabled && loyaltyProfile) {
+      if (!name && loyaltyProfile.name) setName(loyaltyProfile.name);
+      if (!phone && loyaltyProfile.phone) setPhone(loyaltyProfile.phone);
+      setUserPoints(loyaltyProfile.points);
+    }
+  }, [loyaltyProfile, isClubEnabled]);
+
+  useEffect(() => {
+    if (!isClubEnabled) {
+      setUser(null);
+      setUserPoints(0);
+      setAuthLoading(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
@@ -51,22 +78,26 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
             setUserPoints(docSnap.data().points || 0);
+          } else if (loyaltyProfile) {
+            setUserPoints(loyaltyProfile.points);
           } else {
             setUserPoints(0);
           }
         } catch (error) {
           console.error("Error fetching points:", error);
         }
+      } else if (loyaltyProfile) {
+        setUserPoints(loyaltyProfile.points);
       } else {
         setUserPoints(0);
       }
       setAuthLoading(false);
     });
     return () => unsubscribe();
-  }, [name]);
+  }, [name, loyaltyProfile, isClubEnabled]);
 
   const handleSignIn = async () => {
-    if (isSigningIn) return;
+    if (!isClubEnabled || isSigningIn) return;
     setIsSigningIn(true);
     setAuthError(null);
     try {
@@ -276,13 +307,26 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
     
     await new Promise(resolve => setTimeout(resolve, 2000));
     
+    const effectiveDocId = isFinalConsumer
+      ? 'V-00000000 (Consumidor Final)'
+      : (docNumber.trim() ? `${docType}-${docNumber.trim()}` : 'V-00000000 (Consumidor Final)');
+
+    const paymentLabels: Record<string, string> = {
+      pago_movil: 'Pago Móvil (Bs)',
+      efectivo_usd: 'Efectivo Divisas ($)',
+      zelle: 'Zelle (USD)',
+      punto: 'Punto de Venta'
+    };
+
     const messageText = `¡Hola, quiero realizar un pedido de pelicula! 🎬\n\n` +
       `*DATOS DEL CLIENTE*\n` +
       `👤 *Nombre:* ${name}\n` +
+      `🆔 *Cédula/RIF:* ${effectiveDocId}\n` +
       `📞 *Teléfono:* ${phone}\n` +
+      `💳 *Pago acordado:* ${paymentLabels[paymentMethod] || 'Pago Móvil'} (Confirmar por este chat)\n` +
       `📍 *Ubicación:* ${mode === 'delivery' ? `https://www.google.com/maps/search/?api=1&query=${location?.lat},${location?.lng}` : 'Retiro en Tienda'}\n` +
       (mode === 'delivery' ? `🏠 *Dirección:* ${address}\n` : '') +
-      `🏪 *Sede:* ${selectedStore?.name}\n` +
+      `🏪 *Sede:* ${selectedStore?.name} (Cod: ${selectedStore?.storeCode || '00000'})\n` +
       (mode === 'delivery' && isMaracaiboStore ? `🛵 *Vehículo:* ${vehicleType.toUpperCase()}\n` : '') +
       `\n*DETALLE DEL PEDIDO:*\n` +
       cart.map(item => {
@@ -313,44 +357,69 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
             itemStr += `\n   _Extras: ${extras}_`;
           }
         }
-        itemStr += `\n   *Subtotal:* $${(item.price * item.quantity).toFixed(2)}`;
+        if (item.isReward) {
+          itemStr += `\n   🎁 _[Recompensa Club Hollywood: Gratis (-${item.pointsCost || 0} pts)]_`;
+        }
+        itemStr += `\n   *Subtotal:* ${item.isReward ? '$0.00' : `$${(item.price * item.quantity).toFixed(2)}`}`;
         return itemStr;
       }).join('\n\n') +
       `\n\n*RESUMEN DE PAGO*\n` +
       `💰 *Subtotal Productos:* $${total.toFixed(2)}\n` +
       (deliveryFee > 0 ? `🚚 *Costo Delivery:* $${deliveryFee.toFixed(2)}\n` : '') +
       `⭐ *TOTAL A PAGAR:* $${(total + deliveryFee).toFixed(2)}\n\n` +
+      (isClubEnabled
+        ? `*CLUB RECOMPENSAS HOLLYWOOD:*\n` +
+          `✨ *Puntos sumados:* +${pointsToEarn} pts\n` +
+          (loyaltyProfile?.pinCode ? `🆔 *Código de Socio:* ${loyaltyProfile.pinCode}\n` : '') +
+          `\n`
+        : '') +
       `_Pedido realizado desde la App Hollywood_`;
 
     const url = `https://wa.me/${selectedStore?.phone || '584120000000'}?text=${encodeURIComponent(messageText)}`;
     setWhatsappUrl(url);
-    
-    if (user) {
-      try {
-        const docRef = doc(db, 'customers', user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          await updateDoc(docRef, {
-            points: (docSnap.data().points || 0) + pointsToEarn,
-            updatedAt: new Date().toISOString()
-          });
-        } else {
-          await setDoc(docRef, {
-            name: user.displayName || name,
-            email: user.email || '',
-            points: pointsToEarn,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
-          });
+
+    if (isClubEnabled) {
+      // Deduct reward points if any
+      const rewardPointsSpent = cart.reduce((sum, item) => sum + (item.isReward ? (item.pointsCost || 0) : 0), 0);
+      if (rewardPointsSpent > 0 && onDeductPoints) {
+        await onDeductPoints(rewardPointsSpent);
+      }
+      // Add points earned from this purchase
+      if (pointsToEarn > 0 && onAddPoints) {
+        await onAddPoints(pointsToEarn);
+      }
+      
+      if (user) {
+        try {
+          const docRef = doc(db, 'customers', user.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            const currentPts = docSnap.data().points || 0;
+            await updateDoc(docRef, {
+              points: Math.max(0, currentPts + pointsToEarn - rewardPointsSpent),
+              updatedAt: new Date().toISOString()
+            });
+          } else {
+            await setDoc(docRef, {
+              name: user.displayName || name,
+              email: user.email || '',
+              phone: phone || '',
+              points: Math.max(0, pointsToEarn - rewardPointsSpent),
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString()
+            });
+          }
+        } catch (error) {
+          console.error("Error updating points in Firestore:", error);
         }
-      } catch (error) {
-        console.error("Error updating points:", error);
       }
     }
 
     onSubmit({
+      docId: isFinalConsumer ? 'V-00000000' : (docNumber.trim() ? `${docType}-${docNumber.trim()}` : 'V-00000000'),
       name,
       phone,
+      paymentMethod,
       address: mode === 'delivery' ? address : 'Pick up',
       location,
       selectedStore,
@@ -453,7 +522,7 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
                   </button>
                 </div>
 
-                {!authLoading && (
+                {isClubEnabled && !authLoading && (
                   <div className="mb-8 sm:mb-10 p-4 sm:p-6 rounded-2xl border-2 border-holly-orange/20 bg-holly-orange/5 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 bg-holly-orange text-white rounded-full flex items-center justify-center shrink-0">
@@ -522,6 +591,89 @@ export function Checkout({ isOpen, onClose, mode, total, cart, preSelectedStore,
                         className="w-full px-0 py-2 sm:py-4 bg-transparent border-b-2 border-holly-orange/10 text-holly-brown focus:outline-none focus:border-holly-orange transition-all text-xl sm:text-2xl font-display font-bold uppercase tracking-widest placeholder:text-holly-brown/10"
                         placeholder="+58 000 0000000"
                       />
+                    </div>
+
+                    {/* Cédula / RIF (Saint ERP Facturación) */}
+                    <div className="space-y-3 p-4 sm:p-5 rounded-2xl bg-holly-orange/5 border border-holly-orange/15">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-holly-brown/80">
+                          Cédula / RIF <span className="text-holly-orange font-normal">(Facturación Saint)</span>
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsFinalConsumer(!isFinalConsumer);
+                            if (!isFinalConsumer) setDocNumber('');
+                          }}
+                          className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full transition-all border ${
+                            isFinalConsumer
+                              ? 'bg-holly-orange text-white border-holly-orange shadow-sm'
+                              : 'bg-white text-holly-brown/60 border-holly-brown/20 hover:border-holly-orange'
+                          }`}
+                        >
+                          {isFinalConsumer ? '✓ Consumidor Final' : '¿Consumidor Final?'}
+                        </button>
+                      </div>
+
+                      {!isFinalConsumer ? (
+                        <div className="flex gap-2">
+                          <select
+                            value={docType}
+                            onChange={(e) => setDocType(e.target.value as any)}
+                            className="bg-white border-2 border-holly-orange/20 rounded-xl px-3 py-2 text-sm sm:text-base font-display font-bold text-holly-brown focus:outline-none focus:border-holly-orange"
+                          >
+                            <option value="V">V-</option>
+                            <option value="E">E-</option>
+                            <option value="J">J-</option>
+                            <option value="G">G-</option>
+                          </select>
+                          <input
+                            type="text"
+                            value={docNumber}
+                            onChange={(e) => setDocNumber(e.target.value.replace(/[^0-9]/g, ''))}
+                            placeholder="Ej: 18456789"
+                            className="flex-1 bg-white border-2 border-holly-orange/20 rounded-xl px-4 py-2 text-base font-display font-bold text-holly-brown focus:outline-none focus:border-holly-orange placeholder:text-holly-brown/20"
+                          />
+                        </div>
+                      ) : (
+                        <p className="text-[11px] text-holly-brown/70 font-sans italic">
+                          Se emitirá a nombre de <strong className="font-bold text-holly-orange">Consumidor Final (V-00000000)</strong> en el sistema Saint.
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Método de Pago Previsto (Cierre en WhatsApp) */}
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <label className="block text-[10px] sm:text-xs font-bold uppercase tracking-[0.4em] text-holly-brown/40">
+                          Método de Pago Previsto
+                        </label>
+                        <span className="text-[9px] font-sans font-medium text-holly-orange bg-holly-orange/10 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                          Se cancela por WhatsApp
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                        {[
+                          { id: 'pago_movil', label: '📱 Pago Móvil (Bs)', desc: 'Banesco / Venezuela / etc.' },
+                          { id: 'efectivo_usd', label: '💵 Efectivo ($)', desc: 'En tienda o delivery' },
+                          { id: 'zelle', label: '🇺🇸 Zelle (USD)', desc: 'Cuenta de la empresa' },
+                          { id: 'punto', label: '💳 Punto de Venta', desc: 'En sede física' },
+                        ].map((m) => (
+                          <button
+                            key={m.id}
+                            type="button"
+                            onClick={() => setPaymentMethod(m.id as any)}
+                            className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border-2 text-left transition-all ${
+                              paymentMethod === m.id
+                                ? 'border-holly-orange bg-holly-orange/10 text-holly-brown shadow-sm'
+                                : 'border-holly-brown/10 bg-white/50 text-holly-brown/70 hover:border-holly-orange/30'
+                            }`}
+                          >
+                            <span className="block font-display font-bold text-xs sm:text-sm">{m.label}</span>
+                            <span className="block text-[9px] sm:text-[10px] text-holly-brown/50 font-sans mt-0.5">{m.desc}</span>
+                          </button>
+                        ))}
+                      </div>
                     </div>
 
                     {mode === 'delivery' && isMaracaiboStore && (

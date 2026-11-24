@@ -85,11 +85,10 @@ service cloud.firestore {
     }
 
     function isValidCustomer(data) {
-      return hasRequiredFields(['name', 'email', 'points', 'createdAt', 'updatedAt']) &&
+      return hasRequiredFields(['name', 'email', 'points']) &&
              data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
              data.email is string && data.email.size() <= 100 &&
-             data.points is int && data.points >= 0 &&
-             data.createdAt is timestamp && data.updatedAt is timestamp;
+             data.points is int && data.points >= 0;
     }
 
     // ===============================================================
@@ -110,10 +109,9 @@ service cloud.firestore {
 
     // Customers: Users can read and update their own loyalty profile
     match /customers/{customerId} {
-      allow read: if isAuthenticated() && request.auth.uid == customerId;
+      allow read: if isAuthenticated() && (request.auth.uid == customerId || isAdmin());
       allow create: if isAuthenticated() && request.auth.uid == customerId && isValidCustomer(request.resource.data);
-      allow update: if isAuthenticated() && request.auth.uid == customerId && isValidCustomer(request.resource.data) &&
-                    request.resource.data.createdAt == resource.data.createdAt;
+      allow update: if isAuthenticated() && request.auth.uid == customerId && isValidCustomer(request.resource.data);
       allow delete: if isAdmin();
     }
 

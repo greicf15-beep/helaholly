@@ -14,9 +14,19 @@ export const TOPPINGS = [
 ];
 
 export const TINA_SIZES = [
-  { id: '6oz', label: '6oz', price: 3.50 },
-  { id: '12oz', label: '12oz', price: 4.50 },
-  { id: '16oz', label: '16oz', price: 6.70 }
+  { id: '6oz', label: '6oz', price: 3.30 },
+  { id: '12oz', label: '12oz', price: 4.15 },
+  { id: '16oz', label: '16oz', price: 5.97 }
+];
+
+export const SUNDAE_SIZES = [
+  { id: '7oz', label: '7oz', price: 1.80 },
+  { id: '12oz', label: '12oz', price: 3.00 }
+];
+
+export const FROSTY_TRADICIONAL_SIZES = [
+  { id: '7oz', label: '7oz', price: 1.70 },
+  { id: '12oz', label: '12oz', price: 2.60 }
 ];
 
 export const TINA_FLAVORS = [
@@ -392,8 +402,8 @@ export const PRODUCTS: Product[] = [
   {
     id: 'tinas-custom',
     name: 'Tinas Holly',
-    description: 'Personaliza tu tina con tu tamaño, sabor y 3 contornos favoritos.',
-    price: 3.50,
+    description: 'Personaliza tu tina con tu tamaño (6oz $3.30, 12oz $4.15, 16oz $5.97), sabor y contornos favoritos.',
+    price: 3.30,
     category: 'soft',
     image: './Tinas.webp',
     deliveryAvailable: true,
@@ -401,9 +411,9 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 's4',
-    name: 'Tina Galleta',
-    description: 'Tina de helado soft acompañada de galletas crujientes.',
-    price: 5.70,
+    name: 'Tina Galleta 14 oz',
+    description: 'Tina de helado soft 14 oz acompañada de galletas crujientes.',
+    price: 4.75,
     category: 'soft',
     image: './tina_cesta.webp',
     deliveryAvailable: false,
@@ -411,67 +421,77 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 's5',
-    name: 'Bubble Waffle',
-    description: 'Waffle esponjoso con burbujas, helado soft y tus toppings favoritos.',
-    price: 7.00,
+    name: 'Bubble Waffle 16 oz',
+    description: 'Waffle esponjoso con burbujas 16 oz, helado soft y tus toppings favoritos.',
+    price: 6.50,
     category: 'soft',
     image: './bubble_waffle.webp',
     deliveryAvailable: false,
     isCustomizable: true
   },
   {
-    id: 's6',
+    id: 'sundae-7oz',
     name: 'Sundae',
-    description: 'Helado soft con sirope y toppings clásicos.',
-    price: 2.00,
+    description: 'Personaliza tu sundae con tu tamaño (7oz $1.80, 12oz $3.00), sirope, sabor y contornos extras.',
+    price: 1.80,
     category: 'soft',
     image: './sundae.webp',
     deliveryAvailable: false,
     isCustomizable: true
   },
   {
-    id: 's7',
-    name: 'Frosty Chicha',
-    description: 'Refrescante helado de chicha con un toque especial.',
+    id: 'sundae-frutas-7oz',
+    name: 'Sundae Frutas 7 oz',
+    description: 'Helado soft 7 oz con frutas frescas y sirope.',
     price: 2.00,
+    category: 'soft',
+    image: '/assets/aistudio/SUNDAEFRUTAS_881be972.webp',
+    deliveryAvailable: false,
+    isCustomizable: true
+  },
+  {
+    id: 'frosty-tradicional-7oz',
+    name: 'Frosty Tradicional',
+    description: 'Personaliza tu Frosty tradicional con tu tamaño (7oz $1.70, 12oz $2.60) y contornos extras.',
+    price: 1.70,
     category: 'soft',
     image: './frosty.webp',
     deliveryAvailable: false,
     isCustomizable: true
   },
   {
+    id: 'frosty-especial-12oz',
+    name: 'Frosty Especial 12 oz',
+    description: 'Frosty especial de 12 oz con contornos y combinación premium.',
+    price: 3.30,
+    category: 'soft',
+    image: '/assets/aistudio/frostyespecialproducto_9de45733.webp',
+    deliveryAvailable: false,
+    isCustomizable: true
+  },
+  {
     id: 's8',
-    name: 'Barquilla',
+    name: 'Barquilla Tradicional',
     description: 'El clásico cono crujiente con nuestro suave helado soft.',
-    price: 1.65,
+    price: 1.00,
     category: 'soft',
     image: './barquilla.webp',
     deliveryAvailable: false
   },
   {
     id: 's9',
-    name: 'Maxi Sundae Básico',
+    name: 'Maxi Sundae',
     description: 'La versión definitiva del sundae con capas extra de sabor.',
-    price: 4.50,
+    price: 3.30,
     category: 'soft',
-    image: './maxi.webp',
-    deliveryAvailable: false,
-    isCustomizable: true
-  },
-  {
-    id: 's10',
-    name: 'Maxi Sundae Premium',
-    description: 'Maxi Sundae con toppings premium y sabores especiales.',
-    price: 4.80,
-    category: 'soft',
-    image: './maxi_premium.webp',
+    image: '/assets/aistudio/maxisundae_7ee2bb08.webp',
     deliveryAvailable: false,
     isCustomizable: true
   },
   {
     id: 'milkshakes-custom-soft',
     name: 'Milkshakes Soft',
-    description: 'Elige tu sabor favorito de milkshake soft: Oreo, Toddy Crunch, Brownie Snickers, Ferrero Rochers o Frutos del Bosque.',
+    description: 'Elige tu sabor favorito de milkshake soft: Oreo ($4.40), Toddy Crunch ($4.40), Brownie Snickers ($4.40), Ferrero Rochers ($5.60) o Frutos del Bosque ($5.60).',
     price: 4.40,
     category: 'soft',
     image: './milkshakesoft.webp',
@@ -481,7 +501,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 'frapuccinos-custom-soft',
     name: 'Frappuccinos Soft',
-    description: 'Elige tu sabor favorito de frappuccino soft: Original, Tiramisú o Nutella.',
+    description: 'Elige tu sabor favorito de frappuccino soft: Original ($4.95), Tiramisú ($4.95) o Nutella ($8.15).',
     price: 4.95,
     category: 'soft',
     image: './frappuccinosoft.webp',
@@ -492,27 +512,21 @@ export const PRODUCTS: Product[] = [
 
 export const HOLLYWOOD_STORES: StoreLocation[] = [
   {
-    id: 'mcbo-farmavid',
-    name: 'Hollywood Farmavid',
-    address: 'Av. Circunvalación 2 con Calle 115, Maracaibo (Farmavid)',
-    lat: 10.5981897,
-    lng: -71.6482119,
+    id: 'mcbo-72',
+    storeCode: '00000',
+    warehouseCode: '01B',
+    name: 'Hollywood Sede 72 (5 de Julio)',
+    address: 'Calle 72 con Avenida 13A, Maracaibo',
+    lat: 10.6698035,
+    lng: -71.6172572,
     city: 'Maracaibo',
-    type: 'gelateria',
-    phone: '584121000643'
-  },
-  {
-    id: 'cab-farmak',
-    name: 'Hollywood Farmak',
-    address: 'Av. Carnevalli con Calle Nueva Granada, Cabimas (Farmak)',
-    lat: 10.3915256,
-    lng: -71.4607155,
-    city: 'Cabimas',
-    type: 'gelateria',
-    phone: '584146829225'
+    type: 'soft',
+    phone: '584126501375'
   },
   {
     id: 'mcbo-cima',
+    storeCode: '00001',
+    warehouseCode: '01B',
     name: 'Hollywood CC Cima Gelato',
     address: 'CC Cima, Av. Libertador, Maracaibo',
     lat: 10.6412835,
@@ -522,27 +536,9 @@ export const HOLLYWOOD_STORES: StoreLocation[] = [
     phone: '584246290925'
   },
   {
-    id: 'mcbo-zonanorte',
-    name: 'Hollywood Zona Norte',
-    address: 'Av. Rosal Sur. Calle 45 entre Av. 14 y 14A, Maracaibo',
-    lat: 10.7001385,
-    lng: -71.6227916,
-    city: 'Maracaibo',
-    type: 'gelateria',
-    phone: '584247643040'
-  },
-  {
-    id: 'cab-costamall',
-    name: 'Hollywood CC Costa Mall',
-    address: 'CC Costa Mall, Av. Intercomunal, Cabimas',
-    lat: 10.3484878,
-    lng: -71.4176744,
-    city: 'Cabimas',
-    type: 'soft',
-    phone: '584246142820'
-  },
-  {
     id: 'mcbo-cima-soft',
+    storeCode: '00002',
+    warehouseCode: '01B',
     name: 'Hollywood CC Cima Soft',
     address: 'CC Cima, Av. Libertador, Maracaibo',
     lat: 10.6412835,
@@ -552,7 +548,33 @@ export const HOLLYWOOD_STORES: StoreLocation[] = [
     phone: '584246211655'
   },
   {
+    id: 'mcbo-farmavid',
+    storeCode: '00003',
+    warehouseCode: '01B',
+    name: 'Hollywood Farmavid',
+    address: 'Av. Circunvalación 2 con Calle 115, Maracaibo (Farmavid)',
+    lat: 10.5981897,
+    lng: -71.6482119,
+    city: 'Maracaibo',
+    type: 'gelateria',
+    phone: '584121000643'
+  },
+  {
+    id: 'mcbo-zonanorte',
+    storeCode: '00004',
+    warehouseCode: '01B',
+    name: 'Hollywood Zona Norte',
+    address: 'Av. Rosal Sur. Calle 45 entre Av. 14 y 14A, Maracaibo',
+    lat: 10.7001385,
+    lng: -71.6227916,
+    city: 'Maracaibo',
+    type: 'gelateria',
+    phone: '584247643040'
+  },
+  {
     id: 'mcbo-mallpaseo',
+    storeCode: '00005',
+    warehouseCode: '01B',
     name: 'Hollywood CC Mall Paseo',
     address: 'CC Mall Paseo, San Francisco (Av. 40)',
     lat: 10.5898,
@@ -563,6 +585,8 @@ export const HOLLYWOOD_STORES: StoreLocation[] = [
   },
   {
     id: 'mcbo-sanfelipe',
+    storeCode: '00006',
+    warehouseCode: '01B',
     name: 'Hollywood San Felipe',
     address: 'Casco Central, Av. 10 con Av. Libertador, Maracaibo (San Felipe)',
     lat: 10.6405678,
@@ -572,17 +596,33 @@ export const HOLLYWOOD_STORES: StoreLocation[] = [
     phone: '584246571962'
   },
   {
-    id: 'mcbo-72',
-    name: 'Hollywood Sede 72',
-    address: 'Calle 72 con Avenida 13A, Maracaibo',
-    lat: 10.6698035,
-    lng: -71.6172572,
-    city: 'Maracaibo',
+    id: 'cab-farmak',
+    storeCode: '00007',
+    warehouseCode: '01B',
+    name: 'Hollywood Farmak',
+    address: 'Av. Carnevalli con Calle Nueva Granada, Cabimas (Farmak)',
+    lat: 10.3915256,
+    lng: -71.4607155,
+    city: 'Cabimas',
+    type: 'gelateria',
+    phone: '584146829225'
+  },
+  {
+    id: 'cab-costamall',
+    storeCode: '00008',
+    warehouseCode: '01B',
+    name: 'Hollywood CC Costa Mall',
+    address: 'CC Costa Mall, Av. Intercomunal, Cabimas',
+    lat: 10.3484878,
+    lng: -71.4176744,
+    city: 'Cabimas',
     type: 'soft',
-    phone: '584126501375'
+    phone: '584246142820'
   },
   {
     id: 'val-naguanagua',
+    storeCode: '00009',
+    warehouseCode: '01B',
     name: 'Hollywood Naguanagua',
     address: 'Av. Salvador Feo La Cruz, Naguanagua, Valencia',
     lat: 10.2447663,

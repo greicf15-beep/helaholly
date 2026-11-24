@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingCart, Menu as MenuIcon, X, Truck, Store } from 'lucide-react';
+import { ShoppingCart, Menu as MenuIcon, X, Truck, Store, Award } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { OrderMode } from '../types';
 import { logoBase64 } from '../logoBase64';
@@ -9,13 +9,32 @@ interface NavbarProps {
   onCartClick: () => void;
   orderMode: OrderMode | null;
   onChangeMode: () => void;
+  points?: number;
+  onRewardsClick?: () => void;
 }
 
-export function Navbar({ cartCount, onCartClick, orderMode, onChangeMode }: NavbarProps) {
+export function Navbar({ cartCount, onCartClick, orderMode, onChangeMode, points, onRewardsClick }: NavbarProps) {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-b border-holly-brown/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#ffffff' }}>
-        <div className="flex flex-col items-center justify-center h-16 sm:h-28 py-1 sm:py-2" style={{ backgroundColor: '#ffffff', marginLeft: '0px', marginBottom: '7px' }}>
+        <div className="relative flex flex-col items-center justify-center h-16 sm:h-28 py-1 sm:py-2" style={{ backgroundColor: '#ffffff', marginLeft: '0px', marginBottom: '7px' }}>
+          
+          {/* Rewards Club Button (Left) */}
+          {onRewardsClick && (
+            <div className="absolute left-2 sm:left-8 top-1/2 -translate-y-1/2">
+              <button
+                onClick={onRewardsClick}
+                className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-gradient-to-r from-amber-50 to-[#f6b40c]/20 hover:from-amber-100 hover:to-[#f6b40c]/30 border border-[#e1a139]/40 text-[#5a2f0f] transition-all shadow-sm active:scale-95 group"
+                title="Abrir Club Recompensas Hollywood"
+              >
+                <Award className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-holly-orange group-hover:scale-110 transition-transform shrink-0" />
+                <span className="font-display font-bold text-[9px] sm:text-xs tracking-wider uppercase">
+                  {points !== undefined ? `${points} pts` : 'Club Hollywood'}
+                </span>
+              </button>
+            </div>
+          )}
+
           <div className="flex items-center">
             <img 
               src={logoBase64} 

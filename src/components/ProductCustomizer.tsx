@@ -3,8 +3,13 @@ import { motion, AnimatePresence } from 'motion/react';
 import { X, Check, Info, ChevronDown, Plus, Minus } from 'lucide-react';
 import { Product, CartItem } from '../types';
 import { IceCreamScoop } from './IceCreamScoop';
+import { HollywoodStar } from './HollywoodStar';
+import { getCustomizedItemAccumulationPoints } from '../loyaltyConstants';
+import { useClubHollywood } from '../context/ClubHollywoodContext';
 import { 
   TINA_SIZES, 
+  SUNDAE_SIZES,
+  FROSTY_TRADICIONAL_SIZES,
   TINA_FLAVORS, 
   TOPPINGS, 
   EXTRA_TOPPINGS, 
@@ -39,16 +44,19 @@ interface ProductCustomizerProps {
 }
 
 export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: ProductCustomizerProps) {
+  const { isClubEnabled } = useClubHollywood();
   const isTina = product.id === 'tinas-custom';
   const isTinaGalleta = product.id === 's4';
   const isBubbleWaffle = product.id === 's5';
   const isFrapuccino = product.id.startsWith('frapuccinos-custom');
   const isMilkshake = product.id.startsWith('milkshakes-custom');
-  const isSundae = product.id === 's6';
-  const isFrosty = product.id === 's7';
+  const isSundae = product.id === 's6' || product.id.startsWith('sundae');
+  const isSundaeWithSize = product.id === 'sundae-7oz';
+  const isFrosty = product.id === 's7' || product.id.startsWith('frosty');
+  const isFrostyTradicionalWithSize = product.id === 'frosty-tradicional-7oz';
   const isSundaeOrFrosty = isSundae || isFrosty;
-  const isMaxiSundae = product.id === 's9' || product.id === 's10';
-  const isMaxiSundaePremium = product.id === 's10';
+  const isMaxiSundae = product.id === 's9';
+  const isMaxiSundaePremium = false;
   
   const MAXI_PREMIUM_TOPPINGS = [
     'Lluvia de Colores', 'Oreo', 'Maní', 'Lluvia de Chocolate', 'Lluvia de Coco'
@@ -71,7 +79,15 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
   const isPromo = product.id.startsWith('promo-') || isPromoGroup;
   const isGroupedGelato = isGelato1Lt || isGelato16oz || isPromo || isBarquilla1 || isBarquillon1 || isBarquillon2 || isTina1 || isTina2;
 
-  const [selectedSize, setSelectedSize] = useState(isTina ? TINA_SIZES[0] : null);
+  const [selectedSize, setSelectedSize] = useState(
+    isTina
+      ? TINA_SIZES[0]
+      : isSundaeWithSize
+        ? SUNDAE_SIZES[0]
+        : isFrostyTradicionalWithSize
+          ? FROSTY_TRADICIONAL_SIZES[0]
+          : null
+  );
   const [selectedPromo, setSelectedPromo] = useState<Product | null>(isPromoGroup ? PROMOS[0] : null);
   
   const frapuccinoFlavors = useMemo(() => {
@@ -152,7 +168,6 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
   }, [selectedLine, gelatoFlavors, isGroupedGelato, isCookieOrBrownie]);
   const [selectedToppings, setSelectedToppings] = useState<string[]>([]);
   const [selectedExtraToppings, setSelectedExtraToppings] = useState<{ name: string; price: number; flavor?: string }[]>([]);
-  const [selectedTeam, setSelectedTeam] = useState<string>('Piru');
   const [selectedPremiumTopping, setSelectedPremiumTopping] = useState<string>('Lluvia de Colores');
   const [selectedMagicLayer, setSelectedMagicLayer] = useState<string>('Chocolate Oscuro');
   const [toppingError, setToppingError] = useState<string | null>(null);
@@ -234,7 +249,7 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
   [selectedExtraToppings]);
 
   const currentBasePrice = useMemo(() => {
-    if (isTina && selectedSize) return selectedSize.price;
+    if ((isTina || isSundaeWithSize || isFrostyTradicionalWithSize) && selectedSize) return selectedSize.price;
     if (isGelato16oz && selectedLine) return selectedLine.price;
     if (isBarquilla1 && selectedLine) return selectedLine.price;
     if (isBarquillon1 && selectedLine) return selectedLine.price;
@@ -245,12 +260,25 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
     if (isFrapuccino) return frapuccinoFlavors.find(f => f.name === selectedFlavor)?.price || product.price;
     if (isMilkshake) return milkshakeFlavors.find(f => f.name === selectedFlavor)?.price || product.price;
     return product.price;
-  }, [isTina, selectedSize, isGelato16oz, selectedLine, isPromoGroup, selectedPromo, isFrapuccino, isMilkshake, selectedFlavor, product.price, frapuccinoFlavors, milkshakeFlavors]);
+  }, [isTina, isSundaeWithSize, isFrostyTradicionalWithSize, selectedSize, isGelato16oz, selectedLine, isPromoGroup, selectedPromo, isFrapuccino, isMilkshake, selectedFlavor, product.price, frapuccinoFlavors, milkshakeFlavors]);
+
+  const pointsEarned = useMemo(() => {
+    if (!isClubEnabled) return 0;
+    return getCustomizedItemAccumulationPoints(
+      product.id,
+      currentBasePrice + extraToppingsTotal,
+      product.category,
+      {
+        size: (isTina || isSundaeWithSize || isFrostyTradicionalWithSize) && selectedSize ? selectedSize.label : undefined,
+        flavor: selectedFlavor
+      }
+    );
+  }, [isClubEnabled, product.id, product.category, currentBasePrice, extraToppingsTotal, isTina, isSundaeWithSize, isFrostyTradicionalWithSize, selectedSize, selectedFlavor]);
 
   const handleConfirm = () => {
     let finalName = product.name;
 
-    if (isTina && selectedSize) {
+    if ((isTina || isSundaeWithSize || isFrostyTradicionalWithSize) && selectedSize) {
       finalName = `${product.name} (${selectedSize.label})`;
     } else if (isPromoGroup && selectedPromo) {
       finalName = selectedPromo.name;
@@ -279,9 +307,8 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
       name: finalName,
       quantity: 1,
       customization: {
-        size: isTina && selectedSize ? selectedSize.label : undefined,
-        flavor: (isBarquillon2 || isTina2) ? selectedFlavors.join(', ') : selectedFlavor,
-        team: isMaxiSundae ? selectedTeam : undefined,
+        size: (isTina || isSundaeWithSize || isFrostyTradicionalWithSize) && selectedSize ? selectedSize.label : undefined,
+        flavor: isFrosty ? undefined : (isBarquillon2 || isTina2) ? selectedFlavors.join(', ') : selectedFlavor,
         premiumTopping: isMaxiSundaePremium ? selectedPremiumTopping : undefined,
         magicLayer: isMaxiSundaePremium ? selectedMagicLayer : undefined,
         toppings: (isFrapuccino || isMilkshake || isSundaeOrFrosty || isGroupedGelato || isCookieOrBrownie || isMaxiSundaePremium) ? [] : selectedToppings,
@@ -325,11 +352,15 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                         ? ''
                         : (isFrapuccino || isMilkshake)
                           ? 'Elige tu sabor favorito y añade extras si deseas.'
-                          : isSundae
-                            ? 'Elige tu sabor favorito y añade contornos extras.'
-                            : isFrosty
-                              ? 'Añade tus contornos extras favoritos.'
-                              : 'Elige tu sabor favorito, 3 contornos gratis y extras.'}
+                          : isSundaeWithSize
+                            ? 'Elige el tamaño, sabor y añade contornos extras.'
+                            : isSundae
+                              ? 'Elige tu sabor favorito y añade contornos extras.'
+                              : isFrostyTradicionalWithSize
+                                ? 'Elige el tamaño y añade tus contornos extras favoritos.'
+                                : isFrosty
+                                  ? 'Añade tus contornos extras favoritos.'
+                                  : 'Elige tu sabor favorito, 3 contornos gratis y extras.'}
                   </p>
                 </div>
                 <button 
@@ -366,7 +397,18 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                 {isSundae && (
                   <div className="flex justify-center">
                     <img 
-                      src="/sundaeusuario.webp"
+                      src={product.id === 'sundae-frutas-7oz' ? '/assets/aistudio/sundaefrutasproducto_9cbaf3fc.webp' : '/sundaeusuario.webp'}
+                      alt={product.name} 
+                      className="w-48 h-48 sm:w-56 sm:h-56 object-contain filter drop-shadow-xl transition-all duration-300"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                )}
+
+                {isFrosty && (
+                  <div className="flex justify-center">
+                    <img 
+                      src={product.id === 'frosty-especial-12oz' ? '/assets/aistudio/frostyespecial_2bce3be8.webp' : '/assets/aistudio/frostytradicional_42a935f8.webp'}
                       alt={product.name} 
                       className="w-48 h-48 sm:w-56 sm:h-56 object-contain filter drop-shadow-xl transition-all duration-300"
                       referrerPolicy="no-referrer"
@@ -404,6 +446,17 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                   <div className="flex justify-center">
                     <img 
                       src="/bubblewaffleusuario.webp"
+                      alt={product.name} 
+                      className="w-48 h-48 sm:w-56 sm:h-56 object-contain filter drop-shadow-xl transition-all duration-300"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                )}
+
+                {isMaxiSundae && (
+                  <div className="flex justify-center">
+                    <img 
+                      src="/piru.webp"
                       alt={product.name} 
                       className="w-48 h-48 sm:w-56 sm:h-56 object-contain filter drop-shadow-xl transition-all duration-300"
                       referrerPolicy="no-referrer"
@@ -501,6 +554,29 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                   </div>
                 )}
 
+                {/* Size Selection - Only for Sundae or Frosty Tradicional */}
+                {(isSundaeWithSize || isFrostyTradicionalWithSize) && (
+                  <section>
+                    <h3 className="text-[11px] font-sans font-bold uppercase tracking-[1.5px] text-holly-brown mb-4">1. Selecciona el Tamaño</h3>
+                    <div className="grid grid-cols-2 gap-3">
+                      {(isSundaeWithSize ? SUNDAE_SIZES : FROSTY_TRADICIONAL_SIZES).map((size) => (
+                        <button
+                          key={size.id}
+                          onClick={() => setSelectedSize(size)}
+                          className={`p-4 sm:p-6 rounded-[15px] border-2 transition-all flex flex-col items-center justify-center gap-2 ${
+                            selectedSize?.id === size.id
+                              ? 'border-holly-orange bg-holly-orange/5 text-holly-orange'
+                              : 'border-holly-brown/5 text-holly-brown hover:border-holly-orange/30'
+                          }`}
+                        >
+                          <span className="text-2xl sm:text-3xl font-display font-black uppercase tracking-wider leading-none">{size.label}</span>
+                          <span className="text-[10px] sm:text-[11px] font-sans font-bold uppercase tracking-wider opacity-60">${size.price.toFixed(2)}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </section>
+                )}
+
                 {/* Line Selection - Only for Grouped Gelato (16oz, Barquilla 1, Barquillon 1/2, Tina 1/2) - 1LT is now separate products */}
                 {(isGelato16oz || isBarquilla1 || isBarquillon1 || isBarquillon2 || isTina1 || isTina2) && (
                   <section>
@@ -534,7 +610,7 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                   <section>
                     <div className="flex justify-between items-end mb-4">
                       <h3 className="text-[11px] font-sans font-bold uppercase tracking-[1.5px] text-holly-brown">
-                        {isTina || isGelato16oz || isBarquilla1 || isBarquillon1 || isBarquillon2 || isTina1 || isTina2 || isPromoGroup ? '2.' : '1.'} Selecciona el Sabor del Helado
+                        {isTina || isSundaeWithSize || isGelato16oz || isBarquilla1 || isBarquillon1 || isBarquillon2 || isTina1 || isTina2 || isPromoGroup ? '2.' : '1.'} Selecciona el Sabor del Helado
                       </h3>
                       {(isBarquillon2 || isTina2) && (
                         <span className="text-[9px] font-sans font-bold uppercase bg-holly-orange/10 text-holly-orange px-2 py-1 rounded-full tracking-wider">
@@ -708,39 +784,6 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                   </section>
                 )}
 
-                {/* Team Selection - Only for Maxi Sundae */}
-                {isMaxiSundae && (
-                  <section>
-                    <div className="flex justify-between items-end mb-4">
-                      <h3 className="text-[11px] font-sans font-bold uppercase tracking-[1.5px] text-holly-brown">
-                        2. Selecciona tu Team
-                      </h3>
-                    </div>
-
-                    <div className="flex justify-center mb-6">
-                      <div className="w-40 h-40 relative flex items-center justify-center">
-                        <img src={`/${selectedTeam.toLowerCase()}.webp`} alt={selectedTeam} className="w-full h-full object-contain drop-shadow-md" />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-3">
-                      {['Piru', 'Panki', 'Loli'].map((team) => (
-                        <button
-                          key={team}
-                          onClick={() => setSelectedTeam(team)}
-                          className={`py-3 px-2 rounded-[15px] border-2 transition-all text-center flex items-center justify-center ${
-                            selectedTeam === team
-                              ? 'border-holly-orange bg-holly-orange/5 text-holly-orange'
-                              : 'border-holly-brown/5 text-holly-brown hover:border-holly-orange/30'
-                          }`}
-                        >
-                          <span className="font-display font-bold uppercase tracking-wider text-sm sm:text-base">{team}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </section>
-                )}
-
                 {/* Premium Topping & Magic Layer Selection - Only for Maxi Sundae Premium */}
                 {isMaxiSundaePremium && (
                   <>
@@ -802,7 +845,7 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                     <div className="flex flex-col gap-2 mb-4">
                       <div className="flex justify-between items-end">
                         <h3 className="text-[11px] font-sans font-bold uppercase tracking-[1.5px] text-holly-brown">
-                          {isMaxiSundae ? '3.' : isTina ? '3.' : '2.'} Contornos Gratis (Máx 60g)
+                          {isTina ? '3.' : '2.'} Contornos Gratis (Máx 60g)
                         </h3>
                         <span className="text-[9px] font-sans font-bold uppercase bg-holly-orange/10 text-holly-orange px-2 py-1 rounded-full tracking-wider">
                           {selectedToppings.length * 20}g / 60g
@@ -920,7 +963,7 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
                   <section>
                     <div className="flex justify-between items-end mb-4">
                       <h3 className="text-[11px] font-sans font-bold uppercase tracking-[1.5px] text-holly-brown">
-                        {isMaxiSundaePremium ? '5.' : isMaxiSundae ? '4.' : isTina ? '4.' : (isFrapuccino || isMilkshake || isSundae) ? '2.' : '1.'} Contornos Extra (Costo adicional)
+                        {isMaxiSundaePremium ? '5.' : isTina ? '4.' : (isSundaeWithSize || isMaxiSundae) ? '3.' : (isFrapuccino || isMilkshake || isSundae || isFrostyTradicionalWithSize) ? '2.' : '1.'} Contornos Extra (Costo adicional)
                       </h3>
                     </div>
 
@@ -1036,9 +1079,17 @@ export function ProductCustomizer({ product, isOpen, onClose, onConfirm }: Produ
               <div className="mt-12 pt-8 border-t border-holly-brown/5 flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div className="text-center sm:text-left">
                   <span className="text-[10px] font-sans font-bold uppercase tracking-[1.5px] text-holly-brown/40 block mb-1">Precio Final</span>
-                  <span className="text-4xl font-display font-bold text-holly-brown">
-                    ${(currentBasePrice + extraToppingsTotal).toFixed(2)}
-                  </span>
+                  <div className="flex items-center justify-center sm:justify-start gap-3">
+                    <span className="text-4xl font-display font-bold text-holly-brown">
+                      ${(currentBasePrice + extraToppingsTotal).toFixed(2)}
+                    </span>
+                    {pointsEarned > 0 && (
+                      <div className="bg-gradient-to-r from-amber-500 to-[#f6b40c] text-white px-2.5 py-1 rounded-lg shadow-sm text-xs font-sans font-bold flex items-center gap-1.5" title={`Sumas ${pointsEarned} puntos Hollywood`}>
+                        <HollywoodStar className="w-3.5 h-3.5 fill-white text-white shrink-0" />
+                        <span>+{pointsEarned} pts</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <button
                   onClick={handleConfirm}

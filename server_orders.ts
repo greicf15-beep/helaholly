@@ -2,13 +2,20 @@ import fs from 'fs';
 import path from 'path';
 
 export interface SistemaOrderItem {
-  id: string;
+  line?: number;
+  codProd?: string;
+  id?: string;
   name: string;
-  price: number;
+  price?: number;
+  priceUsd?: number;
   quantity: number;
-  subtotal: number;
+  subtotal?: number;
+  subtotalUsd?: number;
+  isExempt?: boolean;
+  customizationText?: string;
   customization?: {
     flavor?: string;
+    flavors?: string[];
     team?: string;
     premiumTopping?: string;
     magicLayer?: string;
@@ -17,26 +24,67 @@ export interface SistemaOrderItem {
   } | null;
 }
 
+export interface SistemaOrderStore {
+  storeCode: string;
+  storeName: string;
+  warehouseCode: string;
+}
+
+export interface SistemaOrderCustomer {
+  docId?: string; // V-..., E-..., J-..., G-..., o V00000000
+  name: string;
+  phone: string;
+  email?: string;
+  address?: string;
+  referencePoint?: string;
+  location?: { lat: number; lng: number } | null;
+}
+
+export interface SistemaOrderPayment {
+  method: 'pago_movil' | 'zelle' | 'efectivo_usd' | 'punto' | 'whatsapp' | string;
+  reference?: string;
+  originBank?: string;
+  destinationBank?: string;
+  amountBs?: number;
+  amountUsd?: number;
+  exchangeRate?: number;
+  paidAt?: string;
+  proofUrl?: string;
+  notes?: string;
+}
+
+export interface SistemaOrderFinancials {
+  subtotalUsd: number;
+  deliveryFeeUsd: number;
+  taxUsd: number;
+  totalUsd: number;
+  totalBs: number;
+  exchangeRate: number;
+}
+
 export interface SistemaOrder {
   id: string;
   createdAt: string;
-  customer: {
-    name: string;
-    phone: string;
-    address?: string;
-    location?: { lat: number; lng: number } | null;
-  };
-  store: string;
-  mode: 'in-store' | 'delivery' | string;
+  store: SistemaOrderStore | string;
+  mode: 'in-store' | 'delivery' | 'pickup' | string;
   vehicleType?: string | null;
+  customer: SistemaOrderCustomer;
+  payment?: SistemaOrderPayment;
   items: SistemaOrderItem[];
-  subtotal: number;
-  deliveryFee: number;
-  total: number;
-  status: 'pending' | 'sincronizado' | 'facturado' | 'cancelado' | string;
+  subtotal?: number;
+  deliveryFee?: number;
+  total?: number;
+  financials?: SistemaOrderFinancials;
+  status: 'pending' | 'en_caja' | 'facturado' | 'atendido' | 'en_camino' | 'entregado' | 'cancelado' | string;
+  rewardsClaimed?: {
+    birthday?: boolean;
+    stampReward?: string | null;
+  };
   sistemaSync?: {
-    syncedAt?: string;
-    invoiceNumber?: string;
+    syncedAt?: string | null;
+    saintOrderNumber?: string | null;
+    invoiceNumber?: string | null;
+    terminalId?: string | null;
     notes?: string;
   };
 }
@@ -125,7 +173,13 @@ export function addOrder(newOrderData: Omit<SistemaOrder, 'id' | 'createdAt' | '
 
 export function updateOrder(
   id: string,
-  updates: { status?: string; invoiceNumber?: string; notes?: string }
+  updates: { 
+    status?: string; 
+    saintOrderNumber?: string;
+    invoiceNumber?: string; 
+    terminalId?: string;
+    notes?: string;
+  }
 ): SistemaOrder | null {
   const orders = getAllOrders();
   const index = orders.findIndex(o => o.id === id);
@@ -138,7 +192,9 @@ export function updateOrder(
     sistemaSync: {
       ...current.sistemaSync,
       syncedAt: new Date().toISOString(),
+      ...(updates.saintOrderNumber ? { saintOrderNumber: updates.saintOrderNumber } : {}),
       ...(updates.invoiceNumber ? { invoiceNumber: updates.invoiceNumber } : {}),
+      ...(updates.terminalId ? { terminalId: updates.terminalId } : {}),
       ...(updates.notes ? { notes: updates.notes } : {}),
     },
   };

@@ -5,6 +5,7 @@ export type VehicleType = 'moto' | 'carro';
 
 export interface Product {
   id: string;
+  sku?: string;
   name: string;
   description: string;
   price: number;
@@ -19,6 +20,9 @@ export interface Product {
 
 export interface CartItem extends Product {
   quantity: number;
+  isReward?: boolean;
+  pointsCost?: number;
+  rewardId?: string;
   customization?: {
     size?: string;
     flavor?: string;
@@ -30,8 +34,48 @@ export interface CartItem extends Product {
   };
 }
 
+export type LoyaltyTierType = 'Bronce' | 'Plata' | 'Oro' | 'VIP';
+
+export interface LoyaltyTier {
+  name: LoyaltyTierType;
+  minPoints: number;
+  maxPoints: number;
+  color: string;
+  bgGradient: string;
+  borderClass: string;
+  badgeText: string;
+  benefit: string;
+}
+
+export interface RewardItem {
+  id: string;
+  name: string;
+  description: string;
+  pointsRequired: number;
+  category: 'topping' | 'soft' | 'gelato' | 'especial';
+  tierRequired: LoyaltyTierType;
+  valueUsd: number;
+  image: string;
+  productId?: string;
+}
+
+export interface CustomerProfile {
+  uid: string;
+  name: string;
+  email: string;
+  phone?: string;
+  birthDate?: string;
+  points: number;
+  tier: LoyaltyTierType;
+  pinCode?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface StoreLocation {
   id: string;
+  storeCode?: string;
+  warehouseCode?: string;
   name: string;
   address: string;
   lat: number;

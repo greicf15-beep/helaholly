@@ -1,17 +1,38 @@
 import express from 'express';
 import path from 'path';
 import fs from 'fs';
-import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
 import { getAllOrders, addOrder, updateOrder } from './server_orders';
+import { 
+  findCustomerByPhone, 
+  registerCashierCustomer, 
+  addStampToCustomer, 
+  redeemStampRewardInCashier, 
+  redeemBirthdayRewardInCashier,
+  getAllCustomers,
+  cleanPhoneNumber
+} from './server_loyalty';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const rootDir = process.cwd();
+const publicDir = path.join(rootDir, 'public');
+const distDir = path.join(rootDir, 'dist');
+
+function getFilePath(filename: string): string {
+  const distCandidate = path.join(distDir, filename);
+  if (fs.existsSync(distCandidate)) return distCandidate;
+
+  const publicCandidate = path.join(publicDir, filename);
+  if (fs.existsSync(publicCandidate)) return publicCandidate;
+
+  return path.join(rootDir, filename);
+}
 
 const SISTEMA_API_KEY = process.env.SISTEMA_API_KEY || 'holly_sistema_sec_2026';
+const CAJA_PIN = process.env.CAJA_PIN || '0304';
 
 async function startServer() {
   const app = express();
+  // Dev server and internal backend MUST run on port 3000 (nginx listens on 8080 and proxies to 3000)
   const PORT = Number(process.env.PORT) || 3000;
 
   // Middleware for JSON request bodies
@@ -23,8 +44,19 @@ async function startServer() {
   });
 
   // Direct PDF and Documentation files
+  app.get(['/api-respuesta-saint-hollywood.pdf', '/respuesta-saint.pdf'], (req, res) => {
+    const pdfPath = getFilePath('api-respuesta-saint-hollywood.pdf');
+    if (fs.existsSync(pdfPath)) {
+      res.setHeader('Content-Type', 'application/pdf');
+      const disposition = req.query.download === '1' ? 'attachment' : 'inline';
+      res.setHeader('Content-Disposition', `${disposition}; filename="api-respuesta-saint-hollywood.pdf"`);
+      return res.sendFile(pdfPath);
+    }
+    return res.status(404).send('Archivo PDF no encontrado');
+  });
+
   app.get(['/api-sistema-hollywood.pdf', '/api/docs/pdf', '/api/sistema/docs/pdf', '/api-docs.pdf'], (req, res) => {
-    const pdfPath = path.join(__dirname, 'public', 'api-sistema-hollywood.pdf');
+    const pdfPath = getFilePath('api-sistema-hollywood.pdf');
     if (fs.existsSync(pdfPath)) {
       res.setHeader('Content-Type', 'application/pdf');
       // If user passed ?download=1 force download, otherwise inline view
@@ -36,7 +68,7 @@ async function startServer() {
   });
 
   app.get(['/api-docs', '/api-docs.html', '/documentacion-api'], (req, res) => {
-    const htmlPath = path.join(__dirname, 'public', 'api-docs.html');
+    const htmlPath = getFilePath('api-docs.html');
     if (fs.existsSync(htmlPath)) {
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       return res.sendFile(htmlPath);
@@ -53,11 +85,134 @@ async function startServer() {
       }
 
       const savedOrder = addOrder(orderData);
+
+      // Auto-sync customer to loyalty storage if phone provided
+      if (orderData.customer?.phone) {
+        try {
+          const phone = orderData.customer.phone;
+          const existing = findCustomerByPhone(phone);
+          const totalAmount = Number(orderData.total) || 0;
+          const storeName = typeof orderData.store === 'object' && orderData.store?.storeName ? orderData.store.storeName : String(orderData.store || '');
+          if (existing) {
+            if (totalAmount >= 4.0 && !orderData.rewardsClaimed?.stampReward) {
+              addStampToCustomer(phone, totalAmount, storeName);
+            }
+            if (orderData.rewardsClaimed?.stampReward) {
+              redeemStampRewardInCashier(phone, orderData.rewardsClaimed.stampReward as any, storeName);
+            }
+            if (orderData.rewardsClaimed?.birthday) {
+              redeemBirthdayRewardInCashier(phone, storeName);
+            }
+          } else if (orderData.customer.name) {
+            registerCashierCustomer({
+              name: orderData.customer.name,
+              phone: orderData.customer.phone,
+              birthdate: '',
+              store: storeName,
+              initialAmount: totalAmount,
+            });
+          }
+        } catch (e) {
+          console.warn('Loyalty auto-sync non-critical error:', e);
+        }
+      }
+
       return res.status(201).json({ success: true, order: savedOrder });
     } catch (err: any) {
       console.error('Error saving order in server:', err);
       return res.status(500).json({ error: 'Error interno guardando pedido' });
     }
+  });
+
+  // ==========================================
+  // API TERMINAL DE CAJA (MÉTODO TIENDA FÍSICA)
+  // ==========================================
+
+  // 1. Verificación de PIN de caja
+  app.post('/api/caja/auth', (req, res) => {
+    const { pin } = req.body;
+    if (pin === CAJA_PIN) {
+      return res.json({ success: true, message: 'Acceso autorizado' });
+    }
+    return res.status(401).json({ success: false, error: 'PIN de caja incorrecto' });
+  });
+
+  // 2. Búsqueda de cliente por teléfono
+  app.get('/api/caja/search', (req, res) => {
+    const phone = req.query.phone as string;
+    if (!phone) {
+      return res.status(400).json({ error: 'Número de teléfono requerido' });
+    }
+    const customer = findCustomerByPhone(phone);
+    return res.json({ found: Boolean(customer), customer });
+  });
+
+  // 3. Sumar sello por compra (mínimo $4.00)
+  app.post('/api/caja/stamp', (req, res) => {
+    try {
+      const { phone, amount, store } = req.body;
+      if (!phone) return res.status(400).json({ error: 'Teléfono requerido' });
+      const purchaseAmount = Number(amount);
+      if (isNaN(purchaseAmount) || purchaseAmount < 4.0) {
+        return res.status(400).json({ error: 'La compra mínima debe ser de $4.00 para sumar un sello.' });
+      }
+      const updated = addStampToCustomer(phone, purchaseAmount, store);
+      return res.json({ success: true, customer: updated });
+    } catch (err: any) {
+      return res.status(400).json({ success: false, error: err.message || 'Error procesando sello' });
+    }
+  });
+
+  // 4. Canjear premio de 5 sellos
+  app.post('/api/caja/redeem-stamp', (req, res) => {
+    try {
+      const { phone, rewardItem, store } = req.body;
+      if (!phone || !rewardItem) {
+        return res.status(400).json({ error: 'Faltan parámetros requeridos (phone, rewardItem)' });
+      }
+      const updated = redeemStampRewardInCashier(phone, rewardItem, store);
+      return res.json({ success: true, customer: updated, message: `Premio ${rewardItem} canjeado exitosamente` });
+    } catch (err: any) {
+      return res.status(400).json({ success: false, error: err.message || 'Error canjeando premio de sellos' });
+    }
+  });
+
+  // 5. Canjear regalo de cumpleaños (Sundae de Película)
+  app.post('/api/caja/redeem-birthday', (req, res) => {
+    try {
+      const { phone, store } = req.body;
+      if (!phone) return res.status(400).json({ error: 'Teléfono requerido' });
+      const updated = redeemBirthdayRewardInCashier(phone, store);
+      return res.json({ success: true, customer: updated, message: 'Sundae de Cumpleaños canjeado exitosamente' });
+    } catch (err: any) {
+      return res.status(400).json({ success: false, error: err.message || 'Error canjeando regalo de cumpleaños' });
+    }
+  });
+
+  // 6. Registro rápido de cliente en caja (en 5 segundos)
+  app.post('/api/caja/register', (req, res) => {
+    try {
+      const { name, phone, birthdate, store, initialAmount } = req.body;
+      if (!name || !phone) {
+        return res.status(400).json({ error: 'Nombre y teléfono son obligatorios' });
+      }
+      const newCust = registerCashierCustomer({
+        name,
+        phone,
+        birthdate: birthdate || '',
+        store,
+        initialAmount: Number(initialAmount) || 0,
+      });
+      return res.status(201).json({ success: true, customer: newCust });
+    } catch (err: any) {
+      return res.status(400).json({ success: false, error: err.message || 'Error registrando cliente' });
+    }
+  });
+
+  // 7. Lista de clientes para la caja
+  app.get('/api/caja/customers', (req, res) => {
+    const list = getAllCustomers();
+    return res.json({ success: true, count: list.length, customers: list });
   });
 
   // ==========================================
@@ -101,7 +256,11 @@ async function startServer() {
       }
 
       if (store && typeof store === 'string') {
-        orders = orders.filter(o => o.store.toLowerCase().includes(store.toLowerCase()));
+        orders = orders.filter(o => {
+          const sName = typeof o.store === 'object' && o.store?.storeName ? o.store.storeName : String(o.store || '');
+          const sCode = typeof o.store === 'object' && o.store?.storeCode ? o.store.storeCode : '';
+          return sName.toLowerCase().includes(store.toLowerCase()) || sCode.toLowerCase().includes(store.toLowerCase());
+        });
       }
 
       if (limit && !isNaN(Number(limit))) {
@@ -140,16 +299,16 @@ async function startServer() {
   app.patch('/api/sistema/orders/:id', authenticateSistema, (req, res) => {
     try {
       const { id } = req.params;
-      const { status, invoiceNumber, notes } = req.body;
+      const { status, saintOrderNumber, invoiceNumber, terminalId, notes } = req.body;
 
-      if (!status && !invoiceNumber && !notes) {
+      if (!status && !saintOrderNumber && !invoiceNumber && !terminalId && !notes) {
         return res.status(400).json({
           success: false,
-          error: 'Debe enviar al menos uno de los campos a actualizar: status, invoiceNumber, notes',
+          error: 'Debe enviar al menos uno de los campos a actualizar: status, saintOrderNumber, invoiceNumber, terminalId, notes',
         });
       }
 
-      const updatedOrder = updateOrder(id, { status, invoiceNumber, notes });
+      const updatedOrder = updateOrder(id, { status, saintOrderNumber, invoiceNumber, terminalId, notes });
       if (!updatedOrder) {
         return res.status(404).json({ success: false, error: 'Pedido no encontrado para actualizar' });
       }
@@ -167,20 +326,31 @@ async function startServer() {
 
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: { middlewareMode: true, hmr: false },
       appType: 'spa',
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(__dirname, 'dist');
-    app.use(express.static(distPath));
+    app.use(express.static(distDir));
     app.get('*', (req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
+      res.sendFile(path.join(distDir, 'index.html'));
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
+  const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is running on port ${PORT}`);
+  });
+
+  server.on('error', (err: any) => {
+    if (err.code === 'EADDRINUSE') {
+      console.warn(`Port ${PORT} in use, retrying in 1s...`);
+      setTimeout(() => {
+        server.close();
+        server.listen(PORT, '0.0.0.0');
+      }, 1000);
+    } else {
+      console.error('Server error:', err);
+    }
   });
 }
 

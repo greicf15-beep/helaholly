@@ -2,6 +2,9 @@ import React from 'react';
 import { Product, OrderMode } from '../types';
 import { motion } from 'motion/react';
 import { Plus, Truck, Store } from 'lucide-react';
+import { HollywoodStar } from './HollywoodStar';
+import { getProductAccumulationPoints } from '../loyaltyConstants';
+import { useClubHollywood } from '../context/ClubHollywoodContext';
 
 interface ProductGridProps {
   products: Product[];
@@ -10,10 +13,13 @@ interface ProductGridProps {
 }
 
 export function ProductGrid({ products, onAddToCart, orderMode }: ProductGridProps) {
+  const { isClubEnabled } = useClubHollywood();
+
   return (
     <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-x-4 sm:gap-x-8 gap-y-10 sm:gap-y-16 px-4">
       {products.map((product, index) => {
         const isUnavailable = orderMode === 'delivery' && !product.deliveryAvailable;
+        const pointsEarned = isClubEnabled ? getProductAccumulationPoints(product) : 0;
 
         return (
           <motion.div
@@ -33,10 +39,18 @@ export function ProductGrid({ products, onAddToCart, orderMode }: ProductGridPro
               />
               <div className="absolute inset-0 bg-gradient-to-t from-holly-brown/20 via-transparent to-transparent opacity-60" />
               
-              {/* Price Tag Overlay */}
+              {/* Price Tag & Points Overlay */}
               {product.price > 0 && (
-                <div className="absolute top-3 left-3 sm:top-6 sm:left-6 bg-white/90 backdrop-blur-sm px-2 py-1 sm:px-4 sm:py-2 font-sans font-bold text-xs sm:text-lg tracking-normal sm:tracking-widest text-holly-orange rounded-lg sm:rounded-xl shadow-sm border border-holly-orange/10">
-                  ${product.price.toFixed(2)}
+                <div className="absolute top-2.5 left-2.5 sm:top-5 sm:left-5 flex flex-col gap-1 items-start">
+                  <div className="bg-white/95 backdrop-blur-sm px-2 py-0.5 sm:px-3 sm:py-1 font-sans font-bold text-xs sm:text-base tracking-normal sm:tracking-wider text-holly-orange rounded-lg sm:rounded-xl shadow-sm border border-holly-orange/15">
+                    ${product.price.toFixed(2)}
+                  </div>
+                  {pointsEarned > 0 && (
+                    <div className="bg-gradient-to-r from-amber-500 to-[#f6b40c] text-white px-2 py-0.5 rounded-md shadow-sm text-[8px] sm:text-[10px] font-sans font-bold flex items-center gap-1" title={`Ganas ${pointsEarned} puntos Hollywood`}>
+                      <HollywoodStar className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-white text-white shrink-0" />
+                      <span>+{pointsEarned} pts</span>
+                    </div>
+                  )}
                 </div>
               )}
 

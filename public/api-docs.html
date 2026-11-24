@@ -271,9 +271,9 @@
 
   <div class="container" id="printable-doc">
     <div class="header">
-      <span class="badge">API REST v1.0 • Producción</span>
-      <h1>Documentación Oficial: API de Pedidos para Sistema Administrativo</h1>
-      <p>Especificación técnica para la sincronización de pedidos entre la tienda web de Heladería Hollywood y el software administrativo contable.</p>
+      <span class="badge">API REST v2.0 • Saint Enterprise ERP • Producción</span>
+      <h1>Documentación Oficial: API de Pedidos para Saint Enterprise ERP</h1>
+      <p>Especificación técnica para la sincronización de pedidos entre la tienda web de Heladería Hollywood y el software Saint Enterprise ERP (SQL Server). Adaptado para 10 sedes físicas con atención y cierre por WhatsApp.</p>
 
       <div class="actions-bar">
         <a href="/api-sistema-hollywood.pdf" download="api-sistema-hollywood.pdf" class="btn" id="btn-download-pdf">
@@ -363,35 +363,60 @@ curl -H "x-api-key: holly_sistema_sec_2026" \
   "orders": [
     {
       "id": "ORD-1726912345-ABCD",
-      "createdAt": "2026-09-21T19:20:00.000Z",
-      "customer": {
-        "name": "María González",
-        "phone": "584121234567",
-        "address": "Calle 72 con Av. 15, Maracaibo",
-        "location": { "lat": 10.6698, "lng": -71.6094 }
+      "createdAt": "2026-09-28T14:30:00.000Z",
+      "store": {
+        "storeCode": "00000",             // Mapeado a SAFACT.CodSucu (00000 = Sede 72 / 5 de Julio)
+        "storeName": "Hollywood Sede 72 (5 de Julio)",
+        "warehouseCode": "01B"            // Mapeado a SAFACT.CodUbic y SAITEMFAC.CodUbic
       },
-      "store": "Sede 5 de Julio",
-      "mode": "delivery",              // "delivery" o "pickup"
-      "vehicleType": "moto",           // "moto" o "carro"
+      "mode": "delivery",                 // "delivery" o "pickup"
+      "vehicleType": "moto",              // "moto" o "carro"
+      "customer": {
+        "docId": "V-18456789",            // Cédula o RIF (SACLIE.ID3 / CodClie) o V-00000000
+        "name": "María González",         // SACLIE.Descrip
+        "phone": "584121234567",          // SACLIE.Telef
+        "address": "Calle 72 con Av. 15, Casa #14-20"
+      },
+      "payment": {
+        "method": "pago_movil",           // "pago_movil", "zelle", "efectivo_usd", "punto"
+        "notes": "Pago acordado y validado por el operador en el chat de WhatsApp de la sede"
+      },
       "items": [
         {
-          "id": "barquilla-especial",
-          "name": "Barquilla Hollywood Especial",
-          "price": 3.50,
-          "quantity": 2,
-          "subtotal": 7.00,
-          "customization": {
-            "flavor": "Chocolate Fudge",
-            "magicLayer": "Capa Mágica de Avellana",
-            "toppings": ["Lluvia de Chocolate (20g)", "Maní Tostado (20g)"]
-          }
+          "line": 1,
+          "codProd": "010045",            // Código exacto en Saint (SAPROD.CodProd)
+          "name": "Barquilla Hollywood Especial 2 Sabores",
+          "quantity": 2.0,
+          "priceUsd": 3.50,
+          "subtotalUsd": 7.00,
+          "isExempt": true,
+          "customizationText": "Sabor: Chocolate Fudge | Topping: Lluvia Choc"
+        },
+        {
+          "line": 2,                      // Flete inyectado como renglón de servicio
+          "codProd": "SERV-DELIV",        // SKU de servicio en SAPROD / SASERV
+          "name": "Servicio de Delivery",
+          "quantity": 1.0,
+          "priceUsd": 2.00,
+          "subtotalUsd": 2.00,
+          "isExempt": false
         }
       ],
-      "subtotal": 7.00,
-      "deliveryFee": 2.00,
-      "total": 9.00,
-      "status": "pending",
-      "sistemaSync": {}
+      "financials": {
+        "subtotalUsd": 7.00,
+        "deliveryFeeUsd": 2.00,
+        "taxUsd": 0.00,
+        "totalUsd": 9.00,
+        "totalBs": 450.00,
+        "exchangeRate": 50.00
+      },
+      "status": "pending",                // "pending", "en_caja", "facturado", "cancelado"
+      "sistemaSync": {
+        "syncedAt": null,
+        "saintOrderNumber": null,
+        "invoiceNumber": null,
+        "terminalId": null
+      }
     }
   ]
 }</code></pre>
@@ -400,10 +425,22 @@ curl -H "x-api-key: holly_sistema_sec_2026" \
       <!-- Endpoint 3 -->
       <div class="endpoint-card">
         <h3><span class="method method-patch">PATCH</span> /api/sistema/orders/{id}</h3>
-        <p><strong>Descripción:</strong> Actualiza el estado del pedido una vez que el sistema administrativo lo factura o procesa, impidiendo que vuelva a salir como pendiente.</p>
+        <p><strong>Descripción:</strong> Permite al integrador local de Saint actualizar el estado del pedido en dos momentos: al ingresarlo en caja (<code>en_caja</code>) y al totalizar la factura fiscal (<code>facturado</code>).</p>
         <p style="margin-top: 8px;"><strong>Encabezados requeridos:</strong> <code>Content-Type: application/json</code> | <code>x-api-key: holly_sistema_sec_2026</code></p>
 
-        <pre><code>// Petición PATCH:
+        <pre><code>// Momento 1: Registro en Saint ERP (Se imprime comanda de cocina y reserva stock):
+PATCH /api/sistema/orders/ORD-1726912345-ABCD HTTP/1.1
+Host: pedidos.helaholly.com
+x-api-key: holly_sistema_sec_2026
+Content-Type: application/json
+
+{
+  "status": "en_caja",
+  "saintOrderNumber": "PED-000412",
+  "notes": "Comanda registrada en Saint ERP y enviada a barra de preparación."
+}
+
+// Momento 2: Totalización en Caja Fiscal (Emisión de Factura Fiscal Tipo 'A' / 'C'):
 PATCH /api/sistema/orders/ORD-1726912345-ABCD HTTP/1.1
 Host: pedidos.helaholly.com
 x-api-key: holly_sistema_sec_2026
@@ -412,7 +449,7 @@ Content-Type: application/json
 {
   "status": "facturado",
   "invoiceNumber": "FAC-001245",
-  "notes": "Facturado en Caja 1 - Sede 5 de Julio"
+  "notes": "Factura emitida por Caja 1. Pago verificado en WhatsApp."
 }
 
 // Respuesta Exitosa (200 OK):
@@ -423,9 +460,10 @@ Content-Type: application/json
     "id": "ORD-1726912345-ABCD",
     "status": "facturado",
     "sistemaSync": {
-      "syncedAt": "2026-09-21T19:25:00.000Z",
+      "syncedAt": "2026-09-28T14:35:00.000Z",
+      "saintOrderNumber": "PED-000412",
       "invoiceNumber": "FAC-001245",
-      "notes": "Facturado en Caja 1 - Sede 5 de Julio"
+      "notes": "Factura emitida por Caja 1. Pago verificado en WhatsApp."
     }
   }
 }</code></pre>

@@ -49,16 +49,20 @@
     },
     "Customer": {
       "title": "Customer",
-      "description": "A registered customer with loyalty points.",
+      "description": "A registered customer with loyalty points and Hollywood rewards profile.",
       "type": "object",
       "properties": {
         "name": { "type": "string", "maxLength": 100 },
         "email": { "type": "string", "maxLength": 100 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "birthDate": { "type": "string", "maxLength": 20 },
         "points": { "type": "integer", "description": "Loyalty points accumulated" },
+        "tier": { "type": "string", "enum": ["Bronce", "Plata", "Oro", "VIP"] },
+        "pinCode": { "type": "string", "maxLength": 4 },
         "createdAt": { "type": "string", "format": "date-time" },
         "updatedAt": { "type": "string", "format": "date-time" }
       },
-      "required": ["name", "email", "points", "createdAt", "updatedAt"]
+      "required": ["name", "email", "points"]
     }
   },
   "firestore": {
